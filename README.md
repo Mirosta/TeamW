@@ -1,4 +1,4 @@
 TeamW
 =====
 
-Cloud Computing Tean W
+Cloud Computing Team W
