@@ -1,1 +1,1 @@
-from debts.settings import *
+from comp3201payme.settings import *

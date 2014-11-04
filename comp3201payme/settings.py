@@ -1,4 +1,4 @@
-# Django settings for debts project.
+# Django settings for comp3201payme project.
 
 # Initialize App Engine and import the default settings (DB backend, etc.).
 # If you want to use a different backend you have to remove all occurences
@@ -78,7 +78,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '_$slv^*g7b9&pb&&kw)9!lw5+h(tltl=dbo!u02m57=h%6-qgb'
+SECRET_KEY = '1vg=)2w8!!sbvu^=vp(sicov++c8tjvi%nikn&g%73b9biaqoe'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -100,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'debts.urls'
+ROOT_URLCONF = 'comp3201payme.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

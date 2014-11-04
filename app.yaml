@@ -1,4 +1,4 @@
-application: electric-spark-735
+application: comp3201payme
 version: 1
 runtime: python27
 api_version: 1
