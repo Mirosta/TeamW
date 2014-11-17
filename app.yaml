@@ -12,4 +12,4 @@ libraries:
 
 handlers:
 - url: /.*
-  script: testapp.main
+  script: testapp.main.application
