@@ -1,3 +1,4 @@
+indexes:
 - kind: Greeting
   ancestor: yes
   properties:
