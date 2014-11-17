@@ -10,6 +10,10 @@ builtins:
 inbound_services:
 - warmup
 
+libraries:
+- name: django
+  version: latest
+
 handlers:
 - url: /_ah/queue/deferred
   script: djangoappengine.deferred.handler.application
@@ -20,6 +24,10 @@ handlers:
 
 - url: /media/admin
   static_dir: django/contrib/admin/media
+  expiration: '0'
+
+- url: /static/admin
+  static_dir: django/contrib/admin/static/admin
   expiration: '0'
 
 - url: /.*
