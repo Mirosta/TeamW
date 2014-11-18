@@ -40,3 +40,18 @@ class ContentHandler:
     def allowInvalidParameter(self):
         return True
     #TODO: End
+
+class PageHandler(ContentHandler):
+
+    def __init__(self, verbs = {}):
+        self.verbs = verbs
+
+    def getVerbs(self):
+        return self.verbs
+
+class MyPage(PageHandler):
+
+    verbs = {}
+
+    def __init__(self):
+        super(MyPage, self).__init__(self.verbs)
