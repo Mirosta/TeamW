@@ -1,5 +1,6 @@
 import os
 import urllib
+import logging
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -47,6 +48,8 @@ class Greeting(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
+        logging.debug('GET on home')
+        logging.debug('Route name %s', self.request.route.name)
         guestbook_name = self.request.get('guestbook_name',
                                           DEFAULT_GUESTBOOK_NAME)
         greetings_query = Greeting.query(
@@ -90,7 +93,7 @@ class Guestbook(webapp2.RequestHandler):
         self.redirect('/?' + urllib.urlencode(query_params))
 
 application = webapp2.WSGIApplication([
-    ('/', MainPage),
+    webapp2.Route(r'/', handler=MainPage, name='Home'),
     ('/sign', Guestbook),
 ], debug=True)
 

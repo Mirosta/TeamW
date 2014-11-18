@@ -5,6 +5,10 @@ class Entity:
         pass
 
     def getDebts(self):
+        """
+        :rtype: dict of {User: Debt[]}
+        :return:
+        """
         pass
 
     def getCredits(self):
@@ -27,4 +31,3 @@ class Entity:
 
     def getNetAmount(self):
         pass
-
