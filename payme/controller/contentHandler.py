@@ -84,5 +84,5 @@ class VerbHandler(ContentHandler):
 class TestPageHandler(PageHandler):
 
     def __init__(self):
-        super(TestPageHandler, self).__init__('Test')
+        super(TestPageHandler, self).__init__('test')
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
