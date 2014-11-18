@@ -1,31 +1,17 @@
 import webapp2
 import logging
-from contentHandler import ContentHandler, ParameterType
-# /api/<page>(/<verb:w+>)? -> apiController
-# /<page>(/<verb:w+>)? -> htmlController
-
-# /<page>/* -> controller->handleHTML
-# controller->handlePage(api, page)
-#/foo/1
-#/groups/edit/
-#/groups/edit/1
-# controller
-
-# apiController
-    #get super.get(true, page, verb, param)
-    #post super.post(true, params)
-# htmlController
-    #get super.get(api=false, params)
-    #post - error
+from contentHandler import TestPageHandler, Parameter
 from exceptions import PageNotFound
 
+# Supported HTTP verbs
 class HTTPVerb:
     GET = object()
     POST = object()
 
+# Main controller. Handles the map of pages and what not.
 class Controller (webapp2.RequestHandler):
 
-    pages = {'home': ContentHandler()}
+    pages = {'home': TestPageHandler()}
     homePage = 'home'
 
     def __init__(self, isAPI):
@@ -47,15 +33,15 @@ class Controller (webapp2.RequestHandler):
         contentHandler = None
         parameter = None
 
-        if verbName not in page.getVerbs():
+        if not page.hasVerb(verbName):
             contentHandler = page
             parameter = verbName
-            if parameter == "" and page.isParameterRequired(): raise PageNotFound('404 Page not found')
+            if parameter == "" and page.getParameter().isRequired(): raise PageNotFound('404 Page not found')
             if parameter != "" and not self.validateParameter(page, verbName):
-                if not page.allowInvalidParameter(): raise PageNotFound('404 Page not found')
+                if not page.getParameter().canBeInvalid(): raise PageNotFound('404 Page not found')
                 else: parameter = None
-        elif verbName in page.getVerbs():
-            contentHandler = page.getVerbs()[verbName]
+        elif page.hasVerb(verbName):
+            contentHandler = page.getVerb(verbName)
         else:
             raise PageNotFound('404 Page not found')
 
@@ -72,8 +58,8 @@ class Controller (webapp2.RequestHandler):
 
     def validateParameter(self, page, parameter):
         #Do validation
-        if page.getParameterType() == ParameterType.NoParameter: return False
-        if page.getParameterType() == ParameterType.Int:
+        if page.getParameter.getType() == Parameter.Type.NoParameter: return False
+        if page.getParameter.getType() == Parameter.Type.Int:
             try:
                 val = int(parameter)
                 return True
@@ -81,21 +67,25 @@ class Controller (webapp2.RequestHandler):
                 return False
         return True
 
+# Controller for handling HTML requests
 class HTMLController(Controller):
     def __init__(self, request = None, response = None):
         super(HTMLController, self).__init__(False)
         super(Controller, self).__init__(request, response)
 
+# Controller for handling API requests
 class APIController(Controller):
     def __init__(self, request = None, response = None):
         super(HTMLController, self).__init__(True)
         super(Controller, self).__init__(request, response)
 
+# Set debu logging
 logging.getLogger().setLevel(logging.DEBUG)
 logging.debug('Loaded controller')
-routes = webapp2.WSGIApplication(
-    [
-        #webapp2.Route(r'/api/<pageName:\w+>/(?:/<verbName:\w+>)?/?', APIController, 'api'),
-        webapp2.SimpleRoute(r'^/(\w+)(?:/(\w+))?/?', HTMLController, 'html'),
-        #webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': '/' + Controller.homePage})
-    ], debug=True)
+
+# Define the routes.
+routes = webapp2.WSGIApplication([
+    webapp2.Route(r'^/api/(\w+)(?:/(\w+))?/?', APIController, 'api'),
+    webapp2.SimpleRoute(r'^/(\w+)(?:/(\w+))?/?', HTMLController, 'html'),
+    webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': '/' + Controller.homePage})
+], debug=True)

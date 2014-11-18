@@ -1,57 +1,88 @@
-#/api/groups -> json
-#/groups -> html
-#ContentHandler
-    #Type of argument
-    #Required
-#PageHandler /groups page
-#   Map<String, VerbHandler> verbHandlers add
-#VerbHandler /groups/add
-#   getApi
-#   getHtml
-#   postApi
-#   postHtml
-class ParameterType:
-    Int = object()
-    String = object()
-    NoParameter = object()
+import jinja2
+import os
+import logging
 
-class ContentHandler:
+# Class for representing URL parameters for pages
+class Parameter(object):
+    
+    class Type(object):
+        Int = object()
+        String = object()
+        NoParameter = object()
+        
+    def __init__(self, paramType, isRequired, canBeInvalid):
+        self.paramType = paramType
+        self.required = isRequired
+        self.beInvalid = canBeInvalid
+        
+    def getType(self):
+        return self.paramType
+        
+    def isRequired(self):
+        return self.required
+        
+    def canBeInvalid(self):
+        return self.beInvalid
 
-    #TODO: Remove dummy code Start
+# Class for handling content - be it pages or verbs
+class ContentHandler(object):
+    
+    TEMPLATE_EXTENSION = '.jinja'
+    TEMPLATE_FOLDER = '../view/'
+    JINJA_ENVIRONMENT = jinja2.Environment(
+        loader=jinja2.FileSystemLoader('view/'),#os.path.dirname(__file__) + TEMPLATE_FOLDER),
+        extensions=['jinja2.ext.autoescape'],
+        autoescape=False)
+    
+    def __init__(self, templateFile):
+        self.templateFile = templateFile
+    
     def getHTML(self, parameter):
-        if parameter == None: body = '<div style="color: red;">Invalid Parameter</div>'
-        elif parameter == "": body = 'Lol no parameter'
-        else: body = "Hello world number " + parameter
-
-        return "<html><body>" + body + "</body></html>"
-
+        logging.info('Loading template from ' + __file__)
+        # Get the template and render it
+        template = ContentHandler.JINJA_ENVIRONMENT.get_template(self.templateFile + ContentHandler.TEMPLATE_EXTENSION)
+        return template.render({'page': self})
+        
+    def postHTML(self, parameter):
+        # Need to error out here
+        pass
+    
     def getAPI(self, parameter):
-        return "{message: 'Hello World'}"
+        # Need to error out here
+        pass
+        
+    def postAPI(self, parameter):
+        # Need to error out here
+        pass
 
-    def getVerbs(self):
-        return {}
-
-    def getParameterType(self):
-        return ParameterType.Int
-
-    def isParameterRequired(self):
-        return False
-
-    def allowInvalidParameter(self):
-        return True
-    #TODO: End
-
+# Class for handling pages
 class PageHandler(ContentHandler):
-
-    def __init__(self, verbs = {}):
+    
+    def __init__(self, parameter, templateFile, verbs = {}):
+        super(PageHandler, self).__init__(templateFile)
+        self.parameter = parameter
         self.verbs = verbs
+    
+    def getVerb(self, verb):
+        return self.verbs.has_key(verb)
+        
+    def hasVerb(self, verb):
+        return self.verbs.get(verb)
+    
+    def getParameter(self):
+        return self.parameter
+        
+# class for handling verbs
+class VerbHandler(ContentHandler):
 
-    def getVerbs(self):
-        return self.verbs
+    def __init__(self, templateFile):
+        super(VerbHandler, self).__init__(templateFile)
+    
 
-class MyPage(PageHandler):
-
-    verbs = {}
+# Test page with a test template
+class TestPageHandler(PageHandler):
 
     def __init__(self):
-        super(MyPage, self).__init__(self.verbs)
+        super(TestPageHandler, self).__init__(Parameter(Parameter.Type.NoParameter, False, False), 'test', {})
+        
+        
