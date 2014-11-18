@@ -28,9 +28,9 @@ class Parameter(object):
 class ContentHandler(object):
     
     TEMPLATE_EXTENSION = '.jinja'
-    TEMPLATE_FOLDER = '../view/'
+    TEMPLATE_FOLDER = '/../view/'
     JINJA_ENVIRONMENT = jinja2.Environment(
-        loader=jinja2.FileSystemLoader('view/'),#os.path.dirname(__file__) + TEMPLATE_FOLDER),
+        loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + TEMPLATE_FOLDER),
         extensions=['jinja2.ext.autoescape'],
         autoescape=False)
     
