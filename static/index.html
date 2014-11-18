@@ -9,7 +9,12 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/dashboard.css">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -27,14 +32,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;margin-left:10px;" class="green">payme.</span></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
+            <li><a href="help.html">help!</a></li>
+            <li><a href="index.html">dashboard</a></li>
+            <li><a href="#">user profile</a></li>
+            <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
@@ -44,28 +49,119 @@
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
+            <li><a href="">past transactions</a></li>
+            <li><a href="">make payment</a></li>
+            <li><a href="">add debt</a></li>
           </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
+          <hr>
+          <ul class="nav nav-sidebar top-buffer">
+            <li><a href="">manage friends</a></li>
+            <li><a href="">manage groups</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
+        <div class="col-md-10 col-md-offset-2 main">
+          <div style="width:100%;">
+            <div class="row">
+              <h1 class="page-header bold">your dashboard</h1>
+            </div>
+            <div class="row">
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                  <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> 
+                        recent transactions
+                        <span class="pull-right">
+                          <i class="glyphicon glyphicon-plus"></i>
+                        </span>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                      <table id="example" class="table table-striped" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>payment by...</th>
+                                <th>payment to...</th>
+                                <th>date</th>
+                                <th>amount paid (£)</th>
+                                <th>remaining debt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>12/12/2012</td>
+                                <td>61</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Yuri Berry</td>
+                                <td>Chief Marketing Officer (CMO)</td>
+                                <td>14/12/2012</td>
+                                <td>40</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Caesar Vance</td>
+                                <td>Pre-Sales Support</td>
+                                <td>15/12/2012</td>
+                                <td>21</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Doris Wilder</td>
+                                <td>Sales Assistant</td>
+                                <td>24/12/2012</td>
+                                <td>23</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Angelica Ramos</td>
+                                <td>Chief Executive Officer (CEO)</td>
+                                <td>30/12/2012</td>
+                                <td>47</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end of accordion div -->
+            <div class="row">
+              <div class="col-md-6 grey-bordered-box side-margin pull-left">
+                <h2 class="bold">friends<span class="pull-right">£</span></h3>
+                <hr class="top-buffer">
+                <div class="top-buffer" id="friends-content-div">
+                  <span style="font-size:18px;">
+                    Alex <span class="pull-right bold" style="color:#26A65B;">+133</span><br>
+                    Lyubomir <span class="pull-right bold" style="color:red;">-500</span><br>
+                    James <span class="pull-right bold" style="color:#26A65B;">+283</span><br>
+                    Thomas <span class="pull-right bold" style="color:red;">-7</span><br>
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-5 grey-bordered-box side-margin pull-right">
+                <h2 class="bold">groups<span class="pull-right">£</span></h2>
+                <hr class="top-buffer">
+                <div class="top-buffer" id="friends-content-div">
+                  <span style="font-size:18px;">
+                    House <span class="pull-right bold" style="color:#26A65B;">+80</span><br>
+                    ECSS <span class="pull-right bold" style="color:red;">-5</span><br>
+                    Dinner club <span class="pull-right bold" style="color:#26A65B;">+20</span><br>
+                    Mojito fanclub <span class="pull-right bold" style="color:#26A65B;">+902</span><br>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,6 +170,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables initialisation options -->
+    <script>
+      $(document).ready(function() {
+        $('#example').DataTable({
+          "pageLength": 5,
+          "bLengthChange": false,
+          "bFilter": false, 
+          "paging": false,
+          "info": false
+        });
+      });
+    </script>
+
+    <!-- Toggle icon -->
+    <script>
+      function toggleChevron(e) {
+          $(e.target)
+              .prev('.panel-heading')
+              .find('i')
+              .toggleClass('glyphicon-plus glyphicon-minus');
+      }
+      $('#accordion').on('hidden.bs.collapse', toggleChevron);
+      $('#accordion').on('shown.bs.collapse', toggleChevron);
+    </script>
   
   </body>
 </html>
