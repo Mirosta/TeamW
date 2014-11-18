@@ -1,7 +1,7 @@
 import jinja2
 import os
 import logging
-
+from exceptions import NoTemplateError
 # Class for representing URL parameters for pages
 class Parameter(object):
     
@@ -40,6 +40,7 @@ class ContentHandler(object):
     def getHTML(self, parameter):
         logging.info('Loading template from ' + __file__)
         # Get the template and render it
+        if self.templateFile == None: raise NoTemplateError("No template set on content handler")
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(self.templateFile + ContentHandler.TEMPLATE_EXTENSION)
         return template.render({'page': self})
         

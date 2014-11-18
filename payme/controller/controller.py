@@ -1,7 +1,7 @@
 import webapp2
 import logging
 from contentHandler import TestPageHandler, Parameter
-from exceptions import PageNotFound
+from exceptions import PageNotFoundError
 
 # Supported HTTP verbs
 class HTTPVerb:
@@ -27,7 +27,7 @@ class Controller (webapp2.RequestHandler):
         if verbName == None: verbName = ''
 
         if pageName not in Controller.pages:
-            raise PageNotFound('404 Page not found')
+            raise PageNotFoundError('404 Page not found')
         page = Controller.pages[pageName]
 
         contentHandler = None
@@ -36,14 +36,14 @@ class Controller (webapp2.RequestHandler):
         if not page.hasVerb(verbName):
             contentHandler = page
             parameter = verbName
-            if parameter == "" and page.getParameter().isRequired(): raise PageNotFound('404 Page not found')
+            if parameter == "" and page.getParameter().isRequired(): raise PageNotFoundError('404 Page not found')
             if parameter != "" and not self.validateParameter(page, verbName):
-                if not page.getParameter().canBeInvalid(): raise PageNotFound('404 Page not found')
+                if not page.getParameter().canBeInvalid(): raise PageNotFoundError('404 Page not found')
                 else: parameter = None
         elif page.hasVerb(verbName):
             contentHandler = page.getVerb(verbName)
         else:
-            raise PageNotFound('404 Page not found')
+            raise PageNotFoundError('404 Page not found')
 
         response = self.sendToContentHandler(contentHandler, parameter, httpVerb)
         self.response.write(response)
