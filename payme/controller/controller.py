@@ -1,5 +1,6 @@
 import webapp2
-
+import logging
+from webapp2 import Route
 # /api/<page>(/<verb:w+>)? -> apiController
 # /<page>(/<verb:w+>)? -> htmlController
 
@@ -26,16 +27,18 @@ class Controller (webapp2.RequestHandler):
 
     pages = {}
 
-    def __init(self, isAPI):
-        self.isAPI = isAPI
+    def __init(self):
+        self.isAPI = False
+        pass
 
     def get(self, pageName, verbName):
-        self.handleRequest(pageName, verbName, HTTPVerb.GET)
+        logging.debug('GET Request with route %s', self.request.route.name)
+        self.handleRequest(HTTPVerb.GET, pageName, verbName)
 
     def post(self, pageName, verbName):
-        self.handleRequest(pageName, verbName, HTTPVerb.POST)
+        self.handleRequest(HTTPVerb.POST, pageName, verbName)
 
-    def handleRequest(self, pageName, verbName, httpVerb):
+    def handleRequest(self, httpVerb, pageName = None, verbName = None):
         if pageName not in Controller.pages:
             raise PageNotFound('404 Page not found')
         page = Controller.pages[pageName]
@@ -64,4 +67,8 @@ class Controller (webapp2.RequestHandler):
 
     def validateParameter(self, page, parameter):
         #Do validation
+
         return True
+
+logging.getLogger().setLevel(logging.DEBUG)
+routes = webapp2.WSGIApplication([Route('/api/<pageName:w+>/<verbName:w+>', handler = 'Controller', name='apiPath'), Route('/<pageName:w+>/<verbName:w+>', handler = 'Controller', name = 'htmlPath')], debug=True)
