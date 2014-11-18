@@ -10,7 +10,7 @@ class Parameter(object):
         String = object()
         NoParameter = object()
         
-    def __init__(self, paramType, isRequired, canBeInvalid):
+    def __init__(self, paramType = Type.NoParameter, isRequired = False, canBeInvalid = False):
         self.paramType = paramType
         self.required = isRequired
         self.beInvalid = canBeInvalid
@@ -58,7 +58,7 @@ class ContentHandler(object):
 # Class for handling pages
 class PageHandler(ContentHandler):
     
-    def __init__(self, parameter, templateFile, verbs = {}):
+    def __init__(self, templateFile = None, parameter = Parameter(), verbs = {}):
         super(PageHandler, self).__init__(templateFile)
         self.parameter = parameter
         self.verbs = verbs
@@ -83,6 +83,5 @@ class VerbHandler(ContentHandler):
 class TestPageHandler(PageHandler):
 
     def __init__(self):
-        super(TestPageHandler, self).__init__(Parameter(Parameter.Type.NoParameter, False, False), 'test', {})
-        
-        
+        super(TestPageHandler, self).__init__('Test')
+        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
