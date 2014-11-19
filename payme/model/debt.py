@@ -1,7 +1,9 @@
 from user import User
 from payment import Payment
+from google.appengine.ext import ndb
 
-class Debt:
+
+class Debt(ndb.Model):
     'Represents a debt that one user owes to another'
 
     def __init__(self, debtor, creditor, amount, amountsPaid, description, isPaid, date, dateCreated, amountPaid):

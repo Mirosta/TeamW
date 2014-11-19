@@ -11,27 +11,25 @@ class User (Entity):
         self.friends = friends
 
     def getDebtAmount(self):
-        Entity.getDebtAmount(self)
+        pass
 
     def getNetAmounts(self):
-        Entity.getNetAmounts(self)
+        pass
 
     def getNetCreditAmount(self):
-        Entity.getNetCreditAmount(self)
+        pass
 
     def getCredits(self):
-        Entity.getCredits(self)
+        pass
 
     def getDebtsAmounts(self):
-        Entity.getDebtsAmounts(self)
+        pass
 
     def getCreditsAmount(self):
-        Entity.getCreditsAmount(self)
+        pass
 
     def getDebts(self):
-        Entity.getDebts(self)
+        pass
 
     def getNetAmount(self):
-        Entity.getNetAmount(self)
-
-
+        pass

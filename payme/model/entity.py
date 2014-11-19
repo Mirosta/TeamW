@@ -1,8 +1,10 @@
-class Entity:
-    empCount = 0
+from google.appengine.ext import ndb
+
+
+class Entity(ndb.model):
 
     def __init__(self, name):
-        pass
+        self.name = name
 
     def getDebts(self):
         """
@@ -12,22 +14,22 @@ class Entity:
         pass
 
     def getCredits(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getDebtsAmounts(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getCreditsAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetAmounts(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getDebtAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetCreditAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
