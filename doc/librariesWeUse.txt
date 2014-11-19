@@ -1,0 +1,24 @@
+Backend:
+--------
+
+Jinja - HTML Templating library
+-------------------------------
+ Useful Links
+  Library Documentation    - http://jinja.pocoo.org/docs/dev/api/
+  Templating Documentation - http://jinja.pocoo.org/docs/dev/templates/
+
+Webapp2 - Google's Simple Web Application Framework
+---------------------------------------------------
+ Useful Links
+   Library Documentation   - https://cloud.google.com/appengine/docs/python/tools/webapp2
+   Hello World Application - https://cloud.google.com/appengine/docs/python/gettingstartedpython27/helloworld
+
+NDB Datastore - Google's Non-Relation Database
+----------------------------------------------
+ Useful Links
+   Library Documentation - https://cloud.google.com/appengine/docs/python/ndb/
+   Entities and Keys     - https://cloud.google.com/appengine/docs/python/ndb/entities
+   Model Properties      - https://cloud.google.com/appengine/docs/python/ndb/properties
+
+Front End
+----------
