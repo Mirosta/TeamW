@@ -1,6 +1,7 @@
 import webapp2
 import logging
 from contentHandler import TestPageHandler, Parameter
+from dbTesting import TestPage
 from exceptions import PageNotFoundError
 
 # Supported HTTP verbs
@@ -11,7 +12,7 @@ class HTTPVerb:
 # Main controller. Handles the map of pages and what not.
 class Controller (webapp2.RequestHandler):
 
-    pages = {'home': TestPageHandler()}
+    pages = {'home': TestPageHandler(), 'test': TestPage()}
     homePage = 'home'
 
     def __init__(self, isAPI):
