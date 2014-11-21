@@ -18,8 +18,8 @@ class Controller (webapp2.RequestHandler):
     pages = {
         'home': TestPageHandler(),
         'login': OAuthLoginHandler(),
-        'test': TestPage()
-        'groups': JSONDummy()
+        'test': TestPage(),
+        'groups': JSONDummy(),
     }
 
     homePage = 'home'
