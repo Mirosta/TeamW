@@ -100,3 +100,12 @@ hr {
   border-radius: 4px;
   padding-bottom: 10px;
 }
+
+/*
+ * Input fields
+ */
+
+ .textarea {
+  max-width: 400px;
+  max-height: 150px;
+ }
