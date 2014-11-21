@@ -9,7 +9,10 @@ class Parameter(object):
         Int = object()
         String = object()
         NoParameter = object()
-        
+
+    Invalid = object()
+    NoneGiven = object()
+
     def __init__(self, paramType = Type.NoParameter, isRequired = False, canBeInvalid = False):
         self.paramType = paramType
         self.required = isRequired
@@ -28,31 +31,33 @@ class Parameter(object):
 class ContentHandler(object):
     
     TEMPLATE_EXTENSION = '.jinja'
-    TEMPLATE_FOLDER = '/../view/'
+    TEMPLATE_FOLDER = '../view/'
     JINJA_ENVIRONMENT = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + TEMPLATE_FOLDER),
+        loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), TEMPLATE_FOLDER)),
         extensions=['jinja2.ext.autoescape'],
         autoescape=False)
     
     def __init__(self, templateFile):
         self.templateFile = templateFile
     
-    def getHTML(self, parameter):
-        logging.info('Loading template from ' + __file__)
+    def getHTML(self, controller, parameter):
+        return self.renderTemplate(self.templateFile)
+
+    def renderTemplate(self, templateFile):
         # Get the template and render it
-        if self.templateFile == None: raise NoTemplateError("No template set on content handler")
-        template = ContentHandler.JINJA_ENVIRONMENT.get_template(self.templateFile + ContentHandler.TEMPLATE_EXTENSION)
+        if templateFile == None: raise NoTemplateError("No template set on content handler")
+        template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
         return template.render({'page': self})
         
-    def postHTML(self, parameter):
+    def postHTML(self, controller, parameter):
         # Need to error out here
         pass
     
-    def getAPI(self, parameter):
+    def getAPI(self, controller, parameter):
         # Need to error out here
         pass
         
-    def postAPI(self, parameter):
+    def postAPI(self, controller, parameter):
         # Need to error out here
         pass
 
@@ -64,10 +69,10 @@ class PageHandler(ContentHandler):
         self.parameter = parameter
         self.verbs = verbs
     
-    def getVerb(self, verb):
+    def hasVerb(self, verb):
         return self.verbs.has_key(verb)
         
-    def hasVerb(self, verb):
+    def getVerb(self, verb):
         return self.verbs.get(verb)
     
     def getParameter(self):
