@@ -13,4 +13,4 @@ class TestPage(PageHandler):
         u = User(userName='john', name='John Smith', password='pass', dateOfBirth=date(1993, 12, 22))
         key = u.put() # put returns key to u in the database
         self.output = User.retrieveUserName(u, key)
-        return super(TestPage, self).getHTML(parameter)
+        return super(TestPage, self).getHTML(controller, parameter)
