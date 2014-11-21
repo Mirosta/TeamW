@@ -1,6 +1,7 @@
 import webapp2
 import logging
 from contentHandler import TestPageHandler, Parameter
+from dbTesting import TestPage
 from exceptions import PageNotFoundError
 from oAuthLogin import OAuthLoginHandler
 # Supported HTTP verbs
@@ -14,6 +15,7 @@ class Controller (webapp2.RequestHandler):
     pages = {
                 'home': TestPageHandler(),
                 'login': OAuthLoginHandler(),
+                'test': TestPage()
             }
     homePage = 'home'
 
