@@ -2,6 +2,7 @@ import jinja2
 import os
 import logging
 from exceptions import NoTemplateError
+
 # Class for representing URL parameters for pages
 class Parameter(object):
     
@@ -79,7 +80,6 @@ class VerbHandler(ContentHandler):
     def __init__(self, templateFile):
         super(VerbHandler, self).__init__(templateFile)
     
-
 # Test page with a test template
 class TestPageHandler(PageHandler):
 
