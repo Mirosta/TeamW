@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+    <head>
+        <title>Login Failure</title>
+        <style>
+            div.Success
+            {
+                color: green;
+            }
+            div.Credentials
+            {
+                display: block;
+                padding-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='Success'>
+            Login success, credentials:
+            <div class='Credentials'>{{ page.credentials }}</div>
+        </div>
+    </body>
+</html>
+{%  endautoescape %}
