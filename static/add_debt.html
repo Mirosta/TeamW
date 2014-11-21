@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>payme - add debt</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  <!-- JQuery UI CSS -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../assets/css/stylesheet.css">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <!-- datepicker script -->
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          <span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;margin-left:10px;" class="green">payme.</span>
+        </a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="help.html">help!</a>
+          </li>
+          <li>
+            <a href="index.html">dashboard</a>
+          </li>
+          <li>
+            <a href="#">user profile</a>
+          </li>
+          <li>
+            <a href="#"> <i class="glyphicon glyphicon-cog"></i>
+            </a>
+          </li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="Search..."></form>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 sidebar" id="sidebar-div">
+        <ul class="nav nav-sidebar">
+          <li>
+            <a href="">past transactions</a>
+          </li>
+          <li>
+            <a href="">make payment</a>
+          </li>
+          <li>
+            <a href="#">add debt</a>
+          </li>
+        </ul>
+        <hr>
+        <ul class="nav nav-sidebar top-buffer">
+          <li>
+            <a href="">manage friends</a>
+          </li>
+          <li>
+            <a href="">manage groups</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-10 col-md-offset-2 main">
+        <div style="width:100%;">
+          <div class="row">
+            <h1 class="page-header bold">add debt</h1>
+          </div>
+          <div class="row">
+            <!-- start of form -->
+            <form class="col-md-6 form-horizontal grey-bordered-box" role="form">
+              <div class="form-group">
+                <label for="debtor" class="col-md-2 control-label top-buffer">debtor:</label>
+                <div class="col-md-6 top-buffer">
+                  <select class="form-control" id="debtor">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="debtor-friend" class="col-md-2 control-label">debtor type:</label>
+                <div class="col-md-6">
+                  <label class="radio-inline">
+                    <input type="radio" name="debtor-type" id="debtor-friend" value="friend">friend</label>
+                  <label class="radio-inline">
+                    <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="ammount" class="col-md-2 control-label">ammount:</label>
+                <div class="col-md-6">
+                  <input type="number" class="form-control" id="ammount" value="1" min="1">
+                  <!-- TODO: inser gbp sign in input box --> </div>
+              </div>
+              <div class="form-group">
+                <label for="date" class="col-md-2 control-label">date:</label>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" id="date"></div>
+              </div>
+              <div class="form-group">
+                <label for="description" class="col-md-2 control-label">description:</label>
+                <div class="col-md-6">
+                <textarea class="form-control textarea" id="description" maxlength="200"></textarea></div>
+              </div>
+              <div class="form-group">
+                <label for="split" class="col-md-2 control-label">splitting:</label>
+                <div clas="col-md-6">
+                  <label class="radio-inline">
+                    <input type="radio" id="split" value="split">split money between debtor(s)?</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">name:</label>
+                <label class="col-md-2 control-label">Trisha</label>
+                <label class="col-md-2 control-label">Lubo</label>
+                <label class="col-md-2 control-label">Tom</label>
+              </div>
+              <div class="form-group">
+                <label class="col-md-2 control-label">ammount:</label>
+                <div class="col-md-2">
+                  <input type="number" class="form-control" id="split1" value="1" min="1"></div>
+                <div class="col-md-2">
+                  <input type="number" class="form-control" id="split2" value="1" min="1"></div>
+                <div class="col-md-2">
+                  <input type="number" class="form-control" id="split3" value="1" min="1"></div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-2 col-md-offset-1">
+                  <button type="submit" class="btn btn-primary" id="submit">submit</button>
+                </div>
+              </div>
+            </form>
+            <!-- recent debtors --> 
+            <div class="col-md-6 grey-bordered-box">
+              
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+  <script>
+      $(document).ready(function() {
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        $("#date").val( day + "/" + month + "/" + year);
+        $("#date").datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+     });
+    </script>
+
+</body>
+</html>

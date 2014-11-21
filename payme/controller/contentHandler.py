@@ -2,6 +2,7 @@ import jinja2
 import os
 import logging
 from exceptions import NoTemplateError
+
 # Class for representing URL parameters for pages
 class Parameter(object):
     
@@ -35,7 +36,8 @@ class ContentHandler(object):
     JINJA_ENVIRONMENT = jinja2.Environment(
         loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), TEMPLATE_FOLDER)),
         extensions=['jinja2.ext.autoescape'],
-        autoescape=False)
+        autoescape=False
+    )
     
     def __init__(self, templateFile):
         self.templateFile = templateFile
@@ -45,7 +47,7 @@ class ContentHandler(object):
 
     def renderTemplate(self, templateFile):
         # Get the template and render it
-        if templateFile == None: raise NoTemplateError("No template set on content handler")
+        if templateFile == None: raise NoTemplateError()
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
         return template.render({'page': self})
         
@@ -78,13 +80,25 @@ class PageHandler(ContentHandler):
     def getParameter(self):
         return self.parameter
         
+    def validateParameter(self, parameter):
+        if self.getParameter().getType() == Parameter.Type.NoParameter:
+            return parameter == Parameter.NoneGiven
+        
+        if self.getParameter().getType() == Parameter.Type.Int:
+            try:
+                val = int(parameter)
+                return True
+            except ValueError:
+                return False
+        
+        return True
+        
 # class for handling verbs
 class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile):
         super(VerbHandler, self).__init__(templateFile)
     
-
 # Test page with a test template
 class TestPageHandler(PageHandler):
 
