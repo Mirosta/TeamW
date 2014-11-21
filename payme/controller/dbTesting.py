@@ -10,15 +10,18 @@ class TestPage(PageHandler):
         super(TestPage, self).__init__('testingPage')
         self.output = ''
 
-    def getHTML(self, parameter):
-        u1 = User(userName='john', name='John Smith', password='pass', dateOfBirth=date(1993, 12, 22))
-        u1.put() # put returns key to u in the database
+    def createUser(self, userName, name, year, mth, day):
+        u = User(id=userName, userName=userName, name=name, dateOfBirth=date(year, mth, day))
+        u.put()
 
-        u2 = User(userName='david', name='David Hutchinson', password='pass', dateOfBirth=date(1992, 12, 22))
-        u2.put() # put returns key to u in the database
+    def getHTML(self, controller, parameter):
 
-        key = ndb.Key(User, 'david')
+        self.createUser('david', 'David Hutchinson', 1993, 01, 01)
+        self.createUser('john', 'John Smith', 1993, 01, 02)
 
-        self.output = User.retrieveUserName(key)
+        users = User.query(User.userName == 'john').fetch(100)
 
-        return super(TestPage, self).getHTML(parameter)
+        for user in users:
+            self.output += user.retrieveUserName()
+
+        return super(TestPage, self).getHTML(controller, parameter)

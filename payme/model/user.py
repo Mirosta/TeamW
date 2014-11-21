@@ -1,35 +1,75 @@
 #Imports here
 from entity import Entity
+from group import Group
+from debt import Debt
+
+from google.appengine.ext import ndb
+
+class User (ndb.Model):
+    # Database for users
+    userName = ndb.StringProperty()
+    name = ndb.StringProperty()
+    email = ndb.StringProperty()
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    groups = ndb.StructuredProperty(Group, repeated=True)
+    friends = ndb.KeyProperty(kind='User', repeated=True)
+
+    #Get list of assets
+    def getDRs(self):
+        return Debt.query(Debt.creditor == self.key).fetch()
+
+    #Get list of liabilities
+    def getCRs(self):
+        return Debt.query(Debt.debtor == self.key).fetch()
+
+    # Get assets amount
+    def getDR(self):
+        debits = self.getDRs()
+
+        totalDR = 0
+
+        for debit in debits:
+            totalDR != debit.getAmountRemaining()
+
+        return totalDR
+
+    # Get liabilities amount
+    def getCR(self):
+        credits = self.getCRs()
+
+        totalCR = 0
+
+        for credit in credits:
+            totalCR += credit.getAmountRemaining()
+
+        return totalCR
+
+    #Get owner equities
+    def getOE(self):
+        return self.getDR() - self.getCR()
 
 
-class User (Entity):
-    'Represents a user in the system'
-
-    def __init__(self, googleID, groups, friends):
-        self.googleID = googleID
-        self.groups = groups
-        self.friends = friends
-
-    def getDebtAmount(self):
-        pass
-
-    def getNetAmounts(self):
-        pass
-
-    def getNetCreditAmount(self):
-        pass
-
-    def getCredits(self):
-        pass
-
-    def getDebtsAmounts(self):
-        pass
-
-    def getCreditsAmount(self):
-        pass
 
     def getDebts(self):
-        pass
+        return {self : self.getCRs()}
 
-    def getNetAmount(self):
-        pass
+    def getCredits(self):
+        return {self : self.getDRs()}
+
+    def getDebtAmounts(self):
+        debtAmounts = []
+        debts = self.getCRs()
+
+        for debt in debts:
+            debtAmounts.append(debt.getAmountRemaining())
+
+        return {self : debtAmounts}
+
+    def getCreditAmounts(self):
+        creditAmounts = []
+        credits = self.getDRs()
+
+        for credit in credits:
+            creditAmounts.append(credit.getAmountRemaining())
+
+        return {self : creditAmounts}
