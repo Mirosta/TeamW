@@ -8,6 +8,6 @@ class TestPage(PageHandler):
         super(TestPage, self).__init__('testingPage')
         self.output = ''
 
-    def getHTML(self, parameter):
+    def getHTML(self, controller, parameter):
         self.output = 'Hello World'
         return super(TestPage, self).getHTML(parameter)
