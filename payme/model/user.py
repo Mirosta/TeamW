@@ -5,15 +5,15 @@ from debt import Debt
 
 from google.appengine.ext import ndb
 
-class User (ndb.Model):
+class User (Entity):
     # Database for users
-    userName = ndb.StringProperty()
-    name = ndb.StringProperty()
+    googleID = ndb.StringProperty()
     email = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.StructuredProperty(Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
-
+    uniqueProperty = 'googleID'
+    
     #Get list of assets
     def getDRs(self):
         return Debt.query(Debt.creditor == self.key).fetch()

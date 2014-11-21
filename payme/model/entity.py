@@ -1,10 +1,10 @@
 from google.appengine.ext import ndb
+from uniqueModel import HasUniqueProperty
 
 
-class Entity(ndb.model):
+class Entity(HasUniqueProperty):
 
-    def __init__(self, name):
-        self.name = name
+    name = ndb.StringProperty()
 
     def getDebts(self):
         """
