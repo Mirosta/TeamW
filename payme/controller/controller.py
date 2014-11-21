@@ -6,6 +6,7 @@ from exceptions import PageNotFoundError, InvalidParameterError
 from oAuthLogin import OAuthLoginHandler
 from pages import *
 from jsonDummy import JSONDummy
+from webapp2_extras import sessions
 
 # Supported HTTP verbs
 class HTTPVerb:
@@ -26,6 +27,23 @@ class Controller (webapp2.RequestHandler):
 
     def __init__(self, isAPI):
         self.isAPI = isAPI
+
+    #Session Stuff
+    def dispatch(self):
+        # Get a session store for this request.
+        self.session_store = sessions.get_store(request=self.request)
+
+        try:
+            # Dispatch the request.
+            webapp2.RequestHandler.dispatch(self)
+        finally:
+            # Save all sessions.
+            self.session_store.save_sessions(self.response)
+
+    @webapp2.cached_property
+    def session(self):
+        # Returns a session using the default cookie key.
+        return self.session_store.get_session()
 
     def get(self, pageName, verbName):
         self.handleRequest(HTTPVerb.GET, pageName, verbName)
@@ -92,6 +110,7 @@ class APIController(Controller):
         super(APIController, self).__init__(True)
         super(Controller, self).__init__(request, response)
 
+sessions.default_config['secret_key'] = 'a random key to use for generating cookies' #TODO: Maybe something a little more secure
 logging.debug('Loaded controller')
 
 # Define the routes.
