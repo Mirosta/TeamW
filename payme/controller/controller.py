@@ -5,6 +5,7 @@ from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from oAuthLogin import OAuthLoginHandler
 from pages import *
+from jsonDummy import JSONDummy
 
 # Supported HTTP verbs
 class HTTPVerb:
@@ -18,8 +19,9 @@ class Controller (webapp2.RequestHandler):
         'home': TestPageHandler(),
         'login': OAuthLoginHandler(),
         'test': TestPage()
+        'groups': JSONDummy()
     }
-    
+
     homePage = 'home'
 
     def __init__(self, isAPI):
