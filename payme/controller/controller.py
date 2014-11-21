@@ -54,14 +54,17 @@ class Controller (webapp2.RequestHandler):
             parameter = verbName
             
             if parameter == "":
-                parameter = Parameter.NoneGiven
-            
-            # If the parameter is invalid, and this isn't allowed, throw an error. Otherwise mark the param as invalid.
-            if not page.validateParameter(parameter):
-                if page.getParameter().canBeInvalid():
-                    parameter = Parameter.Invalid
-                else:
+                if page.getParameter().isRequired():
                     raise InvalidParameterError()
+                else:
+                    parameter = Parameter.NoneGiven
+            else:
+                # If the parameter is invalid, and this isn't allowed, throw an error. Otherwise mark the param as invalid.
+                if not page.validateParameter(parameter):
+                    if page.getParameter().canBeInvalid():
+                        parameter = Parameter.Invalid
+                    else:
+                        raise InvalidParameterError()
 
         response = self.sendToContentHandler(contentHandler, parameter, httpVerb)
 

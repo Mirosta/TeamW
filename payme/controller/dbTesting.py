@@ -10,7 +10,7 @@ class TestPage(PageHandler):
         super(TestPage, self).__init__('testingPage')
         self.output = ''
 
-    def getHTML(self, parameter):
+    def getHTML(self, controller, parameter):
         u1 = User(userName='john', name='John Smith', password='pass', dateOfBirth=date(1993, 12, 22))
         u1.put() # put returns key to u in the database
 
@@ -21,4 +21,4 @@ class TestPage(PageHandler):
 
         self.output = User.retrieveUserName(key)
 
-        return super(TestPage, self).getHTML(parameter)
+        return super(TestPage, self).getHTML(controller, parameter)
