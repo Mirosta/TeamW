@@ -45,7 +45,7 @@ class OAuthCallbackHandler(VerbHandler):
 
     def handleCode(self, controller, parameter):
         if controller.request.GET.has_key('error'):
-            raise OAuthCodeError(controller.request.GET['error'])
+            raise OAuthCodeError() #controller.request.GET['error']
         if not controller.request.GET.has_key('code'):
-            raise OAuthCodeError('No code given')
+            raise OAuthCodeError() #'No code given'
         return OAuthLoginHandler.oAuthFlow.step2_exchange(controller.request.GET['code'])

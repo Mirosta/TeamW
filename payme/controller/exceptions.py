@@ -9,7 +9,7 @@ class PaymeError(Exception):
     def __init__(self, errorType):
         self.errorType = errorType
         
-    def getErrorCode():
+    def getErrorCode(self):
         return self.errorType
 
 class InvalidParameterError(PaymeError):
