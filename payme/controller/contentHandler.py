@@ -3,6 +3,9 @@ import os
 import logging
 from exceptions import NoTemplateError
 
+FOOTER = "footer"
+HEADER = "header"
+
 # Class for representing URL parameters for pages
 class Parameter(object):
     
@@ -63,6 +66,12 @@ class ContentHandler(object):
         # Need to error out here
         pass
 
+    def header(self):
+        return self.renderTemplate(HEADER)
+
+    def footer(self):
+        return self.renderTemplate(FOOTER)
+
 # Class for handling pages
 class PageHandler(ContentHandler):
     
@@ -105,3 +114,7 @@ class TestPageHandler(PageHandler):
     def __init__(self):
         super(TestPageHandler, self).__init__('test')
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+
+    def getHTML(self, controller, parameter):
+        return super(TestPageHandler, self).getHTML(controller, parameter)
+

@@ -14,9 +14,6 @@ class HTTPVerb:
     GET = object()
     POST = object()
 
-FOOTER = "footer"
-HEADER = "header"
-
 # Main controller. Handles the map of pages and what not.
 class Controller (webapp2.RequestHandler):
 
@@ -101,12 +98,6 @@ class Controller (webapp2.RequestHandler):
         else:
             if httpVerb == HTTPVerb.GET: return contentHandler.getHTML(self, parameter)
             elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter)
-
-    def header(self, contentHandler):
-        return contentHandler.renderTemplate(HEADER);
-
-    def footer(self, contentHandler):
-        return contentHandler.renderTemplate(FOOTER);
 
 # Controller for handling HTML requests
 class HTMLController(Controller):
