@@ -18,10 +18,10 @@ class JSONDummy(PageHandler):
         return self.displayGroup()
 
     def outputAllGroups(self):
-        return '{groups: [' + self.displayGroup() + ']}'
+        return '{"results": [' + self.displayGroup() + ']}'
 
     def displayGroup(self):
-        return '{name: "TestGroup", ID: 1, users: [{name: "TestUser", ID: 1},{name: "TestUser2", ID: 2}]}'
+        return '{"name": "TestGroup", "id": 1, "users": [{"name": "TestUser", "id": 1},{"name": "TestUser2", "id": 2}]}'
 
     def onInvalidParameter(self):
         return '{error: "Invalid group ID"}'
