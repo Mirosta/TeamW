@@ -1,0 +1,11 @@
+{{ page.header() }}
+{% autoescape true %}
+    <link rel="stylesheet" href="../assets/css/zocial/zocial.css"/>
+    <script src="../assets/js/pages/login.js" type="text/javascript"></script>
+    <h2>Welcome to payme</h2>
+    <h3>Keep track of what you owe</h3>
+    <p>To get started, login with google</p>
+    <a onclick="startLogin()" class="zocial google">Google</a>
+
+{%  endautoescape %}
+{{ page.footer() }}
