@@ -15,6 +15,9 @@ class Debt(ndb.Model):
     dateCreated = ndb.DateTimeProperty(auto_now_add=True)
     amountPaid = ndb.IntegerProperty()
 
+    def getAmount(self):
+        return self.amount;
+
     def getAmountRemaining(self):
         return self.amount - self.getAmountPaid()
 

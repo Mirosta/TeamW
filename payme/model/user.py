@@ -8,9 +8,6 @@ from google.appengine.ext import ndb
 class User (Entity):
     # Database for users
 
-    firstName = ndb.StringProperty()
-    lastName = ndb.StringProperty()
-
     googleID = ndb.StringProperty()
     email = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -58,9 +55,6 @@ class User (Entity):
     # create new group
     def addGroup(self, group):
         self.groups.append(group)
-
-
-
 
 
 
