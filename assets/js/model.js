@@ -24,19 +24,19 @@ function Model(modelUrl, idOrObj)
     {
         var url = apiUrl + thisObj.modelUrl + createUrl;
         //Create object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
     };
     this.update = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + updateUrl;
         //Update object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
     };
     this.remove = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + deleteUrl;
         //Remove object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
     };
 }
 
@@ -96,7 +96,9 @@ function ModelClass(modelUrl)
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
 var groups = new ModelClass("groups");
 //Model objects have .update, .create and .remove methods
-/*Example: Get all groups
+/*
+Example: Get all groups
+
 var allGroups = groups.getAll(
     function(success, data)
     {
@@ -111,8 +113,10 @@ var allGroups = groups.getAll(
         }
     }
 );
+/*
 //Example: Get group with id 1
 //NOTE: Objects don't necessarily have integer ids, they can be strings
+/*
 var group1 = groups.get("1",
     function(success, data)
     {
@@ -127,12 +131,17 @@ var group1 = groups.get("1",
         }
     }
 );
+*/
 //Example: Update name of group 1
+/*
 group1.name = "Broadlands Road";
 group1.update();
+*/
 //Example: Remove group 1
-group1.remove();
+//group1.remove();
 //Example: Create a new group in the DB, with no users
+/*
 var newGroup = groups.newInstance({"name": "New Group"}); //Properties can be passed in when creating a new group
 newGroup.users = []; //Or later by setting the properties directly
 newGroup.create();
+*/

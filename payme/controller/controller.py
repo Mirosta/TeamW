@@ -1,12 +1,14 @@
-import webapp2
 import logging
+
+import webapp2
+from webapp2_extras import sessions
+
 from contentHandler import TestPageHandler, Parameter
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
-from oAuthLogin import OAuthLoginHandler
-from pages import *
+from payme.controller.pages.oAuthLogin import OAuthLoginHandler, OAuthHandler
 from jsonDummy import JSONDummy
-from webapp2_extras import sessions
+
 
 # Supported HTTP verbs
 from payme.controller.pages.userHandler import UserHandler
@@ -21,7 +23,7 @@ class Controller (webapp2.RequestHandler):
 
     pages = {
         'home': TestPageHandler(),
-        'login': OAuthLoginHandler(),
+        'oauth': OAuthHandler(),
         'test': TestPage(),
         'groups': JSONDummy(),
         'user': UserHandler()
