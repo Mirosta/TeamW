@@ -9,7 +9,6 @@ class Debt(ndb.Model):
     debtor = ndb.KeyProperty(kind="User")
     creditor = ndb.KeyProperty(kind="User")
     amount = ndb.IntegerProperty()
-   # amountsPaid = ndb.StructuredProperty(Payment, repeated=True)
     description = ndb.StringProperty()
     isPaid = ndb.BooleanProperty()
     date = ndb.DateProperty()
