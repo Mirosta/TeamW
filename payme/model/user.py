@@ -12,8 +12,10 @@ class User (Entity):
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.StructuredProperty(Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
+    credentials = ndb.PickleProperty() #Store the OAuthCredentials
+
     uniqueProperty = 'googleID'
-    
+
     #Get list of assets
     def getDRs(self):
         return Debt.query(Debt.creditor == self.key).fetch()
