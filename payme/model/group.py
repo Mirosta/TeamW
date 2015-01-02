@@ -3,7 +3,7 @@ from google.appengine.ext import ndb
 from entity import Entity
 from debt import Debt
 
-#Group is made by passing a list of users. When addDebt is called, it will add 'debt' passed to every user in the group.
+# Group is made by passing a list of users. When addDebt is called, it will add 'debt' passed to every user in the group.
 class Group (Entity):
 
     users = ndb.KeyProperty(kind='User', repeated=True)
