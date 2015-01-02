@@ -16,33 +16,39 @@ class Group (Entity):
 
     #TODO: Do some division on the amount of debt to add
     # When debt is evenly distributed to everyone in the group
-    def addDebt(self, debt):
+    def addDebtEven(self, debt):
 
-        amountTotal = debt.getAmountRemaining();
+        amountTotal = debt.getAmountRemaining()
         amountEach = amountTotal / self.users.__len__()
 
+        # create debts and put them in database
         for user in self.users:
-            user.addDebt(Debt(debtor=user,
-                              creditor=debt.debtor,
-                              amount=amountEach,
-                              description=debt.description,
-                              isPaid=False,
-                              date=debt.date,))
+            d = Debt(debtor=user,
+                     creditor=debt.creditor,
+                     amount=amountEach,
+                     description=debt.description,
+                     isPaid=False,
+                     date=debt.date)
+
+            d.put()
 
     # When debt is not applied to the entire group
     # Split evenly among users provided
-    def addDebt(self, debt, users):
+    def addDebtUneven(self, debt, users):
 
         amountTotal = debt.getAmountRemaining();
         amountEach = amountTotal / users.__len__()
 
+        # create debts and put then in database
         for user in self.users:
-            user.addDebt(Debt(debtor=user,
-                              creditor=debt.debtor,
-                              amount=amountEach,
-                              description=debt.description,
-                              isPaid=False,
-                              date=debt.date))
+            d = Debt(debtor=user,
+                     creditor=debt.creditor,
+                     amount=amountEach,
+                     description=debt.description,
+                     isPaid=False,
+                     date=debt.date)
+
+            d.put()
 
 
     #TODO: Implement methods
