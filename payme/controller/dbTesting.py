@@ -41,9 +41,6 @@ class TestPage(PageHandler):
         self.createDebtGroup()
 
 
-
-
-
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
 
@@ -51,7 +48,7 @@ class TestPage(PageHandler):
     def createUser(self, userName, name, year, mth, day):
 
         # u = User(id=userName, userName=userName, name=name, dateOfBirth=date(year, mth, day))
-        u = User(googleID=userName, email='cock@email.com', dateOfBirth=date(year, mth, day), firstName=name)
+        u = User(googleID=userName, email='cock@email.com', dateOfBirth=date(year, mth, day), name=name)
         u.put()
 
         return u
@@ -94,25 +91,30 @@ class TestPage(PageHandler):
 
         return p
 
-#   PENDING - 5: Create and verify group
+#   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
 
-        john = User.query(User.googleID == 'john').fetch(10)[0].key
-        david = User.query(User.googleID == 'david').fetch(10)[0].key
-        dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0].key
+        john = User.query(User.googleID == 'john').fetch(10)[0]
+        david = User.query(User.googleID == 'david').fetch(10)[0]
+        dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0]
 
-        g = Group(name='Wolfpack')
-        g.put()
+        # g = Group(name='Wolfpack')
+        # g.put()
+        # g = Group.query(Group.name == 'Wolfpack').fetch(10)[0]
+        #
+        # g.addUser(john.key)
+        # g.addUser(david.key)
+        #
+        # d = Debt(creditor=dingdong.key, amount=8000)
+        #
+        #
+        # g.addDebtEven(d)
 
-        g.addUser(john)
-        g.addUser(david)
+        self.output += "John's OE: "
+        self.output += str(john.getOE())
 
-        self.output += str(g.users)
+        self.output += "<br>David's OE: "
+        self.output += str(david.getOE())
 
-        d = Debt(creditor=dingdong, amount=8000)
-
-        g.addDebt(d)
-
-        self.output += "John's OE: <br>"
-        self.output += john.getOE()
-
+        self.output += "<br>Dingdong's OE: "
+        self.output += str(dingdong.getOE())

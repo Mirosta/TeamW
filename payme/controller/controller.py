@@ -17,6 +17,8 @@ from apiclient.discovery import build
 
 # Supported HTTP verbs
 from payme.controller.pages.userHandler import UserHandler
+from payme.controller.pages.debtHandler import DebtHandler
+from payme.controller.pages.transactionsHandler import TransactionsHandler
 
 
 class HTTPVerb:
@@ -37,7 +39,9 @@ class Controller (webapp2.RequestHandler):
         'test': TestPage(),
         'friends': FriendHandler(),
         'groups': GroupHandler(),
-        'user': UserHandler()
+        'user': UserHandler(),
+        'debt': DebtHandler(),
+        'transactions': TransactionsHandler(),
     }
 
     homePage = 'home'
