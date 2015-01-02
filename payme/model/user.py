@@ -17,7 +17,7 @@ class User (Entity):
     groups = ndb.StructuredProperty(Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
     dateOfBirth = ndb.DateProperty()
-    credentials = ndb.PickleProperty() #Store the OAuthCredentials
+    credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
 
@@ -36,7 +36,7 @@ class User (Entity):
         totalDR = 0
 
         for debit in debits:
-            totalDR != debit.getAmountRemaining()
+            totalDR += debit.getAmountRemaining()
 
         return totalDR
 
@@ -54,7 +54,6 @@ class User (Entity):
     # Get owner equities
     def getOE(self):
         return self.getDR() - self.getCR()
-
 
 
     def getDebts(self):
@@ -80,3 +79,7 @@ class User (Entity):
             creditAmounts.append(credit.getAmountRemaining())
 
         return {self : creditAmounts}
+
+    # debug
+    def retrieveUserName(self):
+        return self.googleID

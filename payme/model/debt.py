@@ -9,7 +9,7 @@ class Debt(ndb.Model):
     debtor = ndb.KeyProperty(kind="User")
     creditor = ndb.KeyProperty(kind="User")
     amount = ndb.IntegerProperty()
-    amountsPaid = ndb.StructuredProperty(Payment, repeated=True)
+   # amountsPaid = ndb.StructuredProperty(Payment, repeated=True)
     description = ndb.StringProperty()
     isPaid = ndb.BooleanProperty()
     date = ndb.DateProperty()
@@ -17,12 +17,14 @@ class Debt(ndb.Model):
     amountPaid = ndb.IntegerProperty()
 
     def getAmountRemaining(self):
-        return self.amount - self.getAmountPaid
+        return self.amount - self.getAmountPaid()
 
     def getAmountPaid(self):
+        payments = Payment.query(Payment.debt == self.key).fetch()
+
         totalPaid = 0
 
-        for amount in self.amountsPaid:
-            totalPaid += amount.getAmountPaid()
+        for payment in payments:
+            totalPaid += payment.getAmount()
 
         return totalPaid
