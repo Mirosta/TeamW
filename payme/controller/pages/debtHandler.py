@@ -3,7 +3,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 class DebtHandler(PageHandler):
 
     def __init__(self):
-        super(DebtHandler, self).__init__(None, {'add': AddHandler(), 'pay': PayHandler()})
+        super(DebtHandler, self).__init__(None, Parameter(), {'add': AddHandler(), 'pay': PayHandler()})
 
 class AddHandler(VerbHandler):
 
