@@ -9,6 +9,8 @@ from jsonDummy import JSONDummy
 from webapp2_extras import sessions
 
 # Supported HTTP verbs
+from payme.controller.pages.userHandler import UserHandler
+
 
 class HTTPVerb:
     GET = object()
@@ -22,6 +24,7 @@ class Controller (webapp2.RequestHandler):
         'login': OAuthLoginHandler(),
         'test': TestPage(),
         'groups': JSONDummy(),
+        'user': UserHandler()
     }
 
     homePage = 'home'
