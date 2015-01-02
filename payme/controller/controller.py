@@ -24,7 +24,10 @@ class Controller (webapp2.RequestHandler):
         'login': OAuthLoginHandler(),
         'test': TestPage(),
         'groups': JSONDummy(),
-        'user': UserHandler()
+        'user': UserHandler(),
+        'debt': DebtHandler(),
+        'transactions': TransactionsHandler(),
+        'home': HomeHandler()
     }
 
     homePage = 'home'

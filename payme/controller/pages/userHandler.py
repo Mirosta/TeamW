@@ -1,7 +1,7 @@
-from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 
 
-class UserHandler(ContentHandler):
+class UserHandler(PageHandler):
 
     def __init__(self):
         super(UserHandler, self).__init__(None, {'login': LoginHandler()})
