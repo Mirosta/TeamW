@@ -1,28 +1,33 @@
 #Imports here
 from entity import Entity
 from group import Group
-from debt import Debt
+import debt
 
 from google.appengine.ext import ndb
 
 class User (Entity):
     # Database for users
+
+    firstName = ndb.StringProperty()
+    lastName = ndb.StringProperty()
+
     googleID = ndb.StringProperty()
     email = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.StructuredProperty(Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
+    dateOfBirth = ndb.DateProperty()
     credentials = ndb.PickleProperty() #Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
 
-    #Get list of assets
+    # Get list of assets
     def getDRs(self):
-        return Debt.query(Debt.creditor == self.key).fetch()
+        return debt.Debt.query(debt.Debt.creditor == self.key).fetch()
 
-    #Get list of liabilities
+    # Get list of liabilities
     def getCRs(self):
-        return Debt.query(Debt.debtor == self.key).fetch()
+        return debt.Debt.query(debt.Debt.debtor == self.key).fetch()
 
     # Get assets amount
     def getDR(self):
@@ -46,7 +51,7 @@ class User (Entity):
 
         return totalCR
 
-    #Get owner equities
+    # Get owner equities
     def getOE(self):
         return self.getDR() - self.getCR()
 

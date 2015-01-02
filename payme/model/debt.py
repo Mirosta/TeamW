@@ -1,4 +1,4 @@
-from user import User
+import user
 from payment import Payment
 from google.appengine.ext import ndb
 
@@ -6,8 +6,8 @@ from google.appengine.ext import ndb
 class Debt(ndb.Model):
     'Represents a debt that one user owes to another'
 
-    debtor = ndb.KeyProperty(kind=User)
-    creditor = ndb.KeyProperty(kind=User)
+    debtor = ndb.KeyProperty(kind="User")
+    creditor = ndb.KeyProperty(kind="User")
     amount = ndb.IntegerProperty()
     amountsPaid = ndb.StructuredProperty(Payment, repeated=True)
     description = ndb.StringProperty()
