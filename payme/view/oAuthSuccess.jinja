@@ -2,7 +2,7 @@
 {% autoescape true %}
 <html>
     <head>
-        <title>Login Failure</title>
+        <title>Login Success</title>
         <style>
             div.Success
             {
@@ -14,6 +14,11 @@
                 padding-left: 10px;
             }
         </style>
+        <script>
+            window.localStorage.removeItem('oauth-login');
+			window.localStorage.setItem('oauth-login', 'true');
+            window.close();
+        </script>
     </head>
     <body>
         <div class='Success'>

@@ -2,6 +2,7 @@
 from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
+from payme.model.group import Group
 from datetime import date
 from payme.controller.contentHandler import PageHandler
 
@@ -15,7 +16,7 @@ class TestPage(PageHandler):
 
 #   MAIN
     def getHTML(self, controller, parameter):
-        self.output += "Starting..."
+        self.output += "Starting... <br>"
 
 #   TEST 1 - Users
 #        self.createUsers()
@@ -26,15 +27,27 @@ class TestPage(PageHandler):
 
 #   TEST 3 - Payments
 
-        john = User.query(User.googleID == 'john').fetch(10)[0]
-        david = User.query(User.googleID == 'david').fetch(10)[0]
+#        self.createUser('alison', 'Alison Burgers', 1991, 11, 12)
+#        self.createUser('dingdong', 'Ding Dong', 1990, 01, 23)
+#
+#         john = User.query(User.googleID == 'john').fetch(10)[0]
+#         david = User.query(User.googleID == 'david').fetch(10)[0]
+#
+#         debt = Debt.query(Debt.creditor == david.key).fetch(10)[0]
+#
+#         self.createPayments(john.key, debt.key, 100)
+#
+#         self.viewDebts()
 
-        debt = Debt.query(Debt.creditor == david.key).fetch(10)[0]
+#   TEST 4 - Group and group debts
 
-        self.createPayments(john.key, debt.key, 100)
+        self.createDebtGroup()
 
-        self.viewDebts()
 
+
+
+
+#   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
 
 #   Create new single user and returns it
@@ -82,4 +95,25 @@ class TestPage(PageHandler):
 
         return p
 
+#   PENDING - 5: Create and verify group
+    def createDebtGroup(self):
+
+        john = User.query(User.googleID == 'john').fetch(10)[0].key
+        david = User.query(User.googleID == 'david').fetch(10)[0].key
+        dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0].key
+
+        g = Group(name='Wolfpack')
+        g.put()
+
+        g.addUser(john)
+        g.addUser(david)
+
+        self.output += str(g.users)
+
+        d = Debt(creditor=dingdong, amount=8000)
+
+        g.addDebt(self.createDebt(d))
+
+        self.output += "John's OE: <br>"
+        self.output += john.getOE()
 

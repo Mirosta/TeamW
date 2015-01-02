@@ -1,16 +1,38 @@
-from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
-
+from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
 
 class UserHandler(PageHandler):
 
     def __init__(self):
-        super(UserHandler, self).__init__(None, {'login': LoginHandler()})
+        super(UserHandler, self).__init__(None, Parameter(), {'login': UserHandler.LoginHandler()}) #This page has no view, but it does have verbs
 
-class LoginHandler(VerbHandler):
+    class LoginHandler(VerbHandler):
 
-    def __init__(self):
-        super(LoginHandler, self).__init__('login')
-        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+        def __init__(self):
+            super(UserHandler.LoginHandler, self).__init__('login')
 
-    def getHTML(self, controller, parameter):
-        return super(LoginHandler, self).getHTML(controller, parameter)
+        def getHTML(self, controller, parameter):
+            return super(UserHandler.LoginHandler, self).getHTML(controller, parameter)
+
+    class LogoutHandler(VerbHandler):
+
+        def __init__(self):
+            super(UserHandler.LogoutHandler, self).__init__('logout')
+
+        def getHTML(self, controller, parameter):
+            return super(UserHandler.LogoutHandler, self).getHTML(controller, parameter)
+
+    class ProfileHandler(VerbHandler):
+
+        def __init__(self):
+            super(UserHandler.ProfileHandler, self).__init__('profile')
+
+        def getHTML(self, controller, parameter):
+            return super(UserHandler.ProfileHandler, self).getHTML(controller, parameter)
+
+    class SettingsHandler(VerbHandler):
+
+        def __init__(self):
+            super(UserHandler.SettingsHandler, self).__init__('settings')
+
+        def getHTML(self, controller, parameter):
+            return super(UserHandler.SettingsHandler, self).getHTML(controller, parameter)

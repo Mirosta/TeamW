@@ -9,15 +9,19 @@ class Scope:
     Email = 'email'
     OpenID = 'openid'
 
-class OAuthLoginHandler(PageHandler):
+class OAuthHandler(PageHandler):
 
-    REDIRECT_URI = 'http://localhost:8080/login/callback'
+    def __init__(self):
+        super(OAuthHandler, self).__init__(None, Parameter(), {'login': OAuthLoginHandler(), 'callback': OAuthCallbackHandler()})
+
+class OAuthLoginHandler(VerbHandler):
+    REDIRECT_URI = 'http://localhost:8080/oauth/callback'
     CLIENT_ID = '399506081912-4dg74rjo7k6huk0f5bsid5tst65qd7c2.apps.googleusercontent.com'
     CLIENT_SECRET = 'Ih38GJ4bMO9TTDuhPpYKv9rS'
     oAuthFlow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, str.join(' ',[Scope.OpenID, Scope.Email]), redirect_uri=REDIRECT_URI)
 
     def __init__(self):
-        super(OAuthLoginHandler, self).__init__(None, Parameter(), {'callback': OAuthCallbackHandler()})
+        super(OAuthLoginHandler, self).__init__(None)
 
     def getHTML(self, controller, parameter):
         self.authorise(controller)

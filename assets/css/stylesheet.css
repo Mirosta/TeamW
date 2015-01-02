@@ -33,7 +33,7 @@ hr {
     padding-left: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #BFBFBF;
+    background-color: #333333;
     border-right: 1px solid #eee;
   }
 }
@@ -47,13 +47,20 @@ hr {
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
+  color: #E4E4E4;
 }
 
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
-  color: #fff;
+  color: #000000;
   background-color: #C8F7C5;
+}
+
+.nav-sidebar > li > a:hover,
+.navbar-right > li > a:hover {
+  color: #000000 !important;
+  background-color: #C8F7C5 !important;
 }
 
 /*
