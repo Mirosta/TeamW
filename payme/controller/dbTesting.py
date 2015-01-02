@@ -26,9 +26,6 @@ class TestPage(PageHandler):
 #        self.viewDebts()
 
 #   TEST 3 - Payments
-
-#        self.createUser('alison', 'Alison Burgers', 1991, 11, 12)
-#        self.createUser('dingdong', 'Ding Dong', 1990, 01, 23)
 #
 #         john = User.query(User.googleID == 'john').fetch(10)[0]
 #         david = User.query(User.googleID == 'david').fetch(10)[0]
@@ -70,6 +67,8 @@ class TestPage(PageHandler):
     def createUsers(self):
         self.createUser('david', 'David Hutchinson', 1993, 01, 01)
         self.createUser('john', 'John Smith', 1993, 01, 02)
+        self.createUser('alison', 'Alison Burgers', 1991, 11, 12)
+        self.createUser('dingdong', 'Ding Dong', 1990, 01, 23)
 
         users = User.query(User.googleID == 'john').fetch(100)
 
@@ -112,7 +111,7 @@ class TestPage(PageHandler):
 
         d = Debt(creditor=dingdong, amount=8000)
 
-        g.addDebt(self.createDebt(d))
+        g.addDebt(d)
 
         self.output += "John's OE: <br>"
         self.output += john.getOE()

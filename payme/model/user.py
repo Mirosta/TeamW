@@ -14,7 +14,7 @@ class User (Entity):
     googleID = ndb.StringProperty()
     email = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
-    groups = ndb.StructuredProperty(Group, repeated=True)
+    groups = ndb.KeyProperty(kind=Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
     dateOfBirth = ndb.DateProperty()
     credentials = ndb.PickleProperty() # Store the OAuthCredentials
@@ -54,6 +54,15 @@ class User (Entity):
     # Get owner equities
     def getOE(self):
         return self.getDR() - self.getCR()
+
+    # create new group
+    def addGroup(self, group):
+        self.groups.append(group)
+
+
+
+
+
 
 
     def getDebts(self):
