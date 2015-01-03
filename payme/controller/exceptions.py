@@ -27,3 +27,5 @@ class NoTemplateError(PaymeError):
 class OAuthCodeError(PaymeError):
     def __init__(self):
         super(OAuthCodeError, self).__init__(PaymeError.Types.SERVER_ERROR)
+
+

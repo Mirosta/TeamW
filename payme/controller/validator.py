@@ -1,36 +1,40 @@
+from google.appengine.api.datastore_errors import BadValueError
+from payme.controller.exceptions import InvalidParameterError
+import json
+from payme.model.debt import Debt
+from payme.model.group import Group
+from payme.model.payment import Payment
+from payme.model.user import User
+
 
 class Validator:
-
-    required_fields = {'debt': [], 'entity': [], 'group': [], 'payment': [], 'user': []}
-    field_types = {'debt': {'description': basestring}}
 
     def __init__(self):
         pass
 
-    def parse(self, json_obj, type):
-        if type in Validator.required_fields:
-            # Validate json object contains the required field for its type
-            for key in Validator.required_fields[type]:
+    def validate(self, json_str, type_class, required_fields):
+        json_obj = json.loads(json_str)
+        entity = type_class()
+        try:
+            for key in required_fields:
                 if key not in json_obj:
-                    raise MissingField(key)
-
-            # Validate every field the json object contains is of the correct type
-            for key in json_obj:
-                if not isinstance(key, Validator.field_types[type][key]):
-                    raise IncorrectType('%s. Required type: %s' % (key, Validator.field_types[type][key]))
-
-            return json_obj
-        else:
-            raise UndefinedType(type)
+                    raise MissingFieldError()
+            for key, value in json_obj.iteritems():
+                if key not in type_class._properties:
+                    raise MissingFieldError()
+                setattr(entity, key, value)
+            return entity
+        except:
+            raise InvalidParameterError()
 
 
-class MissingField(Exception):
-    pass
+if __name__ == '__main__':
+    validator = Validator()
+    validator.validate('''
+    {
+        "amount": 1
+    }
+    ''', Debt, [])
 
-
-class IncorrectType(Exception):
-    pass
-
-
-class UndefinedType(Exception):
+class MissingFieldError(Exception):
     pass
