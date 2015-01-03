@@ -140,11 +140,11 @@
             <hr class="top-buffer">
             <table class="table">
                 <tbody>
-                    <tr>
-                        <td class="bold" id="split-name">name</td>
+                    <tr id="split-name">
+                        <td class="bold">name</td>
                     </tr>
-                    <tr>
-                        <td class="bold" id="split-check">split</td>
+                    <tr id="split-check">
+                        <td class="bold">split</td>
                     </tr>
                 </tbody>
             </table>
@@ -195,7 +195,11 @@
             if($(this).prop("checked")){
                 $('#debt-split').show();
                 //populate table data -- possibly separate function
-
+                $('#split-name').append(
+                        "<td>trisha</td>" +
+                        "<td>alex</td>" +
+                        "<td>polly</td>"
+                );
 
             }else {
                 $('#debt-split').hide();
