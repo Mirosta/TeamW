@@ -15,6 +15,9 @@ class Debt(ndb.Model):
     dateCreated = ndb.DateTimeProperty(auto_now_add=True)
     amountPaid = ndb.IntegerProperty()
 
+    # Able to dispute debt as the creditor
+    disputed = ndb.BooleanProperty(default=False)
+
     def getAmount(self):
         return self.amount
 
@@ -30,3 +33,20 @@ class Debt(ndb.Model):
             totalPaid += payment.getAmount()
 
         return totalPaid
+
+    # unpaid = none, inProgress = 0 < amountPaid < amount,
+    # paid - amountPaid = amount, inDispute = disputed
+    def getStatus(self):
+
+        # see if its disputed first
+        if self.disputed:
+            return "INDISPUTE"
+
+        # otherwise work out the progress of the payments
+        if self.amountPaid > 0:
+            if self.amountPaid == self.amount:
+                return "PAID"
+            else:
+                return "INPROGRESS"
+        else:
+            return "UNPAID"
