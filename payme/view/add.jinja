@@ -135,9 +135,19 @@
         </table>
     </div>
     <div class="row">
-        <div class="col-md-12 grey-bordered-box top-buffer">
-            <h2 class="bold">frequent debtors</h2>
+        <div class="col-md-12 grey-bordered-box top-buffer" id="debt-split">
+            <h2 class="bold">debt split</h2>
             <hr class="top-buffer">
+            <table class="table">
+                <tbody>
+                    <tr id="split-name">
+                        <td class="bold">name</td>
+                    </tr>
+                    <tr id="split-check">
+                        <td class="bold">split</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -153,6 +163,8 @@
 <!-- jQuery scripts -->
 <script>
     $(document).ready(function() {
+        //hide debt-split by default
+        $('#debt-split').hide();
         //datepicker for date of debt input field
         var date = new Date();
         var day = date.getDate();
@@ -174,10 +186,25 @@
             }
         });
 
+        //colour the balance
         $('.balance:contains("-")').css("color","red");
         $('.balance:contains("+")').css("color","green");
 
+         //toggle debt-split visibility
+        $('#split').change(function () {
+            if($(this).prop("checked")){
+                $('#debt-split').show();
+                //populate table data -- possibly separate function
+                $('#split-name').append(
+                        "<td>trisha</td>" +
+                        "<td>alex</td>" +
+                        "<td>polly</td>"
+                );
 
+            }else {
+                $('#debt-split').hide();
+            }
+        });
 
     });
 </script>
