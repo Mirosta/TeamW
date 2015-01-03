@@ -46,13 +46,13 @@ class ContentHandler(object):
         self.templateFile = templateFile
     
     def getHTML(self, controller, parameter):
-        return self.renderTemplate(self.templateFile)
+        return self.renderTemplate(controller, self.templateFile)
 
-    def renderTemplate(self, templateFile):
+    def renderTemplate(self, controller, templateFile):
         # Get the template and render it
         if templateFile == None: raise NoTemplateError()
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
-        return template.render({'page': self})
+        return template.render({'page': self, 'controller': controller})
         
     def postHTML(self, controller, parameter):
         # Need to error out here
@@ -67,10 +67,10 @@ class ContentHandler(object):
         pass
 
     def header(self):
-        return self.renderTemplate(HEADER)
+        return self.renderTemplate(controller, HEADER)
 
     def footer(self):
-        return self.renderTemplate(FOOTER)
+        return self.renderTemplate(controller, FOOTER)
 
 # Class for handling pages
 class PageHandler(ContentHandler):

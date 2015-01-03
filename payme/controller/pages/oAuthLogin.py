@@ -44,10 +44,10 @@ class OAuthCallbackHandler(VerbHandler):
             self.credentials = self.handleCode(controller, parameter)
             controller.onLogin(self.credentials)
 
-            return self.renderTemplate('oAuthSuccess')
+            return self.renderTemplate(controller, 'oAuthSuccess')
         except (OAuthCodeError, FlowExchangeError) as ex:
             self.errorMessage = ex.message
-            return self.renderTemplate('oAuthCodeError')
+            return self.renderTemplate(controller, 'oAuthCodeError')
 
     def handleCode(self, controller, parameter):
         if controller.request.GET.has_key('error'):

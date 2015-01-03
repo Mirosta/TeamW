@@ -1,5 +1,6 @@
 import json
 import logging
+from google.appengine.ext.ndb.key import Key
 
 import webapp2
 import httplib2
@@ -123,13 +124,25 @@ class Controller (webapp2.RequestHandler):
     def onLogin(self, credentials):
         credentials.authorize(serviceHttp)
         userDetails = userInfoService.userinfo().get().execute()
-        logging.log(logging.INFO, json.dumps(userDetails))
+        existingUser = User.query(User.googleID == userDetails['id']).fetch()
+        if existingUser.__len__() < 1: #No users found
+            self.onNewUserLogin(userDetails, credentials)
+        else:
+            self.onExistingUserLogin(userDetails, credentials)
+
+    def onNewUserLogin(self, userDetails, credentials):
+        newUser = User(googleID = userDetails['id'], email = userDetails['email'], name = userDetails['name'], profilePicture = userDetails['picture'], credentials = credentials)
+        newUser.put()
+        self.session['user'] = newUser.key.urlsafe()
+
+    def onExistingUserLogin(self, userDetails, credentials):
+        pass
 
     def getCurrentUser(self):
         if not 'user' in self.session:
             return None
         else:
-            matchingUsers = User.query(User.key == self.session['currentUser']).fetch()
+            matchingUsers = User.query(User.key == Key(urlsafe=self.session['currentUser'])).fetch()
             if matchingUsers.__len__() < 1:
                 return None
             else:

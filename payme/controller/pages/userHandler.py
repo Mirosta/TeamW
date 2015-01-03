@@ -3,7 +3,7 @@ from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandl
 class UserHandler(PageHandler):
 
     def __init__(self):
-        super(UserHandler, self).__init__(None, Parameter(), {'login': UserHandler.LoginHandler()}) #This page has no view, but it does have verbs
+        super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String, ), {'login': UserHandler.LoginHandler(), 'logout': UserHandler.LogoutHandler(), 'profile': UserHandler.ProfileHandler, 'settings': UserHandler.SettingsHandler}) #This page has no view, but it does have verbs
 
     class LoginHandler(VerbHandler):
 
