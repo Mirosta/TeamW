@@ -13,7 +13,6 @@ class User (Entity):
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.KeyProperty(kind=Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
-    dateOfBirth = ndb.DateProperty()
     credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
