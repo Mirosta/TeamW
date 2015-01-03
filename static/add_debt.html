@@ -90,10 +90,12 @@
           </div>
           <div class="row">
             <!-- start of form -->
-            <form class="col-md-6 form-horizontal grey-bordered-box" role="form">
+            <form class="col-md-5 form-horizontal grey-bordered-box pull-left" role="form">
+              <h2 class="bold">new debt</h2>
+              <hr class="top-buffer">
               <div class="form-group">
-                <label for="debtor" class="col-md-2 control-label top-buffer">debtor:</label>
-                <div class="col-md-6 top-buffer">
+                <label for="debtor" class="col-md-1 control-label form-label top-buffer">debtor:</label>
+                <div class="col-md-5 top-buffer">
                   <select class="form-control" id="debtor">
                     <option>1</option>
                     <option>2</option>
@@ -102,63 +104,91 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="debtor-friend" class="col-md-2 control-label">debtor type:</label>
-                <div class="col-md-6">
+                <label for="debtor-friend" class="col-md-2 control-label form-label">debtor type:</label>
+                <div class="col-md-4">
                   <label class="radio-inline">
-                    <input type="radio" name="debtor-type" id="debtor-friend" value="friend">friend</label>
+                    <input checked type="radio" name="debtor-type" id="debtor-friend" value="friend" >friend</label>
                   <label class="radio-inline">
                     <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
                 </div>
               </div>
               <div class="form-group">
-                <label for="ammount" class="col-md-2 control-label">ammount:</label>
-                <div class="col-md-6">
-                  <input type="number" class="form-control" id="ammount" value="1" min="1">
-                  <!-- TODO: inser gbp sign in input box --> </div>
+                <label for="ammount" class="col-md-1 control-label form-label">ammount:</label>
+                <div class="col-md-5">
+                  <input type="number" class="form-control" id="ammount" value="1" min="1"></div>
               </div>
               <div class="form-group">
-                <label for="date" class="col-md-2 control-label">date:</label>
-                <div class="col-md-6">
+                <label for="date" class="col-md-1 control-label form-label">date:</label>
+                <div class="col-md-5">
                   <input type="text" class="form-control" id="date"></div>
               </div>
               <div class="form-group">
-                <label for="description" class="col-md-2 control-label">description:</label>
-                <div class="col-md-6">
-                <textarea class="form-control textarea" id="description" maxlength="200"></textarea></div>
-              </div>
-              <div class="form-group">
-                <label for="split" class="col-md-2 control-label">splitting:</label>
-                <div clas="col-md-6">
-                  <label class="radio-inline">
-                    <input type="radio" id="split" value="split">split money between debtor(s)?</label>
+                <label for="description" class="col-md-1 control-label form-label">description:</label>
+                <div class="col-md-5">
+                  <textarea class="form-control textarea" id="description" maxlength="256"></textarea>
+                  <div id="chars-left">256 characters left</div>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">name:</label>
-                <label class="col-md-2 control-label">Trisha</label>
-                <label class="col-md-2 control-label">Lubo</label>
-                <label class="col-md-2 control-label">Tom</label>
+                <label for="split" class="col-md-1 control-label form-label">splitting:</label>
+                <div class="col-md-5">
+                  <label class="checkbox-inline">
+                    <input type="checkbox" id="split" value="split">split money between debtor(s)?</label>
+                </div>
               </div>
               <div class="form-group">
-                <label class="col-md-2 control-label">ammount:</label>
-                <div class="col-md-2">
-                  <input type="number" class="form-control" id="split1" value="1" min="1"></div>
-                <div class="col-md-2">
-                  <input type="number" class="form-control" id="split2" value="1" min="1"></div>
-                <div class="col-md-2">
-                  <input type="number" class="form-control" id="split3" value="1" min="1"></div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-2 col-md-offset-1">
+                <div class="col-md-3 col-md-offset-2">
                   <button type="submit" class="btn btn-primary" id="submit">submit</button>
                 </div>
               </div>
             </form>
-            <!-- recent debtors --> 
-            <div class="col-md-6 grey-bordered-box">
-              
+            <!-- frequent debtor -->
+            <div class="col-md-6 col-md-offset-1 grey-bordered-box pull-right">
+              <h2 class="bold">favourite debts</h2>
+              <hr class="top-buffer">
+              <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>debtor</th>
+                  <th>debtor type</th>
+                  <th>average ammount</th>
+                  <th>current balance</th>
+                </tr>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>trisha</td>
+                  <td>friend</td>
+                  <td>15</td>
+                  <td>-100</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>polly</td>
+                  <td>friend</td>
+                  <td>10</td>
+                  <td>-150</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>house</td>
+                  <td>group</td>
+                  <td>333</td>
+                  <td>+300</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>hartley crew</td>
+                  <td>group</td>
+                  <td>3</td>
+                  <td>+15</td>
+                </tr>
+              </tbody>
+              </thead>
+              </table>
             </div>
-            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -171,8 +201,10 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 
+  <!-- jQuery scripts -->
   <script>
       $(document).ready(function() {
+        //datepicker for date of debt input field 
         var date = new Date();
         var day = date.getDate();
         var month = date.getMonth() + 1;
@@ -180,8 +212,19 @@
 
         $("#date").val( day + "/" + month + "/" + year);
         $("#date").datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+        
+        //character counter for debt description
+        $("#description").keyup(function() {
+            var max = parseInt($(this).attr("maxlength"));
+            var count = $(this).val().length;
+          if(count >= max) {
+            $('#chars-left').text("0 characters left");      
+          } else {
+            var remaining =  max - count;
+            $('#chars-left').text(remaining + " characters left");
+          }
+       });
      });
     </script>
-
 </body>
 </html>
