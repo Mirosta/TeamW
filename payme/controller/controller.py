@@ -158,18 +158,13 @@ class Controller (webapp2.RequestHandler):
 
     def getCurrentUser(self):
         if self.currentUser == None:
-            logging.info('Current user is none')
             if not 'user' in self.session:
-                logging.info('User not set in session')
                 return None
             else:
-                logging.info('User set in session with key ' + self.session['user'])
                 matchingUsers = User.query(User.key == Key(urlsafe=self.session['user'])).fetch()
                 if matchingUsers.__len__() < 1:
-                    logging.info('No users matching that key')
                     return None
                 else:
-                    logging.info('Found user matching that key ' + matchingUsers[0].name)
                     self.currentUser = matchingUsers[0]
         return self.currentUser
 

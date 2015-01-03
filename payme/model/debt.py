@@ -50,3 +50,6 @@ class Debt(ndb.Model):
                 return "INPROGRESS"
         else:
             return "UNPAID"
+
+    def getPayments(self):
+        return Payment.query(Payment.debt == self.key)

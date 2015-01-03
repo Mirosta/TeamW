@@ -80,7 +80,6 @@ class ContentHandler(object):
         pass
 
     def header(self):
-        logging.info(self.lastController)
         return self.renderTemplate(self.lastController, HEADER)
 
     def footer(self):
@@ -129,5 +128,5 @@ class PageHandler(ContentHandler):
 # class for handling verbs
 class VerbHandler(ContentHandler):
 
-    def __init__(self, templateFile):
-        super(VerbHandler, self).__init__(templateFile)
+    def __init__(self, templateFile, accessLevel = 1):
+        super(VerbHandler, self).__init__(templateFile, accessLevel)

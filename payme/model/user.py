@@ -133,6 +133,20 @@ class User (Entity):
 
         return {self : creditAmounts}
 
+    def getAllPayments(self):
+        debts = self.getDRs()
+        credits = self.getCRs()
+
+        payments = []
+
+        for debt in debts:
+            payments.extend(debt.getPayments())
+
+        for credit in credits:
+            payments.extend(credit.getPayments())
+
+        return payments
+
     # debug
     def retrieveUserName(self):
         return self.googleID
