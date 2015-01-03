@@ -1,14 +1,19 @@
+import json
 import logging
 
 import webapp2
+import httplib2
+
 from webapp2_extras import sessions
 
 from contentHandler import TestPageHandler, Parameter
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
+from payme.controller.pages.friendHandler import FriendHandler
+from payme.controller.pages.groupHandler import GroupHandler
 from payme.controller.pages.oAuthLogin import OAuthLoginHandler, OAuthHandler
-from jsonDummy import JSONDummy
-
+from payme.model.user import User
+from apiclient.discovery import build
 
 # Supported HTTP verbs
 from payme.controller.pages.userHandler import UserHandler
@@ -20,6 +25,11 @@ class HTTPVerb:
     GET = object()
     POST = object()
 
+apiKeys = {'oAuth2': None}
+htmlController = None
+apiController = None
+serviceHttp = httplib2.Http()
+userInfoService = build('oauth2', 'v2', http=serviceHttp)
 # Main controller. Handles the map of pages and what not.
 class Controller (webapp2.RequestHandler):
 
@@ -27,7 +37,8 @@ class Controller (webapp2.RequestHandler):
         'home': TestPageHandler(),
         'oauth': OAuthHandler(),
         'test': TestPage(),
-        'groups': JSONDummy(),
+        'friends': FriendHandler(),
+        'groups': GroupHandler(),
         'user': UserHandler(),
         'debt': DebtHandler(),
         'transactions': TransactionsHandler(),
@@ -108,17 +119,35 @@ class Controller (webapp2.RequestHandler):
             if httpVerb == HTTPVerb.GET: return contentHandler.getHTML(self, parameter)
             elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter)
 
+    #We have credentials, now do something with them
+    def onLogin(self, credentials):
+        credentials.authorize(serviceHttp)
+        userDetails = userInfoService.userinfo().get().execute()
+        logging.log(logging.INFO, json.dumps(userDetails))
+
+    def getCurrentUser(self):
+        if not 'user' in self.session:
+            return None
+        else:
+            matchingUsers = User.query(User.key == self.session['currentUser']).fetch()
+            if matchingUsers.__len__() < 1:
+                return None
+            else:
+                return matchingUsers[0]
+
 # Controller for handling HTML requests
 class HTMLController(Controller):
     def __init__(self, request = None, response = None):
         super(HTMLController, self).__init__(False)
         super(Controller, self).__init__(request, response)
+        htmlController = self
 
 # Controller for handling API requests
 class APIController(Controller):
     def __init__(self, request = None, response = None):
         super(APIController, self).__init__(True)
         super(Controller, self).__init__(request, response)
+        apiController = self
 
 sessions.default_config['secret_key'] = 'a random key to use for generating cookies' #TODO: Maybe something a little more secure
 logging.debug('Loaded controller')

@@ -42,6 +42,8 @@ class OAuthCallbackHandler(VerbHandler):
     def getHTML(self, controller, parameter):
         try:
             self.credentials = self.handleCode(controller, parameter)
+            controller.onLogin(self.credentials)
+
             return self.renderTemplate('oAuthSuccess')
         except (OAuthCodeError, FlowExchangeError) as ex:
             self.errorMessage = ex.message
