@@ -10,6 +10,15 @@ class Payment(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
     description = ndb.StringProperty()
 
+    # the debtor of the debt
+    approvedByDebtor = ndb.BooleanProperty(default=False)
+
+    # the creditor of the debt i.e. the Payer
+    approvedByCreditor = ndb.BooleanProperty(default=False)
+
+    # the debtor of the debt can dispute an individual payment (payment has to be made to be disputed)
+    disputed = ndb.BooleanProperty(default=False)
+
     def getPayer(self):
         return self.payer
 
@@ -24,3 +33,27 @@ class Payment(ndb.Model):
 
     def getDescription(self):
         return self.description
+
+
+    # unpaid = none, inProgress = one approved,
+    # paid = both approved, inDispute = disputed
+    def getStatus(self):
+
+        # see if its disputed first
+        if self.disputed:
+            return "INDISPUTE"
+
+        # otherwise work out the progress of the payments
+        if self.approvedByCreditor:
+            if self.approvedByDebtor:
+                return "PAID"
+            else:
+                return "INPROGRESS"
+        else:
+            return "UNPAID"
+
+
+
+
+
+
