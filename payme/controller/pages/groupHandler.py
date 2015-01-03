@@ -4,7 +4,7 @@ from payme.model.user import User
 class GroupHandler(PageHandler):
 
     # dummy for currentUser
-    currentUser = User.query(User.googleID == 'john').fetch(10)[0]
+    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
         super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))

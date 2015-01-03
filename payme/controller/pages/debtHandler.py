@@ -6,7 +6,7 @@ from payme.model.payment import Payment
 class DebtHandler(PageHandler):
 
     # dummy for currentUser
-    currentUser = User.query(User.googleID == 'john').fetch(10)[0]
+    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
         super(DebtHandler, self).__init__(None, Parameter(Parameter.Type.String), {'add': AddHandler(), 'pay': PayHandler()})

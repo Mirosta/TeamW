@@ -4,7 +4,7 @@ from payme.model.user import User
 class FriendHandler(PageHandler):
 
     # dummy for currentUser
-    currentUser = User.query(User.googleID == 'john').fetch(10)[0]
+    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
         super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))
