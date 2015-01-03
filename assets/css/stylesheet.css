@@ -84,7 +84,7 @@ hr {
  * Default colours and sizes
  */
 
- .top-buffer {
+.top-buffer {
   margin-top: 10px;
 }
 
@@ -116,3 +116,14 @@ hr {
   max-width: 400px;
   max-height: 150px;
  }
+
+/*
+ * Form elements
+ */
+
+ 
+ .form-label {
+  width: 115px;
+  padding: 15px;
+ }
+

@@ -27,6 +27,7 @@ class UserHandler(PageHandler):
 
         def __init__(self):
             super(UserHandler.LoginHandler, self).__init__('login')
+            self.accessLevel = 0
 
         def getHTML(self, controller, parameter):
             return super(UserHandler.LoginHandler, self).getHTML(controller, parameter)
