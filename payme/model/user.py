@@ -9,6 +9,7 @@ class User (Entity):
     # Database for users
 
     googleID = ndb.StringProperty()
+    familyName = ndb.StringProperty()
     email = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.KeyProperty(kind=Group, repeated=True)
