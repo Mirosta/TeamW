@@ -114,6 +114,13 @@ hr {
   padding-bottom: 10px;
 }
 
+.grey-box {
+  background-color: #c6c6c6;
+  border-radius: 4px;
+  padding-top: 5px;
+  padding-bottom: 8px;
+}
+
 /*
  * Input fields
  */
