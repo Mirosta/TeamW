@@ -3,13 +3,27 @@ from google.appengine.ext import ndb
 from entity import Entity
 from debt import Debt
 
+from payme.controller.exceptions import OwnerInGroupError
+
+import user
+
+from payme.controller.globals import Global
+
 # Group is made by passing a list of users. When addDebt is called, it will add 'debt' passed to every user in the group.
 class Group (Entity):
 
     users = ndb.KeyProperty(kind='User', repeated=True)
 
-    def addUser(self, user):
-        self.users.append(user)
+    # Get key for the current user
+    def getCurrentUser(self):
+        # return Global.apiController.getCurrentUser().key
+        return user.User.query(user.User.googleID == 'john').fetch()[0].key
+
+    def addMember(self, user):
+        if self.getCurrentUser() == user:
+            raise OwnerInGroupError
+        else:
+            self.users.append(user)
 
     def renameGroup(self, name):
         self.name = name
@@ -53,27 +67,85 @@ class Group (Entity):
 
     #TODO: Implement methods
     def getDebtAmount(self):
-        return super(Group, self).getDebtAmount()
+
+        output = 0
+
+        for u in self.users:
+            output += u.getDR();
+
+        return output
+
+        # return super(Group, self).getDebtAmount()
+
+    def getCreditAmount(self):
+
+        output = 0
+
+        for u in self.users:
+            output += u.getCR()
+
+        return output
+
+        # return super(Group, self).getNetCreditAmount()
 
     def getNetAmounts(self):
-        return super(Group, self).getNetAmounts()
 
-    def getNetCreditAmount(self):
-        return super(Group, self).getNetCreditAmount()
+        output = []
+
+        for u in self.users:
+            netAmount = u.getCR - u.getDR
+            output.append({u: netAmount})
+
+        return output
+
+        # return super(Group, self).getNetAmounts()
 
     def getCredits(self):
-        return super(Group, self).getCredits()
 
-    def getDebtsAmounts(self):
-        return super(Group, self).getDebtsAmounts()
+        output = []
 
-    def getCreditsAmount(self):
-        return super(Group, self).getCreditsAmount()
+        for u in self.users:
+            output.append(u.getCredits())
+
+        return output
 
     def getDebts(self):
-        super(Group, self).getDebts()
+
+        output = []
+
+        for u in self.users:
+            output.append(u.getDebt())
+
+        return output
+
+    def getDebtsAmounts(self):
+
+        output = []
+
+        for u in self.users:
+            output.append(u.getDebtAmounts)
+
+        return output
+
+        # return super(Group, self).getDebtsAmounts()
+
+    def getCreditsAmount(self):
+
+        output = []
+
+        for u in self.users:
+            output.append(u.getCreditAmounts)
+
+        return output
+
+        # return super(Group, self).getCreditsAmount()
 
     def getNetAmount(self):
-        return super(Group, self).getNetAmount()
+        return self.getCreditAmount() - self.getDebtAmount()
+
+        # return super(Group, self).getNetAmount()
+
+    def queryDebts(self):
+        return Debt.query(Debt.debtor == self.currentUser.key)
 
 

@@ -47,7 +47,7 @@ class ModelHandler(PageHandler):
 
     #Gets all models
     def getAll(self, controller):
-        currentUser = User.query(User.googleID == "john").fetch()[0]#controller.getCurrentUser()
+        currentUser = User.query(User.googleID == 'john').fetch()[0] # controller.getCurrentUser()
         function = getattr(currentUser, self.getAllFunction)
         logging.info('Get all function:')
         logging.info(function)

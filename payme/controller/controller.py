@@ -22,14 +22,13 @@ from payme.controller.pages.userHandler import UserHandler
 from payme.controller.pages.debtHandler import DebtHandler
 from payme.controller.pages.paymentsHandler import PaymentsHandler
 
+from payme.controller.globals import Global
 
 class HTTPVerb:
     GET = object()
     POST = object()
 
 apiKeys = {'oAuth2': None}
-htmlController = None
-apiController = None
 serviceHttp = httplib2.Http()
 userInfoService = build('oauth2', 'v2', http=serviceHttp)
 # Main controller. Handles the map of pages and what not.
@@ -181,14 +180,14 @@ class HTMLController(Controller):
     def __init__(self, request = None, response = None):
         super(HTMLController, self).__init__(False)
         super(Controller, self).__init__(request, response)
-        htmlController = self
+        Global.htmlController = self
 
 # Controller for handling API requests
 class APIController(Controller):
     def __init__(self, request = None, response = None):
         super(APIController, self).__init__(True)
         super(Controller, self).__init__(request, response)
-        apiController = self
+        Global.apiController = self
 
 config = {}
 config['webapp2_extras.sessions'] = {

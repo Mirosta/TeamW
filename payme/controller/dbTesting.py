@@ -2,6 +2,7 @@
 from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
+from payme.model.group import Group
 
 from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
@@ -45,9 +46,9 @@ class TestPage(PageHandler):
 #
 # #   TEST 5 - Add friends
 #
-#         john = self.queryUser('john')
-#         david = self.queryUser('david')
-#         dingdong = self.queryUser('dingdong')
+        john = self.queryUser('john')
+        david = self.queryUser('david')
+        dingdong = self.queryUser('dingdong')
 #
 #         # john.addFriend(david.key)
 #         # john.addFriend(dingdong.key)
@@ -64,14 +65,24 @@ class TestPage(PageHandler):
 #         # self.createPayments(john.key, debt.key, 1000)
 #         self.viewDebts()
 
-        john = self.createUser('john', "John Smith")
-        david = self.createUser('david', "David Hutchinson")
-        dingdong = self.createUser('dingdong', "Ding Dong")
+        # john = self.createUser('john', "John Smith")
+        # david = self.createUser('david', "David Hutchinson")
+        # dingdong = self.createUser('dingdong', "Ding Dong")
+        #
+        # debt = self.createDebt(dingdong.key, john.key, 5000)
+        #
+        # payment = self.createPayments(john.key, debt.key, 300)
 
-        debt = self.createDebt(dingdong.key, john.key, 5000)
+        # group = self.createNewGroup('Wolfpack')
 
-        payment = self.createPayments(john.key, debt.key, 300)
+        group = Group.query(Group.name == 'Wolfpack').fetch()[0]
 
+        # john.addGroup(group.key)
+        # dingdong.addGroup(group.key)
+
+        group.addMember(dingdong.key)
+
+        self.output += "<br>" + self.serialize(dingdong)
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
@@ -134,6 +145,12 @@ class TestPage(PageHandler):
     def serialize(self, object_to_serialize):
         return json.dumps(object_to_serialize, cls=JSonAPIEncoder)
 
+    def createNewGroup(self, name):
+        g = Group(name=name)
+        g.put()
+
+        return g
+
 #   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
 
@@ -172,7 +189,7 @@ class JSonAPIEncoder(json.JSONEncoder):
         if isinstance(obj, date) or isinstance(obj, datetime):
             return obj.strftime('%Y/%m/%d %H:%M:%S')
         elif isinstance(obj, ndb.Key):
-            return str(obj)
+            return obj.urlsafe()
         elif isinstance(obj, ndb.Model):
             return obj.to_dict()
         else:
