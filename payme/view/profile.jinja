@@ -1,12 +1,25 @@
 {{ page.header() }}
 {% autoescape true %}
 
-<form>
-    <label for="name">Given Name </label><input type="text" id="name" name="name">
-    <label for="familyName">Family Name </label><input type="text" id="familyName" name="familyName">
-    <label for="name">Email </label><input type="email" id="email" name="email">
-    <label for="name">Profile Picture (URL) </label><input type="url" id="profilePicture" name="profilePicture">
-</form>
+<div class="row">
+    <div class="col-md-6 form-horizontal grey-bordered-box">
+        <h2 class="bold">lyubo's profile</h2>
+        <hr class="top-buffer">
+        <div class="read-only-form top-buffer" id="user-profile">
+            <img src="http://i.ytimg.com/vi/z2hyky_9WX8/hqdefault.jpg" class="img-circle form-image">
+            <br>
+            <label class="read-only-form-label">given name:</label>
+            <label id="given-name">lyubo</label>
+            <br>
+            <label class="read-only-form-label">family name:</label>
+            <label id="family-name">vasilev</label>
+            <br>
+            <label class="read-only-form-label">email:</label>
+            <label id="email">lubodjwow@gmail.com</label>
+            <br>
+        </div>
+    </div>
+</div>
 
 {% endautoescape %}
 {{ page.footer() }}

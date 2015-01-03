@@ -34,7 +34,6 @@ class Payment(ndb.Model):
     def getDescription(self):
         return self.description
 
-
     # unpaid = none, inProgress = one approved,
     # paid = both approved, inDispute = disputed
     def getStatus(self):

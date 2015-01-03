@@ -1,4 +1,3 @@
-import user
 from payment import Payment
 from google.appengine.ext import ndb
 import logging

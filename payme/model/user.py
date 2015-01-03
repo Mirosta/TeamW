@@ -1,7 +1,10 @@
 #Imports here
 from entity import Entity
 from group import Group
-import debt
+from payme.model.debt import Debt
+from payme.controller.exceptions import SecurityError
+
+from payme.controller.globals import Global
 
 from google.appengine.ext import ndb
 
@@ -19,13 +22,27 @@ class User (Entity):
 
     uniqueProperty = 'googleID'
 
+    # Get key for the current user
+    def getCurrentUser(self):
+        # return Global.apiController.getCurrentUser().key
+        return User.query(User.googleID == 'john').fetch()[0].key
+
+    def isMe(self):
+        return self.getCurrentUser() == self.key
+
     # Get list of assets
     def getDRs(self):
-        return debt.Debt.query(debt.Debt.creditor == self.key).fetch()
+        if self.isMe():
+            return Debt.query(Debt.creditor == self.key).fetch()
+        else:
+            return Debt.query(Debt.creditor == self.key, Debt.debtor == self.getCurrentUser()).fetch()
 
     # Get list of liabilities
     def getCRs(self):
-        return debt.Debt.query(debt.Debt.debtor == self.key).fetch()
+        if self.isMe():
+            return Debt.query(Debt.debtor == self.key).fetch()
+        else:
+            return Debt.query(Debt.debtor == self.key, Debt.creditor == self.getCurrentUser()).fetch()
 
     # Get assets amount
     def getDR(self):
@@ -55,15 +72,38 @@ class User (Entity):
 
     # create new group
     def addGroup(self, group):
-        self.groups.append(group)
+        if self.isMe and group not in self.groups:
+            self.groups.append(group)
+            self.put()
+        else:
+            raise SecurityError()
+
 
     def getFriends(self):
-        return self.friends
+        if self.isMe() or self.getCurrentUser() in self.friends:
+            output = []
+            for friend in self.friends:
+                output.append(User.query(User.key == friend).fetch()[0])
+            return output
+        else:
+            raise SecurityError()
+
+    def getGroups(self):
+        if self.isMe():
+            output = []
+            for group in self.groups:
+                output.append(Group.query(Group.key == group).fetch()[0])
+            return output
+        else:
+            raise SecurityError()
 
     # add friend
     def addFriend(self, friend):
-        self.friends.append(friend)
-        self.put()
+        if self.isMe():
+            self.friends.append(friend)
+            self.put()
+        else:
+            raise SecurityError()
 
     def getDebts(self):
         return {self : self.getCRs()}

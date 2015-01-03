@@ -2,6 +2,7 @@
 from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
+from payme.model.group import Group
 
 from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
@@ -45,9 +46,9 @@ class TestPage(PageHandler):
 #
 # #   TEST 5 - Add friends
 #
-#         john = self.queryUser('john')
-#         david = self.queryUser('david')
-#         dingdong = self.queryUser('dingdong')
+        # john = self.queryUser('john')
+        # david = self.queryUser('david')
+        # dingdong = self.queryUser('dingdong')
 #
 #         # john.addFriend(david.key)
 #         # john.addFriend(dingdong.key)
@@ -64,13 +65,63 @@ class TestPage(PageHandler):
 #         # self.createPayments(john.key, debt.key, 1000)
 #         self.viewDebts()
 
+        # john = self.createUser('john', "John Smith")
+        # david = self.createUser('david', "David Hutchinson")
+        # dingdong = self.createUser('dingdong', "Ding Dong")
+        #
+        # debt = self.createDebt(dingdong.key, john.key, 5000)
+        #
+        # payment = self.createPayments(john.key, debt.key, 300)
+
+        # group = self.createNewGroup('Wolfpack')
+
+        # group = Group.query(Group.name == 'Wolfpack').fetch()[0]
+
+        # john.addGroup(group.key)
+        # dingdong.addGroup(group.key)
+
+        # group.addMember(dingdong.key)
+
+        # self.output += "<br>" + self.serialize(group)
+
+
+#         CREATE STUFF!! - ONLY RUN ONCE
+
+        self.output += 'Creating users... <br>'
         john = self.createUser('john', "John Smith")
         david = self.createUser('david', "David Hutchinson")
         dingdong = self.createUser('dingdong', "Ding Dong")
 
+        self.output += 'Creating group, Wolfpack... <br>'
+        group = self.createNewGroup('Wolfpack')
+
+        self.output += 'Creating debt (Dingdong to John)... <br>'
         debt = self.createDebt(dingdong.key, john.key, 5000)
 
+        self.output += 'Creating payments... <br><br>'
         payment = self.createPayments(john.key, debt.key, 300)
+
+#         ASSOCIATE STUFF!! - ONLY RUN ONCE
+
+#         Add friends
+        self.output += 'Adding David and Dingdong to John... <br>'
+        john.addFriend(david.key)
+        john.addFriend(dingdong.key)
+
+#         Add group
+        self.output += 'Adding Wolpack to John <br>'
+        john.addGroup(group.key)
+
+#         Add member of the group
+        self.output += 'Adding Dingdong to John\'s Wolfpack...'
+        group.addMember(dingdong.key)
+
+        self.output += 'Done... <br>'
+        # self.output += "<br>" + self.serialize(group)
+
+
+
+
 
 
 #   LEAVE THIS ALONE!
@@ -134,6 +185,12 @@ class TestPage(PageHandler):
     def serialize(self, object_to_serialize):
         return json.dumps(object_to_serialize, cls=JSonAPIEncoder)
 
+    def createNewGroup(self, name):
+        g = Group(name=name)
+        g.put()
+
+        return g
+
 #   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
 
@@ -172,7 +229,7 @@ class JSonAPIEncoder(json.JSONEncoder):
         if isinstance(obj, date) or isinstance(obj, datetime):
             return obj.strftime('%Y/%m/%d %H:%M:%S')
         elif isinstance(obj, ndb.Key):
-            return str(obj)
+            return obj.urlsafe()
         elif isinstance(obj, ndb.Model):
             return obj.to_dict()
         else:
