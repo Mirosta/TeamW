@@ -24,6 +24,7 @@ from apiclient.discovery import build
 from payme.controller.pages.userHandler import UserHandler
 from payme.controller.pages.debtHandler import DebtHandler
 from payme.controller.pages.paymentsHandler import PaymentsHandler
+from payme.controller.pages.notificationHandler import NotificationHandler
 
 from payme.controller.globals import Global
 
@@ -47,7 +48,8 @@ class Controller (webapp2.RequestHandler):
         'debt': DebtHandler(),
         'payments': PaymentsHandler(),
         'help': HelpHandler(),
-        'history': HistoryHandler()
+        'history': HistoryHandler(),
+        'notifications': NotificationHandler()
     }
 
     homePage = 'home'

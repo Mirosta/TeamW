@@ -4,6 +4,7 @@ from notification import Notification
 import debt
 from payme.model.debt import Debt
 from payme.controller.exceptions import SecurityError
+from payme.model.notification import Notification
 
 from payme.controller.globals import Global
 
@@ -144,7 +145,13 @@ class User (Entity):
 
     # retrieve a notification from the message queue (if present)
     def getNotifications(self):
-        return self.messageQueue
+
+        output = []
+
+        for notification in self.messageQueue:
+            output.append(Notification.query(Notification.key == notification).fetch()[0])
+
+        return output
 
     def getAllPayments(self):
         debts = self.getDRs()

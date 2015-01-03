@@ -3,6 +3,7 @@ from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
 from payme.model.group import Group
+from payme.model.notification import Notification
 
 from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
@@ -98,8 +99,13 @@ class TestPage(PageHandler):
         self.output += 'Creating debt (Dingdong to John)... <br>'
         debt = self.createDebt(dingdong.key, john.key, 5000)
 
-        self.output += 'Creating payments... <br><br>'
+        self.output += 'Creating payments... <br>'
         payment = self.createPayments(john.key, debt.key, 300)
+
+        self.output += 'Create notifications... <br><br>'
+        notification1 = self.createNotification(Notification.Type.INFO, 'Test notification 1')
+        notification2 = self.createNotification(Notification.Type.INFO, 'Test notification 2')
+        notification3 = self.createNotification(Notification.Type.INFO, 'Test notification 3')
 
 #         ASSOCIATE STUFF!! - ONLY RUN ONCE
 
@@ -113,8 +119,14 @@ class TestPage(PageHandler):
         john.addGroup(group.key)
 
 #         Add member of the group
-        self.output += 'Adding Dingdong to John\'s Wolfpack...'
+        self.output += 'Adding Dingdong to John\'s Wolfpack...<br>'
         group.addMember(dingdong.key)
+
+#           Give John notification
+        self.output += 'Sending John notification...<br>'
+        john.giveNotification(notification1.key)
+        john.giveNotification(notification2.key)
+        david.giveNotification(notification3.key)
 
         self.output += 'Done... <br>'
         # self.output += "<br>" + self.serialize(group)
@@ -217,8 +229,12 @@ class TestPage(PageHandler):
         self.output += "<br>"
         self.output += str(self.serialize(john))
 
+    def createNotification(self, type, content):
+        n = Notification(type=type, content=content)
+        n.put()
 
-#
+        return n
+
 class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
