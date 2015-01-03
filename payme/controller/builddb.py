@@ -25,9 +25,15 @@ class BuildDB(PageHandler):
 #         CREATE STUFF!! - ONLY RUN ONCE
 
         self.output += 'Creating users... <br>'
-        john = self.createUser('john', "John Smith")
-        david = self.createUser('david', "David Hutchinson")
-        dingdong = self.createUser('dingdong', "Ding Dong")
+        try:
+            john = self.createUser('john', "John Smith")
+            david = self.createUser('david', "David Hutchinson")
+            dingdong = self.createUser('dingdong', "Ding Dong")
+        except:
+            john = self.queryUser('john')
+            david = self.queryUser('david')
+            dingdong = self.queryUser('dingdong')
+
 
         self.output += 'Creating group, Wolfpack... <br>'
         group = self.createNewGroup('Wolfpack')
