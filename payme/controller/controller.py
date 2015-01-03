@@ -90,7 +90,7 @@ class Controller (webapp2.RequestHandler):
             contentHandler = page.getVerb(verbName)
             if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
                 if httpVerb == HTTPVerb.GET:
-                    self.session['redirectTo'] = '/' +
+                    self.session['redirectTo'] = '/' + pageName + '/' + verbName
                 self.redirect(self.loginPage)
                 return
         # Otherwise check if pages accepts parameters
@@ -99,6 +99,8 @@ class Controller (webapp2.RequestHandler):
             parameter = verbName
 
             if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
+                if httpVerb == HTTPVerb.GET:
+                    self.session['redirectTo'] = '/' + pageName + '/' + verbName
                 self.redirect(self.loginPage)
                 return
 
