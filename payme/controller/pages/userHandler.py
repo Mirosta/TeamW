@@ -15,9 +15,10 @@ class UserHandler(PageHandler):
         if user.__len__() == 0:
             output = 'Not found'
         else:
-            output = self.serialize(user[0])
+            output = user[0].to_dict()
+            output['readOnly'] = {'netWorth': user[0].getOE()}
 
-        return output
+        return self.serialize({'results': output})
 
         # Actual implementation below:
         # return self.serialize(self.queryUser(parameter))

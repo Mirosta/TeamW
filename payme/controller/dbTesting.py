@@ -8,7 +8,6 @@ from payme.controller.contentHandler import PageHandler
 
 import json
 
-
 from google.appengine.ext import ndb
 
 class TestPage(PageHandler):
@@ -28,16 +27,17 @@ class TestPage(PageHandler):
 #        self.createDebts()()
 #        self.viewDebts()
 
-#   TEST 3 - Payments
-#
-#         john = self.queryUser('john')
-#         david = self.queryUser('david')
-#
-#         debt = Debt.query(Debt.creditor == david.key).fetch(10)[0]
-#
-#         self.createPayments(john.key, debt.key, 100)
-#
-#         self.viewDebts()
+#  TEST 3 - Payments
+
+        # john = self.queryUser('john')
+        # david = self.queryUser('david')
+        # dingdong = self.queryUser('dingdong')
+        #
+        # debt = Debt.query(Debt.creditor == dingdong.key).fetch(10)[0]
+        #
+        # self.createPayments(john.key, debt.key, 100)
+        #
+        # self.viewDebts()
 
 #   TEST 4 - Group and group debts
 
@@ -46,14 +46,23 @@ class TestPage(PageHandler):
 #   TEST 5 - Add friends
 
         john = self.queryUser('john')
-        # david = self.queryUser('david')
-        # dingdong = self.queryUser('dingdong')
-        #
+        david = self.queryUser('david')
+        dingdong = self.queryUser('dingdong')
+
         # john.addFriend(david.key)
         # john.addFriend(dingdong.key)
 
         # self.output += str(john.friends)
         self.output = self.serialize(john)
+
+        self.output += "<br>"
+
+        # self.createDebt(dingdong.key, john.key, 5000)
+
+        debt = Debt.query(Debt.creditor == dingdong.key).fetch(10)[0]
+
+        # self.createPayments(john.key, debt.key, 1000)
+        self.viewDebts()
 
 
 #   LEAVE THIS ALONE!
@@ -105,7 +114,7 @@ class TestPage(PageHandler):
 #   CHECKED - 3: View debt
     def viewDebts(self):
         john = self.queryUser('john')
-        self.output += str(john[0].getOE())
+        self.output += str(john.getOE())
 
 #   CHECKED - 4: Create new payments
     def createPayments(self, payer, debt, amount):

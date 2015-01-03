@@ -19,7 +19,7 @@ class FriendHandler(PageHandler):
             return self.onInvalidFriends()
         if int(parameter) != 1:
             return self.onUnknownFriend()
-        return self.displayGroup()
+        return self.displayFriend(parameter)
 
     def getAllFriends(self):
 
@@ -27,12 +27,16 @@ class FriendHandler(PageHandler):
         friends = []
 
         for key in friendKeys:
-            friends.append(self.queryUser(key))
+            user = User.query(User.key == key).fetch(10)[0]
+            data = user.to_dict()
+            data['readOnly'] = {'netAmount': user.getOE(), 'Owe': user.getCR(), 'Own': user.getDR()}
+
+            friends.append(data)
 
         return friends
 
     def outputAllFriends(self):
-        return self.serialize(self.getAllFriends())
+        return self.serialize({'results': self.getAllFriends()})
 
     def displayFriend(self, userKey):
 
@@ -47,8 +51,6 @@ class FriendHandler(PageHandler):
             return self.queryUser(userKey)
         else:
             return '{error: "Friend not found"}'
-
-        # return '{error: "Not yet implemented"}' #'{"name": "TestGroup", "id": 1, "users": [{"name": "TestUser", "id": 1},{"name": "TestUser2", "id": 2}]}'
 
     def onInvalidParameter(self):
         return '{error: "Invalid argument"}'

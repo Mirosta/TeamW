@@ -1,6 +1,7 @@
 import user
 from payment import Payment
 from google.appengine.ext import ndb
+import logging
 
 
 class Debt(ndb.Model):
@@ -11,12 +12,12 @@ class Debt(ndb.Model):
     amount = ndb.IntegerProperty()
     description = ndb.StringProperty()
     isPaid = ndb.BooleanProperty()
-    date = ndb.DateProperty()
+    date = ndb.DateTimeProperty()
     dateCreated = ndb.DateTimeProperty(auto_now_add=True)
     amountPaid = ndb.IntegerProperty()
 
     def getAmount(self):
-        return self.amount;
+        return self.amount
 
     def getAmountRemaining(self):
         return self.amount - self.getAmountPaid()
