@@ -11,7 +11,6 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None, {'add': AddHandler(), 'pay': PayHandler()}, 'getCRs', Debt, [RelatedModel(Payment, 'debt', 'payments')])
-
     # def getAPI(self, controller, parameter):
     #     if parameter == Parameter.NoneGiven:
     #         return self.displayAllDebt()
@@ -61,7 +60,7 @@ class DebtHandler(ModelHandler):
 class AddHandler(VerbHandler):
 
     def __init__(self):
-        super(AddHandler, self).__init__('add')
+        super(AddHandler, self).__init__('debtAdd')
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
 
     def getHTML(self, controller, parameter):
