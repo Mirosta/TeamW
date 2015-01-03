@@ -20,6 +20,8 @@ from payme.controller.pages.oAuthLogin import OAuthLoginHandler, OAuthHandler
 from payme.model.user import User
 from apiclient.discovery import build
 
+from payme.controller.builddb import BuildDB
+
 # Supported HTTP verbs
 from payme.controller.pages.userHandler import UserHandler
 from payme.controller.pages.debtHandler import DebtHandler
@@ -49,7 +51,8 @@ class Controller (webapp2.RequestHandler):
         'payments': PaymentsHandler(),
         'help': HelpHandler(),
         'history': HistoryHandler(),
-        'notifications': NotificationHandler()
+        'notifications': NotificationHandler(),
+        'builddb': BuildDB()
     }
 
     homePage = 'home'
