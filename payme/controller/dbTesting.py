@@ -2,7 +2,7 @@
 from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
-from payme.model.group import Group
+
 from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
 
