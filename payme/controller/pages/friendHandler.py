@@ -27,7 +27,7 @@ class FriendHandler(PageHandler):
         friends = []
 
         for key in friendKeys:
-            friends.append(User.query(User.key == key).fetch(10)[0])
+            friends.append(self.queryUser(key))
 
         return friends
 
@@ -44,7 +44,7 @@ class FriendHandler(PageHandler):
                 found = True
 
         if found:
-            return User.query(User.key == userKey).fetch(10)[0]
+            return self.queryUser(userKey)
         else:
             return '{error: "Friend not found"}'
 

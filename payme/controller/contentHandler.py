@@ -7,6 +7,7 @@ import json
 from datetime import date, datetime
 
 from google.appengine.ext import ndb
+from payme.model.user import User
 
 FOOTER = "footer"
 HEADER = "header"
@@ -120,6 +121,14 @@ class PageHandler(ContentHandler):
 
     def serialize(self, object_to_serialize):
         return json.dumps(object_to_serialize, cls=self.JSonAPIEncoder)
+
+    def queryUser(self, key):
+        user = User.query(User.key == key).fetch(10)
+
+        if user.__len__() != 0:
+            return user[0]
+        else:
+            return '{error: "User not found"}'
         
 # class for handling verbs
 class VerbHandler(ContentHandler):

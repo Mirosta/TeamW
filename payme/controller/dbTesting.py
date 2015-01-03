@@ -30,8 +30,8 @@ class TestPage(PageHandler):
 
 #   TEST 3 - Payments
 #
-#         john = User.query(User.googleID == 'john').fetch(10)[0]
-#         david = User.query(User.googleID == 'david').fetch(10)[0]
+#         john = self.queryUser('john')
+#         david = self.queryUser('david')
 #
 #         debt = Debt.query(Debt.creditor == david.key).fetch(10)[0]
 #
@@ -45,9 +45,9 @@ class TestPage(PageHandler):
 
 #   TEST 5 - Add friends
 
-        john = User.query(User.googleID == 'john').fetch(10)[0]
-        # david = User.query(User.googleID == 'david').fetch(10)[0]
-        # dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0]
+        john = self.queryUser('john')
+        # david = self.queryUser('david')
+        # dingdong = self.queryUser('dingdong')
         #
         # john.addFriend(david.key)
         # john.addFriend(dingdong.key)
@@ -58,6 +58,14 @@ class TestPage(PageHandler):
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
+
+    def queryUser(self, key):
+        user = User.query(User.googleID == key).fetch(10)
+
+        if user.__len__() != 0:
+            return user[0]
+        else:
+            return '{error: "User not found"}'
 
 #   Create new single user and returns it
     def createUser(self, userName, name):
@@ -96,7 +104,7 @@ class TestPage(PageHandler):
 
 #   CHECKED - 3: View debt
     def viewDebts(self):
-        john = User.query(User.googleID == 'john').fetch(100)
+        john = self.queryUser('john')
         self.output += str(john[0].getOE())
 
 #   CHECKED - 4: Create new payments
@@ -112,9 +120,9 @@ class TestPage(PageHandler):
 #   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
 
-        john = User.query(User.googleID == 'john').fetch(10)[0]
-        david = User.query(User.googleID == 'david').fetch(10)[0]
-        dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0]
+        john = self.queryUser('john')
+        david = self.queryUser('david')
+        dingdong = self.queryUser('dingdong')
 
         # g = Group(name='Wolfpack')
         # g.put()

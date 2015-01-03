@@ -9,6 +9,7 @@ class UserHandler(PageHandler):
 
     def getAPI(self, controller, parameter):
 
+        # Dummy test, fetch by GoogleID
         user = User.query(User.googleID == parameter).fetch(10)
 
         if user.__len__() == 0:
@@ -17,6 +18,9 @@ class UserHandler(PageHandler):
             output = self.serialize(user[0])
 
         return output
+
+        # Actual implementation below:
+        # return self.serialize(self.queryUser(parameter))
 
     class LoginHandler(VerbHandler):
 
