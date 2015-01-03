@@ -40,8 +40,8 @@
             <li><a class="no-hover">Hi {{ controller.getCurrentUser().name }}</a></li>
           {% endif %}
           {% if controller.getAccessLevel() > 0 %}
-            <li><a href="help">help!</a></li>
-            <li><a href="home">dashboard</a></li>
+            <li><a href="../help">help!</a></li>
+            <li><a href="../home">dashboard</a></li>
             <li><a href="#">user profile</a></li>
             <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
           {% else %}
@@ -58,14 +58,14 @@
         {% if controller.getAccessLevel() > 0 %}
         <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
-            <li><a href="history">past transactions</a></li>
+            <li><a href="../history">past transactions</a></li>
             <li><a href="">make payment</a></li>
-            <li><a href="add_debt.html">add debt</a></li>
+            <li><a href="../add_debt.html">add debt</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
-            <li><a href="">manage friends</a></li>
-            <li><a href="">manage groups</a></li>
+            <li><a href="../friends">manage friends</a></li>
+            <li><a href="../groups">manage groups</a></li>
           </ul>
         </div>
         {% endif %}
