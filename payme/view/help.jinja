@@ -1,0 +1,71 @@
+    {{ page.header() }}
+            <div class="row">
+              <h1 class="page-header bold">frequently asked questions</h1>
+            </div>
+            <div class="row">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables initialisation options -->
+    <script>
+      $(document).ready(function() {
+        $('#example').DataTable({
+          "pageLength": 5,
+          "bLengthChange": false,
+          "bFilter": false, 
+          "paging": false,
+          "info": false
+        });
+      });
+    </script>
+
+    <!-- Toggle icon -->
+    <script>
+      function toggleChevron(e) {
+          $(e.target)
+              .prev('.panel-heading')
+              .find('i')
+              .toggleClass('glyphicon-plus glyphicon-minus');
+      }
+      $('#accordion').on('hidden.bs.collapse', toggleChevron);
+      $('#accordion').on('shown.bs.collapse', toggleChevron);
+    </script>
+
+
+    <script type="text/javascript" >
+      $(document).ready(function()
+      {
+      $("#notificationLink").click(function()
+      {
+      $("#notificationContainer").fadeToggle(300);
+      $("#notification_count").fadeOut("slow");
+      return false;
+      });
+
+      //Document Click hiding the popup 
+      $(document).click(function()
+      {
+      $("#notificationContainer").hide();
+      });
+
+      //Popup on click
+      $("#notificationContainer").click(function()
+      {
+      return false;
+      });
+
+      });
+    </script>
+    {{ page.footer() }}

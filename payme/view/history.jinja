@@ -1,0 +1,148 @@
+    {{ page.header() }}      
+          <div style="width:100%;">
+            <div class="row">
+              <h1 class="page-header bold">past transactions</h1>
+            </div>
+            <div class="row">
+              <div class="panel-body grey-bordered-box">
+                <table id="example" class="table table-striped" cellspacing="0" width="100%">
+                  <thead>
+                      <tr>
+                          <th>payment by...</th>
+                          <th>payment to...</th>
+                          <th>date</th>
+                          <th>amount paid (£)</th>
+                          <th>remaining debt</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Tiger Nixon</td>
+                          <td>System Architect</td>
+                          <td>12/12/2012</td>
+                          <td>61</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Yuri Berry</td>
+                          <td>Chief Marketing Officer (CMO)</td>
+                          <td>14/12/2012</td>
+                          <td>40</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Caesar Vance</td>
+                          <td>Pre-Sales Support</td>
+                          <td>15/12/2012</td>
+                          <td>21</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Doris Wilder</td>
+                          <td>Sales Assistant</td>
+                          <td>24/12/2012</td>
+                          <td>23</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Angelica Ramos</td>
+                          <td>Chief Executive Officer (CEO)</td>
+                          <td>30/12/2012</td>
+                          <td>47</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Tiger Nixon</td>
+                          <td>System Architect</td>
+                          <td>12/12/2012</td>
+                          <td>61</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Yuri Berry</td>
+                          <td>Chief Marketing Officer (CMO)</td>
+                          <td>14/12/2012</td>
+                          <td>40</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Caesar Vance</td>
+                          <td>Pre-Sales Support</td>
+                          <td>15/12/2012</td>
+                          <td>21</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Doris Wilder</td>
+                          <td>Sales Assistant</td>
+                          <td>24/12/2012</td>
+                          <td>23</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Angelica Ramos</td>
+                          <td>Chief Executive Officer (CEO)</td>
+                          <td>30/12/2012</td>
+                          <td>47</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Tiger Nixon</td>
+                          <td>System Architect</td>
+                          <td>12/12/2012</td>
+                          <td>61</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Yuri Berry</td>
+                          <td>Chief Marketing Officer (CMO)</td>
+                          <td>14/12/2012</td>
+                          <td>40</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Caesar Vance</td>
+                          <td>Pre-Sales Support</td>
+                          <td>15/12/2012</td>
+                          <td>21</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Doris Wilder</td>
+                          <td>Sales Assistant</td>
+                          <td>24/12/2012</td>
+                          <td>23</td>
+                          <td>0</td>
+                      </tr>
+                      <tr>
+                          <td>Angelica Ramos</td>
+                          <td>Chief Executive Officer (CEO)</td>
+                          <td>30/12/2012</td>
+                          <td>47</td>
+                          <td>0</td>
+                      </tr>                      
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables initialisation options -->
+    <script>
+      $(document).ready(function() {
+        $('#example').DataTable({
+          "pageLength": 25
+        });
+      });
+    </script>
+    {{ page.footer() }}

@@ -9,6 +9,8 @@ from webapp2_extras.appengine.sessions_memcache import MemcacheSessionFactory
 
 from contentHandler import Parameter
 from payme.controller.pages.homepageHandler import HomepageHandler
+from payme.controller.pages.helpHandler import HelpHandler
+from payme.controller.pages.historyHandler import HistoryHandler
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from payme.controller.pages.friendHandler import FriendHandler
@@ -44,6 +46,8 @@ class Controller (webapp2.RequestHandler):
         'user': UserHandler(),
         'debt': DebtHandler(),
         'payments': PaymentsHandler(),
+        'help': HelpHandler(),
+        'history': HistoryHandler()
     }
 
     homePage = 'home'
