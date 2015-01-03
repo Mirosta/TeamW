@@ -30,8 +30,8 @@ class TestPage(PageHandler):
 
 #   TEST 3 - Payments
 #
-#         john = User.query(User.googleID == 'john').fetch(10)[0]
-#         david = User.query(User.googleID == 'david').fetch(10)[0]
+#         john = self.queryUser('john')
+#         david = self.queryUser('david')
 #
 #         debt = Debt.query(Debt.creditor == david.key).fetch(10)[0]
 #
@@ -43,9 +43,29 @@ class TestPage(PageHandler):
 
         self.createDebtGroup()
 
+#   TEST 5 - Add friends
+
+        john = self.queryUser('john')
+        # david = self.queryUser('david')
+        # dingdong = self.queryUser('dingdong')
+        #
+        # john.addFriend(david.key)
+        # john.addFriend(dingdong.key)
+
+        # self.output += str(john.friends)
+        self.output = self.serialize(john)
+
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
+
+    def queryUser(self, key):
+        user = User.query(User.googleID == key).fetch(10)
+
+        if user.__len__() != 0:
+            return user[0]
+        else:
+            return '{error: "User not found"}'
 
 #   Create new single user and returns it
     def createUser(self, userName, name):
@@ -84,7 +104,7 @@ class TestPage(PageHandler):
 
 #   CHECKED - 3: View debt
     def viewDebts(self):
-        john = User.query(User.googleID == 'john').fetch(100)
+        john = self.queryUser('john')
         self.output += str(john[0].getOE())
 
 #   CHECKED - 4: Create new payments
@@ -100,9 +120,9 @@ class TestPage(PageHandler):
 #   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
 
-        john = User.query(User.googleID == 'john').fetch(10)[0]
-        david = User.query(User.googleID == 'david').fetch(10)[0]
-        dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0]
+        john = self.queryUser('john')
+        david = self.queryUser('david')
+        dingdong = self.queryUser('dingdong')
 
         # g = Group(name='Wolfpack')
         # g.put()
@@ -134,6 +154,8 @@ class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
             return obj.strftime('%Y/%m/%d %H:%M:%S')
+        elif isinstance(obj, ndb.Key):
+            return str(obj)
         elif isinstance(obj, ndb.Model):
             return obj.to_dict()
         else:

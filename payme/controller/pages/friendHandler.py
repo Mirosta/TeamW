@@ -1,6 +1,11 @@
 from payme.controller.contentHandler import PageHandler, Parameter
+from payme.model.user import User
 
 class FriendHandler(PageHandler):
+
+    # dummy for currentUser
+    currentUser = User.query(User.googleID == 'john').fetch(10)[0]
+
     def __init__(self):
         super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))
 
@@ -9,20 +14,43 @@ class FriendHandler(PageHandler):
 
     def getAPI(self, controller, parameter):
         if parameter == Parameter.NoneGiven:
-            return self.outputAllGroups()
+            return self.outputAllFriends()
         if parameter == Parameter.Invalid:
-            return self.onInvalidParameter()
+            return self.onInvalidFriends()
         if int(parameter) != 1:
-            return self.onUnknownGroup()
+            return self.onUnknownFriend()
         return self.displayGroup()
 
-    def outputAllFriends(self):
-        return '{error: "Not yet implemented"}'#'{"results": [' + self.displayGroup() + ']}'
+    def getAllFriends(self):
 
-    def displayFriend(self):
-        return '{error: "Not yet implemented"}' #'{"name": "TestGroup", "id": 1, "users": [{"name": "TestUser", "id": 1},{"name": "TestUser2", "id": 2}]}'
+        friendKeys = self.currentUser.getFriends()
+        friends = []
+
+        for key in friendKeys:
+            friends.append(self.queryUser(key))
+
+        return friends
+
+    def outputAllFriends(self):
+        return self.serialize(self.getAllFriends())
+
+    def displayFriend(self, userKey):
+
+        friendKeys = self.currentUser.getFriends()
+        found = False
+
+        for key in friendKeys:
+            if userKey == key:
+                found = True
+
+        if found:
+            return self.queryUser(userKey)
+        else:
+            return '{error: "Friend not found"}'
+
+        # return '{error: "Not yet implemented"}' #'{"name": "TestGroup", "id": 1, "users": [{"name": "TestUser", "id": 1},{"name": "TestUser2", "id": 2}]}'
 
     def onInvalidParameter(self):
-        return '{error: "Invalid friend ID"}'
+        return '{error: "Invalid argument"}'
     def onUnknownFriend(self):
         return '{error: "No friend with that ID"}'
