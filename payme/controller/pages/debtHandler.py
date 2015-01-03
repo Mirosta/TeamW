@@ -17,15 +17,6 @@ class DebtHandler(ModelHandler):
                                           [RelatedModel(Payment, 'debt', 'payments'),
                                            ReadOnlyFunction('getStatus', 'status')])
 
-    # def getAPI(self, controller, parameter):
-    #     if parameter == Parameter.NoneGiven:
-    #         return self.displayAllDebt()
-    #     if parameter == Parameter.Invalid:
-    #         return self.onInvalidParameter() # change
-    #     # if int(parameter) != 1:
-    #     #     return self.onUnknownFriend() # change
-    #     return self.displayDebtOweTo(parameter)
-
     # returns all debt owed by that user - CHECKED
     def displayAllDebt(self):
 

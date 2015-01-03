@@ -22,6 +22,10 @@ class User (Entity):
 
     uniqueProperty = 'googleID'
 
+    # Hacky way to return user for model
+    def getMe(self):
+        return [self]
+
     # Get key for the current user
     def getCurrentUser(self):
         # return Global.apiController.getCurrentUser().key

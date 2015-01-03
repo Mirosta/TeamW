@@ -119,11 +119,6 @@ class TestPage(PageHandler):
         self.output += 'Done... <br>'
         # self.output += "<br>" + self.serialize(group)
 
-
-
-
-
-
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
 
