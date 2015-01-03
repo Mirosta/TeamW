@@ -75,7 +75,7 @@ class TestPage(PageHandler):
 
         # group = self.createNewGroup('Wolfpack')
 
-        group = Group.query(Group.name == 'Wolfpack').fetch()[0]
+        # group = Group.query(Group.name == 'Wolfpack').fetch()[0]
 
         # john.addGroup(group.key)
         # dingdong.addGroup(group.key)
