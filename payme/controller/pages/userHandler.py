@@ -1,21 +1,20 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
 import json
-from datetime import date, datetime
 from payme.model.user import User
-from google.appengine.ext import ndb
 
 class UserHandler(PageHandler):
 
     def __init__(self):
         super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String), {'login': UserHandler.LoginHandler(), 'profile' : UserHandler.ProfileHandler()}) #This page has no view, but it does have verbs
 
-    def serialize(self, object_to_serialize):
-        return json.dumps(object_to_serialize, cls=JSonAPIEncoder)
-
     def getAPI(self, controller, parameter):
 
-        user = User.query(User.googleID == 'john').fetch(10)[0]
-        output = self.serialize(user)
+        user = User.query(User.googleID == parameter).fetch(10)
+
+        if user.__len__() == 0:
+            output = 'Not found'
+        else:
+            output = self.serialize(user[0])
 
         return output
 
@@ -54,11 +53,4 @@ class UserHandler(PageHandler):
 
 
 
-class JSonAPIEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, date) or isinstance(obj, datetime):
-            return obj.strftime('%Y/%m/%d %H:%M:%S')
-        elif isinstance(obj, ndb.Model):
-            return obj.to_dict()
-        else:
-            return json.JSONEncoder.default(self, obj)
+
