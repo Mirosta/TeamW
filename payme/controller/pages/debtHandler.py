@@ -1,24 +1,25 @@
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
+from payme.controller.modelHandler import ModelHandler, RelatedModel
 from payme.model.debt import Debt
 from payme.model.user import User
 from payme.model.payment import Payment
 
-class DebtHandler(PageHandler):
+class DebtHandler(ModelHandler):
 
     # dummy for currentUser
     #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
-        super(DebtHandler, self).__init__(None, Parameter(Parameter.Type.String), {'add': AddHandler(), 'pay': PayHandler()})
+        super(DebtHandler, self).__init__(None, {'add': AddHandler(), 'pay': PayHandler()}, 'getCRs', Debt, [RelatedModel(Payment, 'debt', 'payments')])
 
-    def getAPI(self, controller, parameter):
-        if parameter == Parameter.NoneGiven:
-            return self.displayAllDebt()
-        if parameter == Parameter.Invalid:
-            return self.onInvalidParameter() # change
-        # if int(parameter) != 1:
-        #     return self.onUnknownFriend() # change
-        return self.displayDebtOweTo(parameter)
+    # def getAPI(self, controller, parameter):
+    #     if parameter == Parameter.NoneGiven:
+    #         return self.displayAllDebt()
+    #     if parameter == Parameter.Invalid:
+    #         return self.onInvalidParameter() # change
+    #     # if int(parameter) != 1:
+    #     #     return self.onUnknownFriend() # change
+    #     return self.displayDebtOweTo(parameter)
 
     # returns all debt owed by that user - CHECKED
     def displayAllDebt(self):

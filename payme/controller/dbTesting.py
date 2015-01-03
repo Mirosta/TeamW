@@ -41,28 +41,36 @@ class TestPage(PageHandler):
 
 #   TEST 4 - Group and group debts
 
-        self.createDebtGroup()
+#         self.createDebtGroup()
+#
+# #   TEST 5 - Add friends
+#
+#         john = self.queryUser('john')
+#         david = self.queryUser('david')
+#         dingdong = self.queryUser('dingdong')
+#
+#         # john.addFriend(david.key)
+#         # john.addFriend(dingdong.key)
+#
+#         # self.output += str(john.friends)
+#         self.output = self.serialize(john)
+#
+#         self.output += "<br>"
+#
+#         # self.createDebt(dingdong.key, john.key, 5000)
+#
+#         debt = Debt.query(Debt.creditor == dingdong.key).fetch(10)[0]
+#
+#         # self.createPayments(john.key, debt.key, 1000)
+#         self.viewDebts()
 
-#   TEST 5 - Add friends
+        john = self.createUser('john', "John Smith")
+        david = self.createUser('david', "David Hutchinson")
+        dingdong = self.createUser('dingdong', "Ding Dong")
 
-        john = self.queryUser('john')
-        david = self.queryUser('david')
-        dingdong = self.queryUser('dingdong')
+        debt = self.createDebt(dingdong.key, john.key, 5000)
 
-        # john.addFriend(david.key)
-        # john.addFriend(dingdong.key)
-
-        # self.output += str(john.friends)
-        self.output = self.serialize(john)
-
-        self.output += "<br>"
-
-        # self.createDebt(dingdong.key, john.key, 5000)
-
-        debt = Debt.query(Debt.creditor == dingdong.key).fetch(10)[0]
-
-        # self.createPayments(john.key, debt.key, 1000)
-        self.viewDebts()
+        payment = self.createPayments(john.key, debt.key, 300)
 
 
 #   LEAVE THIS ALONE!

@@ -116,23 +116,6 @@ class PageHandler(ContentHandler):
         
         return True
 
-    # This encoder ensures that complex data type are converted
-    # for JSON serialisation
-    class JSonAPIEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, date) or isinstance(obj, datetime):
-                return obj.strftime('%Y/%m/%d %H:%M:%S')
-            elif isinstance(obj, ndb.Key):
-                return obj.urlsafe()
-            elif isinstance(obj, ndb.Model):
-                return obj.to_dict()
-            else:
-                return json.JSONEncoder.default(self, obj)
-
-    # Helper function to ease serialisation
-    def serialize(self, object_to_serialize):
-        return json.dumps(object_to_serialize, cls=self.JSonAPIEncoder)
-
     # Helper function to query user and handles user not found
     def queryUser(self, key):
         user = User.query(User.key == key).fetch(10)
@@ -148,14 +131,3 @@ class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile):
         super(VerbHandler, self).__init__(templateFile)
-    
-# Test page with a test template
-class TestPageHandler(PageHandler):
-
-    def __init__(self):
-        super(TestPageHandler, self).__init__('test')
-        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
-
-    def getHTML(self, controller, parameter):
-        return super(TestPageHandler, self).getHTML(controller, parameter)
-
