@@ -3,8 +3,11 @@ from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
 from payme.model.group import Group
-from datetime import date
+from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
+
+import json
+
 
 from google.appengine.ext import ndb
 
@@ -45,10 +48,10 @@ class TestPage(PageHandler):
         return super(TestPage, self).getHTML(controller, parameter)
 
 #   Create new single user and returns it
-    def createUser(self, userName, name, year, mth, day):
+    def createUser(self, userName, name):
 
         # u = User(id=userName, userName=userName, name=name, dateOfBirth=date(year, mth, day))
-        u = User(googleID=userName, email='cock@email.com', dateOfBirth=date(year, mth, day), name=name)
+        u = User(googleID=userName, email='cock@email.com')
         u.put()
 
         return u
@@ -62,10 +65,10 @@ class TestPage(PageHandler):
 
 #   CHECKED - 1: Add specimen users to database
     def createUsers(self):
-        self.createUser('david', 'David Hutchinson', 1993, 01, 01)
-        self.createUser('john', 'John Smith', 1993, 01, 02)
-        self.createUser('alison', 'Alison Burgers', 1991, 11, 12)
-        self.createUser('dingdong', 'Ding Dong', 1990, 01, 23)
+        self.createUser('david', 'David Hutchinson')
+        self.createUser('john', 'John Smith')
+        self.createUser('alison', 'Alison Burgers')
+        self.createUser('dingdong', 'Ding Dong')
 
         users = User.query(User.googleID == 'john').fetch(100)
 
@@ -74,8 +77,8 @@ class TestPage(PageHandler):
 
 #   CHECKED - 2: Add debts to database
     def createDebts(self):
-        david = self.createUser('david', 'David Hutchinson', 1993, 01, 01)
-        john = self.createUser('john', 'John Smith', 1993, 01, 02)
+        david = self.createUser('david', 'David Hutchinson')
+        john = self.createUser('john', 'John Smith')
 
         self.createDebt(david.key, john.key, 2000)
 
@@ -90,6 +93,9 @@ class TestPage(PageHandler):
         p.put()
 
         return p
+
+    def serialize(self, object_to_serialize):
+        return json.dumps(object_to_serialize, cls=JSonAPIEncoder)
 
 #   CHECKED - 5: Create and verify group
     def createDebtGroup(self):
@@ -110,11 +116,25 @@ class TestPage(PageHandler):
         #
         # g.addDebtEven(d)
 
-        self.output += "John's OE: "
-        self.output += str(john.getOE())
+        # self.output += "John's OE: "
+        # self.output += str(john.getOE())
+        #
+        # self.output += "<br>David's OE: "
+        # self.output += str(david.getOE())
+        #
+        # self.output += "<br>Dingdong's OE: "
+        # self.output += str(dingdong.getOE())
 
-        self.output += "<br>David's OE: "
-        self.output += str(david.getOE())
+        self.output += "<br>"
+        self.output += str(self.serialize(john))
 
-        self.output += "<br>Dingdong's OE: "
-        self.output += str(dingdong.getOE())
+
+#
+class JSonAPIEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, date) or isinstance(obj, datetime):
+            return obj.strftime('%Y/%m/%d %H:%M:%S')
+        elif isinstance(obj, ndb.Model):
+            return obj.to_dict()
+        else:
+            return json.JSONEncoder.default(self, obj)

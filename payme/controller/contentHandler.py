@@ -3,6 +3,11 @@ import os
 import logging
 from exceptions import NoTemplateError
 
+import json
+from datetime import date, datetime
+
+from google.appengine.ext import ndb
+
 FOOTER = "footer"
 HEADER = "header"
 
@@ -101,6 +106,18 @@ class PageHandler(ContentHandler):
                 return False
         
         return True
+
+    class JSonAPIEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, date) or isinstance(obj, datetime):
+                return obj.strftime('%Y/%m/%d %H:%M:%S')
+            elif isinstance(obj, ndb.Model):
+                return obj.to_dict()
+            else:
+                return json.JSONEncoder.default(self, obj)
+
+    def serialize(self, object_to_serialize):
+        return json.dumps(object_to_serialize, cls=self.JSonAPIEncoder)
         
 # class for handling verbs
 class VerbHandler(ContentHandler):

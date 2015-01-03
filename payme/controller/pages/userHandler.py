@@ -1,9 +1,22 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
+import json
+from payme.model.user import User
 
 class UserHandler(PageHandler):
 
     def __init__(self):
-        super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String, ), {'login': UserHandler.LoginHandler(), 'logout': UserHandler.LogoutHandler(), 'profile': UserHandler.ProfileHandler, 'settings': UserHandler.SettingsHandler}) #This page has no view, but it does have verbs
+        super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String), {'login': UserHandler.LoginHandler(), 'profile' : UserHandler.ProfileHandler()}) #This page has no view, but it does have verbs
+
+    def getAPI(self, controller, parameter):
+
+        user = User.query(User.googleID == parameter).fetch(10)
+
+        if user.__len__() == 0:
+            output = 'Not found'
+        else:
+            output = self.serialize(user[0])
+
+        return output
 
     class LoginHandler(VerbHandler):
 
@@ -36,3 +49,7 @@ class UserHandler(PageHandler):
 
         def getHTML(self, controller, parameter):
             return super(UserHandler.SettingsHandler, self).getHTML(controller, parameter)
+
+
+
+
