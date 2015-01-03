@@ -15,7 +15,7 @@ function processTemplate(template, templateValues)
         if(nextValue >= 0 && endValue >= 0)
         {
             var variableName = template.substring(nextValue + 2, endValue);
-            variableValue = templateValues[variableName].toString();
+            variableValue = getVariable(templateValues, variableName.split("."), 0);
             additionalSkip = endValue - nextValue + 2;
             outputLength = nextValue - offset;
         }
@@ -28,6 +28,18 @@ function processTemplate(template, templateValues)
     }
 
     return output;
+}
+
+function getVariable(templateValues, variableParts, offset)
+{
+    console.log(templateValues)
+    if(offset >= variableParts.length - 1)
+    {
+        if(templateValues[variableParts[offset]]) return templateValues[variableParts[offset]].toString();
+        else return "";
+    }
+    if(templateValues[variableParts[offset]]) return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
+    else return "";
 }
 
 //Makes a copy of the given object and removes the fields given
