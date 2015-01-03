@@ -22,6 +22,7 @@ class OAuthLoginHandler(VerbHandler):
 
     def __init__(self):
         super(OAuthLoginHandler, self).__init__(None)
+        self.accessLevel = 0
 
     def getHTML(self, controller, parameter):
         self.authorise(controller)
@@ -38,6 +39,7 @@ class OAuthCallbackHandler(VerbHandler):
         super(OAuthCallbackHandler, self).__init__(None)
         self.errorMessage = ''
         self.credentials = None
+        self.accessLevel = 0
 
     def getHTML(self, controller, parameter):
         try:

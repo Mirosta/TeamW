@@ -36,10 +36,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="help.html">help!</a></li>
+          {% if controller.getCurrentUser() is not none %}
+            <li><a class="no-hover">Hi {{ controller.getCurrentUser().name }}</a></li>
+          {% endif %}
+          {% if controller.getAccessLevel() > 0 %}
+            <li><a href="help">help!</a></li>
             <li><a href="home">dashboard</a></li>
             <li><a href="#">user profile</a></li>
             <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
+          {% else %}
+          {% endif %}
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
@@ -49,6 +55,7 @@
     </nav>
   <div class="container-fluid">
       <div class="row">
+        {% if controller.getAccessLevel() > 0 %}
         <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
             <li><a href="">past transactions</a></li>
@@ -61,5 +68,6 @@
             <li><a href="">manage groups</a></li>
           </ul>
         </div>
+        {% endif %}
         <div class="col-md-10 col-md-offset-2 main">
           <div style="width:100%;">

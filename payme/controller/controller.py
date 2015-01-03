@@ -1,4 +1,3 @@
-import json
 import logging
 from google.appengine.ext.ndb.key import Key
 
@@ -6,6 +5,7 @@ import webapp2
 import httplib2
 
 from webapp2_extras import sessions
+from webapp2_extras.appengine.sessions_memcache import MemcacheSessionFactory
 
 from contentHandler import TestPageHandler, Parameter
 from dbTesting import TestPage
@@ -46,15 +46,16 @@ class Controller (webapp2.RequestHandler):
     }
 
     homePage = 'home'
+    loginPage = '/user/login'
 
     def __init__(self, isAPI):
         self.isAPI = isAPI
+        self.currentUser = None
 
     #Session Stuff
     def dispatch(self):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
-
         try:
             # Dispatch the request.
             webapp2.RequestHandler.dispatch(self)
@@ -65,7 +66,7 @@ class Controller (webapp2.RequestHandler):
     @webapp2.cached_property
     def session(self):
         # Returns a session using the default cookie key.
-        return self.session_store.get_session()
+        return self.session_store.get_session(backend='memcache')
 
     def get(self, pageName, verbName):
         self.handleRequest(HTTPVerb.GET, pageName, verbName)
@@ -77,8 +78,8 @@ class Controller (webapp2.RequestHandler):
         if verbName == None: verbName = ''
 
         if pageName not in Controller.pages:
-            raise PageNotFoundError()
-            
+            raise PageNotFoundError()   
+
         page = Controller.pages[pageName]
 
         contentHandler = None
@@ -87,12 +88,20 @@ class Controller (webapp2.RequestHandler):
         # If the page has a verb with that name, use that
         if page.hasVerb(verbName):
             contentHandler = page.getVerb(verbName)
-            
+            if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
+                if httpVerb == HTTPVerb.GET:
+                    self.session['redirectTo'] = '/' +
+                self.redirect(self.loginPage)
+                return
         # Otherwise check if pages accepts parameters
         else:
             contentHandler = page
             parameter = verbName
-            
+
+            if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
+                self.redirect(self.loginPage)
+                return
+
             if parameter == "":
                 if page.getParameter().isRequired():
                     raise InvalidParameterError()
@@ -128,25 +137,41 @@ class Controller (webapp2.RequestHandler):
         if existingUser.__len__() < 1: #No users found
             self.onNewUserLogin(userDetails, credentials)
         else:
-            self.onExistingUserLogin(userDetails, credentials)
+            self.onExistingUserLogin(existingUser[0], userDetails, credentials)
 
     def onNewUserLogin(self, userDetails, credentials):
-        newUser = User(googleID = userDetails['id'], email = userDetails['email'], name = userDetails['name'], profilePicture = userDetails['picture'], credentials = credentials)
+        newUser = User(googleID = userDetails['id'], email = userDetails['email'], name = userDetails['given_name'], familyName = userDetails['family_name'], profilePicture = userDetails['picture'], credentials = credentials)
         newUser.put()
         self.session['user'] = newUser.key.urlsafe()
 
-    def onExistingUserLogin(self, userDetails, credentials):
-        pass
+    def onExistingUserLogin(self, existingUser, userDetails, credentials):
+        existingUser.credentials = credentials
+        existingUser.put()
+        self.session['user'] = existingUser.key.urlsafe()
 
     def getCurrentUser(self):
-        if not 'user' in self.session:
-            return None
-        else:
-            matchingUsers = User.query(User.key == Key(urlsafe=self.session['currentUser'])).fetch()
-            if matchingUsers.__len__() < 1:
+        if self.currentUser == None:
+            logging.info('Current user is none')
+            if not 'user' in self.session:
+                logging.info('User not set in session')
                 return None
             else:
-                return matchingUsers[0]
+                logging.info('User set in session with key ' + self.session['user'])
+                matchingUsers = User.query(User.key == Key(urlsafe=self.session['user'])).fetch()
+                if matchingUsers.__len__() < 1:
+                    logging.info('No users matching that key')
+                    return None
+                else:
+                    logging.info('Found user matching that key ' + matchingUsers[0].name)
+                    self.currentUser = matchingUsers[0]
+        return self.currentUser
+
+    def getAccessLevel(self):
+        user = self.getCurrentUser()
+        if user == None:
+            return 0
+        else:
+            return 1
 
 # Controller for handling HTML requests
 class HTMLController(Controller):
@@ -162,7 +187,16 @@ class APIController(Controller):
         super(Controller, self).__init__(request, response)
         apiController = self
 
-sessions.default_config['secret_key'] = 'a random key to use for generating cookies' #TODO: Maybe something a little more secure
+config = {}
+config['webapp2_extras.sessions'] = {
+    'secret_key': 'a different random key',
+     'backends': {'datastore': 'webapp2_extras.appengine.sessions_ndb.DatastoreSessionFactory',
+                 'memcache': 'webapp2_extras.appengine.sessions_memcache.MemcacheSessionFactory',
+                 'securecookie': 'webapp2_extras.sessions.SecureCookieSessionFactory'
+                 }
+}
+#TODO: Maybe something a little more secure
+
 logging.debug('Loaded controller')
 
 # Define the routes.
@@ -170,5 +204,5 @@ routes = webapp2.WSGIApplication([
     webapp2.SimpleRoute(r'^/api/(\w+)(?:/(\w+))?/?', APIController, 'api'),
     webapp2.SimpleRoute(r'^/(\w+)(?:/(\w+))?/?', HTMLController, 'html'),
     webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': '/' + Controller.homePage}),
-], debug=True)
+], debug=True, config=config)
 
