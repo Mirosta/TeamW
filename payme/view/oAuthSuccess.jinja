@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+    <head>
+        <title>Login Success</title>
+        <style>
+            div.Success
+            {
+                color: green;
+            }
+            div.Credentials
+            {
+                display: block;
+                padding-left: 10px;
+            }
+        </style>
+        <script>
+            window.localStorage.removeItem('oauth-login');
+			window.localStorage.setItem('oauth-login', 'true');
+            window.close();
+        </script>
+    </head>
+    <body>
+        <div class='Success'>
+            Login success, credentials:
+            <div class='Credentials'>{{ page.credentials }}</div>
+        </div>
+    </body>
+</html>
+{%  endautoescape %}

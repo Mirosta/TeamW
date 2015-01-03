@@ -1,37 +1,94 @@
 #Imports here
 from entity import Entity
+from group import Group
+import debt
 
+from google.appengine.ext import ndb
 
 class User (Entity):
-    'Represents a user in the system'
+    # Database for users
 
-    def __init__(self, googleID, groups, friends):
-        self.googleID = googleID
-        self.groups = groups
-        self.friends = friends
+    googleID = ndb.StringProperty()
+    familyName = ndb.StringProperty()
+    email = ndb.StringProperty()
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    groups = ndb.KeyProperty(kind=Group, repeated=True)
+    friends = ndb.KeyProperty(kind='User', repeated=True)
+    profilePicture = ndb.StringProperty()
+    credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
-    def getDebtAmount(self):
-        Entity.getDebtAmount(self)
+    uniqueProperty = 'googleID'
 
-    def getNetAmounts(self):
-        Entity.getNetAmounts(self)
+    # Get list of assets
+    def getDRs(self):
+        return debt.Debt.query(debt.Debt.creditor == self.key).fetch()
 
-    def getNetCreditAmount(self):
-        Entity.getNetCreditAmount(self)
+    # Get list of liabilities
+    def getCRs(self):
+        return debt.Debt.query(debt.Debt.debtor == self.key).fetch()
 
-    def getCredits(self):
-        Entity.getCredits(self)
+    # Get assets amount
+    def getDR(self):
+        debits = self.getDRs()
 
-    def getDebtsAmounts(self):
-        Entity.getDebtsAmounts(self)
+        totalDR = 0
 
-    def getCreditsAmount(self):
-        Entity.getCreditsAmount(self)
+        for debit in debits:
+            totalDR += debit.getAmountRemaining()
+
+        return totalDR
+
+    # Get liabilities amount
+    def getCR(self):
+        credits = self.getCRs()
+
+        totalCR = 0
+
+        for credit in credits:
+            totalCR += credit.getAmountRemaining()
+
+        return totalCR
+
+    # Get owner equities
+    def getOE(self):
+        return self.getDR() - self.getCR()
+
+    # create new group
+    def addGroup(self, group):
+        self.groups.append(group)
+
+    def getFriends(self):
+        return self.friends
+
+    # add friend
+    def addFriend(self, friend):
+        self.friends.append(friend)
+        self.put()
 
     def getDebts(self):
-        Entity.getDebts(self)
+        return {self : self.getCRs()}
 
-    def getNetAmount(self):
-        Entity.getNetAmount(self)
+    def getCredits(self):
+        return {self : self.getDRs()}
 
+    def getDebtAmounts(self):
+        debtAmounts = []
+        debts = self.getCRs()
 
+        for debt in debts:
+            debtAmounts.append(debt.getAmountRemaining())
+
+        return {self : debtAmounts}
+
+    def getCreditAmounts(self):
+        creditAmounts = []
+        credits = self.getDRs()
+
+        for credit in credits:
+            creditAmounts.append(credit.getAmountRemaining())
+
+        return {self : creditAmounts}
+
+    # debug
+    def retrieveUserName(self):
+        return self.googleID

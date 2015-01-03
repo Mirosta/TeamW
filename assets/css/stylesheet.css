@@ -3,6 +3,10 @@ body {
   padding-top: 50px;
 }
 
+hr {
+  margin: 0;
+}
+
 
 /* Remove 1px line by setting border to 0 */
 .navbar-fixed-top {
@@ -20,15 +24,16 @@ body {
 @media (min-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 51px;
+    top: 50px;
     bottom: 0;
     left: 0;
     z-index: 1000;
     display: block;
-    padding: 20px;
+    padding-top: 10px;
+    padding-left: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
+    background-color: #333333;
     border-right: 1px solid #eee;
   }
 }
@@ -42,14 +47,27 @@ body {
 .nav-sidebar > li > a {
   padding-right: 20px;
   padding-left: 20px;
+  color: #E4E4E4;
 }
+
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
-  color: #fff;
-  background-color: #428bca;
+  color: #000000;
+  background-color: #C8F7C5;
 }
 
+.nav-sidebar > li > a:hover,
+.navbar-right > li > a:hover {
+  color: #000000 !important;
+  background-color: #C8F7C5 !important;
+}
+
+.nav-sidebar > li > a.no-hover:hover,
+.navbar-right > li > a.no-hover:hover {
+  color: #9d9d9d !important;
+  background-color: rgba(0,0,0,0) !important;
+}
 
 /*
  * Main content
@@ -68,15 +86,50 @@ body {
   margin-top: 0;
 }
 
-?
 /*
- * Form content
+ * Default colours and sizes
  */
 
- .form {
-   
+.top-buffer {
+  margin-top: 10px;
+}
+
+.bold {
+  font-weight:bold;
+}
+
+.green {
+  color: #C8F7C5;
+}
+
+/*
+ * Containers
+ */
+
+.grey-bordered-box {
+  border-color: #e6e6e6;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  padding-bottom: 10px;
+}
+
+/*
+ * Input fields
+ */
+
+ .textarea {
+  max-width: 400px;
+  max-height: 150px;
  }
+
+/*
+ * Form elements
+ */
+
  
- .form-textarea{
-   height: 70px;
+ .form-label {
+  width: 115px;
+  padding: 15px;
  }
+
