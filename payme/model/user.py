@@ -72,7 +72,7 @@ class User (Entity):
 
     # create new group
     def addGroup(self, group):
-        if self.isMe:
+        if self.isMe and group not in self.groups:
             self.groups.append(group)
             self.put()
         else:

@@ -80,9 +80,9 @@ class TestPage(PageHandler):
         # john.addGroup(group.key)
         # dingdong.addGroup(group.key)
 
-        group.addMember(dingdong.key)
+        # group.addMember(dingdong.key)
 
-        self.output += "<br>" + self.serialize(dingdong)
+        self.output += "<br>" + self.serialize(group)
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)

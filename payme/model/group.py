@@ -7,6 +7,8 @@ from payme.controller.exceptions import OwnerInGroupError
 
 import user
 
+import logging
+
 from payme.controller.globals import Global
 
 # Group is made by passing a list of users. When addDebt is called, it will add 'debt' passed to every user in the group.
@@ -24,6 +26,7 @@ class Group (Entity):
             raise OwnerInGroupError
         else:
             self.users.append(user)
+            self.put()
 
     def renameGroup(self, name):
         self.name = name
@@ -71,7 +74,7 @@ class Group (Entity):
         output = 0
 
         for u in self.users:
-            output += u.getDR();
+            output += user.User.query(user.User.key == u).fetch()[0].getDR();
 
         return output
 
@@ -81,8 +84,11 @@ class Group (Entity):
 
         output = 0
 
+        logging.info('!!!!!!!!!!!!!!!!!!!!' + str(self.users.__len__()))
+
         for u in self.users:
-            output += u.getCR()
+
+            output += user.User.query(user.User.key == u).fetch()[0].getCR()
 
         return output
 
