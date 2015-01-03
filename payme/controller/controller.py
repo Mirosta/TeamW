@@ -7,7 +7,7 @@ import httplib2
 from webapp2_extras import sessions
 from webapp2_extras.appengine.sessions_memcache import MemcacheSessionFactory
 
-from contentHandler import TestPageHandler, Parameter
+from contentHandler import HomepageHandler, Parameter
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from payme.controller.pages.friendHandler import FriendHandler
@@ -35,7 +35,7 @@ userInfoService = build('oauth2', 'v2', http=serviceHttp)
 class Controller (webapp2.RequestHandler):
 
     pages = {
-        'home': TestPageHandler(),
+        'home': HomepageHandler(),
         'oauth': OAuthHandler(),
         'test': TestPage(),
         'friends': FriendHandler(),

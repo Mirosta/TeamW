@@ -148,14 +148,3 @@ class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile):
         super(VerbHandler, self).__init__(templateFile)
-    
-# Test page with a test template
-class TestPageHandler(PageHandler):
-
-    def __init__(self):
-        super(TestPageHandler, self).__init__('test')
-        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
-
-    def getHTML(self, controller, parameter):
-        return super(TestPageHandler, self).getHTML(controller, parameter)
-
