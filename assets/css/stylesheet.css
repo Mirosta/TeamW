@@ -63,6 +63,12 @@ hr {
   background-color: #C8F7C5 !important;
 }
 
+.nav-sidebar > li > a.no-hover:hover,
+.navbar-right > li > a.no-hover:hover {
+  color: #9d9d9d !important;
+  background-color: rgba(0,0,0,0) !important;
+}
+
 /*
  * Main content
  */
