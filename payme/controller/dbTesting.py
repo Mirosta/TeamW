@@ -46,9 +46,9 @@ class TestPage(PageHandler):
 #
 # #   TEST 5 - Add friends
 #
-        john = self.queryUser('john')
-        david = self.queryUser('david')
-        dingdong = self.queryUser('dingdong')
+        # john = self.queryUser('john')
+        # david = self.queryUser('david')
+        # dingdong = self.queryUser('dingdong')
 #
 #         # john.addFriend(david.key)
 #         # john.addFriend(dingdong.key)
@@ -82,7 +82,47 @@ class TestPage(PageHandler):
 
         # group.addMember(dingdong.key)
 
-        self.output += "<br>" + self.serialize(group)
+        # self.output += "<br>" + self.serialize(group)
+
+
+#         CREATE STUFF!! - ONLY RUN ONCE
+
+        self.output += 'Creating users... <br>'
+        john = self.createUser('john', "John Smith")
+        david = self.createUser('david', "David Hutchinson")
+        dingdong = self.createUser('dingdong', "Ding Dong")
+
+        self.output += 'Creating group, Wolfpack... <br>'
+        group = self.createNewGroup('Wolfpack')
+
+        self.output += 'Creating debt (Dingdong to John)... <br>'
+        debt = self.createDebt(dingdong.key, john.key, 5000)
+
+        self.output += 'Creating payments... <br><br>'
+        payment = self.createPayments(john.key, debt.key, 300)
+
+#         ASSOCIATE STUFF!! - ONLY RUN ONCE
+
+#         Add friends
+        self.output += 'Adding David and Dingdong to John... <br>'
+        john.addFriend(david.key)
+        john.addFriend(dingdong.key)
+
+#         Add group
+        self.output += 'Adding Wolpack to John <br>'
+        john.addGroup(group.key)
+
+#         Add member of the group
+        self.output += 'Adding Dingdong to John\'s Wolfpack...'
+        group.addMember(dingdong.key)
+
+        self.output += 'Done... <br>'
+        # self.output += "<br>" + self.serialize(group)
+
+
+
+
+
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
