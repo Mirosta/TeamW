@@ -43,6 +43,18 @@ class TestPage(PageHandler):
 
         self.createDebtGroup()
 
+#   TEST 5 - Add friends
+
+        john = User.query(User.googleID == 'john').fetch(10)[0]
+        # david = User.query(User.googleID == 'david').fetch(10)[0]
+        # dingdong = User.query(User.googleID == 'dingdong').fetch(10)[0]
+        #
+        # john.addFriend(david.key)
+        # john.addFriend(dingdong.key)
+
+        # self.output += str(john.friends)
+        self.output = self.serialize(john)
+
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
@@ -134,6 +146,8 @@ class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
             return obj.strftime('%Y/%m/%d %H:%M:%S')
+        elif isinstance(obj, ndb.Key):
+            return str(obj)
         elif isinstance(obj, ndb.Model):
             return obj.to_dict()
         else:

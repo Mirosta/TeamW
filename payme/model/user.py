@@ -56,8 +56,13 @@ class User (Entity):
     def addGroup(self, group):
         self.groups.append(group)
 
+    def getFriends(self):
+        return self.friends
 
-
+    # add friend
+    def addFriend(self, friend):
+        self.friends.append(friend)
+        self.put()
 
     def getDebts(self):
         return {self : self.getCRs()}

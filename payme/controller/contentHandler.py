@@ -111,6 +111,8 @@ class PageHandler(ContentHandler):
         def default(self, obj):
             if isinstance(obj, date) or isinstance(obj, datetime):
                 return obj.strftime('%Y/%m/%d %H:%M:%S')
+            elif isinstance(obj, ndb.Key):
+                return str(obj)
             elif isinstance(obj, ndb.Model):
                 return obj.to_dict()
             else:
