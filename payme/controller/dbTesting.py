@@ -68,7 +68,9 @@ class TestPage(PageHandler):
         david = self.createUser('david', "David Hutchinson")
         dingdong = self.createUser('dingdong', "Ding Dong")
 
-        debt = self.createDebt(dingdong, john, 5000)
+        debt = self.createDebt(dingdong.key, john.key, 5000)
+
+        payment = self.createPayments(john.key, debt.key, 300)
 
 
 #   LEAVE THIS ALONE!
