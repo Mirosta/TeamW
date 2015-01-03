@@ -1,5 +1,5 @@
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
-from payme.controller.modelHandler import ModelHandler, RelatedModel
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
 from payme.model.debt import Debt
 from payme.model.user import User
 from payme.model.payment import Payment
@@ -10,7 +10,13 @@ class DebtHandler(ModelHandler):
     #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
-        super(DebtHandler, self).__init__(None, {'add': AddHandler(), 'pay': PayHandler()}, 'getCRs', Debt, [RelatedModel(Payment, 'debt', 'payments')])
+        super(DebtHandler, self).__init__(None,
+                                          {'add': AddHandler(), 'pay': PayHandler()},
+                                          'getCRs',
+                                          Debt,
+                                          [RelatedModel(Payment, 'debt', 'payments'),
+                                           ReadOnlyFunction('getStatus', 'status')])
+
     # def getAPI(self, controller, parameter):
     #     if parameter == Parameter.NoneGiven:
     #         return self.displayAllDebt()
@@ -60,7 +66,7 @@ class DebtHandler(ModelHandler):
 class AddHandler(VerbHandler):
 
     def __init__(self):
-        super(AddHandler, self).__init__('debtAdd')
+        super(AddHandler, self).__init__('add')
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
 
     def getHTML(self, controller, parameter):
