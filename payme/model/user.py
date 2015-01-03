@@ -1,4 +1,3 @@
-#Imports here
 from entity import Entity
 from group import Group
 from notification import Notification

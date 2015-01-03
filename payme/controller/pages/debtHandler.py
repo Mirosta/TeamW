@@ -6,16 +6,13 @@ from payme.model.payment import Payment
 
 class DebtHandler(ModelHandler):
 
-    # dummy for currentUser
-    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
-
     def __init__(self):
         super(DebtHandler, self).__init__(None,
                                           {'add': AddHandler(), 'pay': PayHandler()},
                                           'getCRs',
                                           Debt,
-                                          [RelatedModel(Payment, 'debt', 'payments'),
-                                           ReadOnlyFunction('getStatus', 'status')])
+                                          [RelatedModel(Payment, 'debt', 'payments')],
+                                          [ReadOnlyFunction('getStatus', 'status')])
 
     # returns all debt owed by that user - CHECKED
     def displayAllDebt(self):
