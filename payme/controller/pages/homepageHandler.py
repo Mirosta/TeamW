@@ -1,4 +1,4 @@
-from payme.controller.contentHandler import HomepageHandler
+from payme.controller.contentHandler import PageHandler
 
 # Test page with a test template
 class HomepageHandler(PageHandler):
