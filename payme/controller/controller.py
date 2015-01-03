@@ -7,8 +7,8 @@ import httplib2
 from webapp2_extras import sessions
 from webapp2_extras.appengine.sessions_memcache import MemcacheSessionFactory
 
-from contentHandler import Parameter,
-from payme.controller.pages.homePageHandler import HomepageHandler,
+from contentHandler import Parameter
+from payme.controller.pages.homePageHandler import HomepageHandler
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from payme.controller.pages.friendHandler import FriendHandler
