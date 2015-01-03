@@ -1,4 +1,6 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
+from payme.controller.modelHandler import ModelHandler, RelatedModel
+
 import json
 from payme.model.user import User
 
