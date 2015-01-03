@@ -1,6 +1,8 @@
 #Imports here
 from entity import Entity
 from group import Group
+from notification import Notification
+import debt
 from payme.model.debt import Debt
 from payme.controller.exceptions import SecurityError
 
@@ -21,6 +23,9 @@ class User (Entity):
     credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
+
+    # notification queue
+    messageQueue = ndb.KeyProperty(kind=Notification, repeated=True)
 
     # Hacky way to return user for model
     def getMe(self):
@@ -132,6 +137,15 @@ class User (Entity):
             creditAmounts.append(credit.getAmountRemaining())
 
         return {self : creditAmounts}
+
+    # add a notification to the user's message queue
+    def giveNotification(self, notification):
+        self.messageQueue.append(notification)
+        self.put()
+
+    # retrieve a notification from the message queue (if present)
+    def getNotifications(self):
+        return self.messageQueue
 
     def getAllPayments(self):
         debts = self.getDRs()
