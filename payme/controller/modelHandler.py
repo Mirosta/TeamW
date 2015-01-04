@@ -152,14 +152,15 @@ class ModelHandler(PageHandler):
 
             
 class ModelAddHandler(VerbHandler):
-    
-    def __init__(self, view = None):
+
+    def __init__(self, type, view = None):
         super(self.__class__, self).__init__(view)
+        self.type = type
 
     def postAPI(self, controller, parameter, postData):
-        entity = validator.validate(postData)
+        entity = validator.validate(postData, self.type)
         # add new entity to database
         return '{"success": 1}'
 
-    
+
 
