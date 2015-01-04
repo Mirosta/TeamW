@@ -1,6 +1,6 @@
 from payme.controller.exceptions import InvalidParameterError, MissingFieldError
 import json
-from payme.model.debt import Debt
+from google.appengine.ext.ndb import Key
 
 all_required = []
 create_debt_required = ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid']
@@ -27,6 +27,6 @@ def retrieve(json_str, type_class, required_fields=[]):
         for key in required_fields:
             if key not in json_obj:
                 raise MissingFieldError()
-        return type_class.query(Debt.key == json_obj.get('key')).fetch(1)[0]
+        return type_class.query(type_class.key == Key(urlsafe=json_obj.get('key'))).fetch(1)[0]
     except Exception as e:
         raise e
