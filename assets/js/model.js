@@ -65,9 +65,23 @@ function ModelClass(modelUrl)
             }
         );
     };
-    this.getAll = function(callback) //Callback is of format function(boolean success, (string | array) errorOrResults)
+    this.getAll = function(callback, count, offset, sortBy) //Callback is of format function(boolean success, (string | array) errorOrResults)
     {
-        var url = apiUrl + thisObj.modelUrl + getAllUrl;
+        var parameters = "";
+        var paramParts = [{name: "count", value: count}, {name: "offset", value: offset}, {name: "sortBy", value: sortBy}];
+        var sep = "?";
+
+        for(var i =0; i < paramParts.length; i++)
+        {
+            if(paramParts[i].value)
+            {
+                parameters += sep;
+                parameters += paramParts[i].name + "=" + paramParts[i].value;
+                sep = "&";
+            }
+        }
+
+        var url = apiUrl + thisObj.modelUrl + getAllUrl + parameters;
         //Get object from DB
         apiGet(url,
             function (success, data)
@@ -95,6 +109,7 @@ function ModelClass(modelUrl)
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
 var groups = new ModelClass("groups");
+
 var friends = new ModelClass("friends");
 //Model objects have .update, .create and .remove methods
 /*
