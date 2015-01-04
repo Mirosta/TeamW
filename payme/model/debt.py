@@ -54,7 +54,7 @@ class Debt(Actionable):
 
     # Get key for the current user
     def getCurrentUser(self):
-        return Global.apiController.getCurrentUser()
+        return Global.controller.getCurrentUser()
 
     def getAmount(self):
         return self.amount
