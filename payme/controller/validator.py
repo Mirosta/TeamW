@@ -14,8 +14,7 @@ required_fields = \
 {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
     Group: [],
-    Payment: [],
-    User: []
+    Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
 
