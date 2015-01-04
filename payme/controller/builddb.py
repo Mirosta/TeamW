@@ -76,6 +76,9 @@ class BuildDB(PageHandler):
 #   LEAVE THIS ALONE!
         return super(BuildDB, self).getHTML(controller, parameter)
 
+
+#   HELPER CLASSES
+
     def queryUser(self, key):
         user = User.query(User.googleID == key).fetch(10)
 

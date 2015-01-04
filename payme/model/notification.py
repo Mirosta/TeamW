@@ -13,6 +13,7 @@ class Notification(ndb.Model):
         ERROR = "ERROR"
         SUCCESS = "SUCCESS"
         MISC = "MISC"
+        FRIEND_REQUEST = "FRIEND_REQUEST"
 
     def getType(self):
         return self.type
