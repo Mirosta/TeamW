@@ -52,13 +52,16 @@ class ContentHandler(object):
         self.templateFile = templateFile
         self.accessLevel = accessLevel
         self.lastController = None
+
     
     def getHTML(self, controller, parameter):
         self.lastController = controller
+        logging.info("Hi")
         return self.renderTemplate(controller, self.templateFile)
 
     def renderTemplate(self, controller, templateFile):
         # Get the template and render it
+        logging.info("Rendering Template")
         self.lastController = controller
         if templateFile == None: raise NoTemplateError()
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
