@@ -21,6 +21,9 @@ class Group (Entity, Actionable):
     def isUpdateAllowed(self):
         return self.key in self.getCurrentUser().groups
 
+    def isRemoveAllowed(self):
+        return self.isUpdateAllowed()
+
      # Get key for the current user
     def getCurrentUser(self):
         return Global.controller.getCurrentUser()

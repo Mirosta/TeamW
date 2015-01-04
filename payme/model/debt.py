@@ -49,6 +49,9 @@ class Debt(Actionable):
     def isUpdateAllowed(self):
         return self.getCurrentUser().key == self.creditor
 
+    def isRemoveAllowed(self):
+        return self.isAddAllowed()
+
     # Get key for the current user
     def getCurrentUser(self):
         return Global.apiController.getCurrentUser()
@@ -81,7 +84,7 @@ class Debt(Actionable):
 
         # otherwise work out the progress of the payments
         if amountPaid > 0:
-            if amountPaid == self.amount:
+            if amountPaid >= self.amount:
                 return "PAID"
             else:
                 return "INPROGRESS"

@@ -12,15 +12,16 @@ function initialisePage() {
 
 function loadRecentTransactions($div) {
   payments.getAll(function(success, paymentData) {
+    console.log(paymentData);
     initialiseDataTables(paymentData, $div);
-  }, 10, null, "-date");
+  }, 10, null, "-created");
 }
 
 
 function initialiseDataTables(paymentData, $div) {
   $(document).ready(function() {
     // (temp) Column headings for DataTables table
-    var columnHeaders = ["payment by...", "payment to...", "date", "amount paid (£)", "remaining debt"];
+    var columnHeaders = ["payment by...", "payment to...", "created", "amount paid (£)", "remaining debt"];
     var data = serverDataToArray(paymentData);
 
     // Add table to DOM
@@ -48,7 +49,7 @@ function initialiseDataTables(paymentData, $div) {
 function serverDataToArray(data) {
   var finalArray = [];
   for (i=0; i < data.length; i++) {
-    finalArray.push([data[i].payer, data[i].readOnly.payee, data[i].date, data[i].amount ]);
+    finalArray.push([data[i].payer, data[i].readOnly.payee, data[i].created, data[i].amount ]);
   }
   return finalArray;
 }
@@ -68,7 +69,7 @@ function loadGroupsIntoDashboard() {
 }
 
 function loadFriendsIntoDashboard() {
-  var template = '<div>{{googleID}}<span class="pull-right bold" style="color:{{readOnly.numberClass}};">{{readOnly.netAmount}}</span><br></div>';
+  var template = '<div>{{name}}<span class="pull-right bold" style="color:{{readOnly.numberClass}};">{{readOnly.netAmount}}</span><br></div>';
   friends.getAll(function(success, friendData) {
     $('#friends-content-div').html(""); 
     for (i=0; i < friendData.length; i++) {

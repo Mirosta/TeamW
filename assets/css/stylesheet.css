@@ -114,15 +114,18 @@ hr {
   padding-bottom: 10px;
 }
 
-.read-only-form {
-    font-size: 18px;
-
-}
 .grey-box {
   background-color: #c6c6c6;
   border-radius: 4px;
   padding-top: 5px;
   padding-bottom: 8px;
+}
+
+.dark-grey-box { 
+  background-color: #555555;
+  border-radius: 4px;
+  padding-top: 10px;
+  padding-bottom: 12px;
 }
 
 
@@ -147,12 +150,17 @@ hr {
  .read-only-form-label {
      width: 180px;
      padding: 15px;
-     text-align: right;
  }
 
- .form-image {
-     width: 180px;
-     height: 135px;
-     margin-left: 40px;
- }
+
+.img-profile {
+  display: block;
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  border-width:1px;
+  border-style:solid;
+  border-color:white;
+}
 

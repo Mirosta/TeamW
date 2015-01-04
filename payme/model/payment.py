@@ -41,6 +41,9 @@ class Payment(Actionable):
         logging.info(str(self.getCurrentUser()))
         return self.getCurrentUser().key == self.getDebt().creditor
 
+    def isRemoveAllowed(self):
+        return self.isUpdateAllowed()
+
     def update(self, values):
 
         super(self.__class__, self).update(values)
@@ -93,20 +96,18 @@ class Payment(Actionable):
 
 
 
-    # unpaid = none, inProgress = one approved,
-    # paid = both approved, inDispute = disputed
+    # approved = creditor approves, awaiting_approval = one approved,
+    # in_dispute = disputed
     def getStatus(self):
 
         # see if its disputed first
         if self.disputed:
-            return 'INDISPUTE'
+            return 'IN_DISPUTE'
 
-        # otherwise work out the progress of the payments
+        # otherwise work out the progress of the payment
         if self.approvedByCreditor:
-            if self.approvedByDebtor:
-                return 'PAID'
-            else:
-                return 'INPROGRESS'
+            return 'APPROVED'
         else:
-            return 'UNPAID'
+            return 'AWAITING_APPROVAL'
+
 

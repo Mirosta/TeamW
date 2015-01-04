@@ -57,6 +57,9 @@ class MissingFieldError(InternalError):
 class AttributeNotFound(InternalError):
     pass
 
+class AddNotAllowed(InternalError):
+    pass
+
 class UpdateNotAllowed(InternalError):
     pass
         

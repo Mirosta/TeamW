@@ -8,7 +8,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
-from payme.controller.exceptions import InvalidParameterError, InvalidVerbType
+from payme.controller.exceptions import InvalidParameterError, InvalidVerbType, AddNotAllowed
 from payme.model.debt import Debt
 from payme.model.user import User
 
@@ -36,11 +36,13 @@ class ModelHandler(PageHandler):
         #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
 
-        requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass])]
+        requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass]),
+                         ('update', ModelUpdateHandler, [modelClass])]
 
         for requiredVerb in requiredVerbs:
-            if verbs.has_key(requiredVerb[0]) and not isinstance(verbs[requiredVerb[0]], requiredVerb[1]):
-                raise InvalidVerbType
+            if verbs.has_key(requiredVerb[0]):
+                if not isinstance(verbs[requiredVerb[0]], requiredVerb[1]):
+                    raise InvalidVerbType
             else:
                 verbs[requiredVerb[0]] = requiredVerb[1](None)
             verbs[requiredVerb[0]].setup(*requiredVerb[2])
@@ -171,10 +173,13 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.create(postData, self.type)
             # add new entity to database
-            entity.put()
-        except InvalidParameterError as e:
+            if entity.isAddAllowed():
+                entity.put()
+            else:
+                raise AddNotAllowed()
+            return Debt._properties
+        except Exception as e:
             raise e
-        return '{"success": 1}'
 
 class ModelRemoveHandler(VerbHandler):
 
@@ -188,10 +193,25 @@ class ModelRemoveHandler(VerbHandler):
         try:
             entity = validator.retrieve(postData, self.type)
             # remove entity from database
-            if self.type == Debt:
-                entity.removeMe()
-        except InvalidParameterError as e:
+            entity.key.delete()
+            return '{"success": 1}'
+        except Exception as e:
             raise e
-        return '{"success": 1}'
 
+
+class ModelUpdateHandler(VerbHandler):
+
+    def __init__(self, view = None):
+        super(ModelUpdateHandler, self).__init__(view)
+
+    def setup(self, type):
+        self.type = type
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            entity = validator.update(postData, self.type)
+            entity.put()
+            return '{"success": 1}'
+        except Exception as e:
+            raise e
 

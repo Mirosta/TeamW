@@ -59,7 +59,7 @@ class Controller (webapp2.RequestHandler):
         'error': errorHandler,
     }
 
-    homePage = 'home'
+    homePage = '/home'
     loginPage = '/user/login'
 
     def __init__(self, isAPI):
@@ -224,6 +224,6 @@ logging.debug('Loaded controller')
 routes = webapp2.WSGIApplication([
     webapp2.SimpleRoute(r'^/api/([\w-]+)(?:/([\w-]+))?/?', APIController, 'api'),
     webapp2.SimpleRoute(r'^/([\w-]+)(?:/([\w-]+))?/?', HTMLController, 'html'),
-    webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': '/' + Controller.homePage}),
+    webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': Controller.homePage}),
 ], debug=True, config=config)
 

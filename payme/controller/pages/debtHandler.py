@@ -1,5 +1,7 @@
+from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler, ModelRemoveHandler
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler, \
+    ModelRemoveHandler, ModelUpdateHandler
 from payme.model.debt import Debt
 from payme.model.user import User
 from payme.model.payment import Payment
@@ -8,9 +10,10 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': ModelAddHandler('add'),
+                                          {'add': ModelAddHandler('addDebt'),
                                            'pay': PayHandler(),
-                                           'remove': ModelRemoveHandler('remove')},
+                                           'remove': RemoveHandler(),
+                                           'update': ModelUpdateHandler()},
                                           'getCRs',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
@@ -54,6 +57,16 @@ class DebtHandler(ModelHandler):
     # def onUnknownFriend(self):
     #     return '{error: "No friend with that ID"}'
 
+
+class RemoveHandler(ModelRemoveHandler):
+
+    def __init__(self):
+        super(RemoveHandler, self).__init__('remove')
+
+    def postAPI(self, controller, parameter, postData):
+        debt = validator.retrieve(postData, self.type)
+        debt.removeMe()
+        return '{"success": 1}'
 
 
 class PayHandler(VerbHandler):
