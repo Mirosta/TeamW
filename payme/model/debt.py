@@ -5,11 +5,12 @@ from payme.model.notification import Notification
 from payme.controller.globals import Global
 
 import user
+from actionable import Actionable
 
 import logging
 
 
-class Debt(ndb.Model):
+class Debt(Actionable):
     'Represents a debt that one user owes to another'
 
     debtor = ndb.KeyProperty(kind="User")
@@ -17,12 +18,17 @@ class Debt(ndb.Model):
     amount = ndb.IntegerProperty()
     description = ndb.StringProperty()
     isPaid = ndb.BooleanProperty()
-    date = ndb.DateTimeProperty()
-    dateCreated = ndb.DateTimeProperty(auto_now_add=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     amountPaid = ndb.IntegerProperty()
 
-    # Able to dispute debt as the creditor
+    # Able to dispute debt as the debtor
     disputed = ndb.BooleanProperty(default=False)
+
+    def isAddAllowed(self):
+        return self.getCurrentUser().key == self.creditor or self.getCurrentUser().key == self.debtor
+
+    def isUpdateAllowed(self):
+        return self.getCurrentUser().key == self.creditor
 
     # Get key for the current user
     def getCurrentUser(self):
@@ -65,20 +71,30 @@ class Debt(ndb.Model):
     def getPayments(self):
         return Payment.query(Payment.debt == self.key).fetch()
 
+    def notifyDebtor(self):
+        debtor = self.queryUser(self.debtor)
+        creditor = self.getCurrentUser()
+
+        n = Notification(type=Notification.Type.INFO, content='A debt of GBP' + "{0:.2f}".format(self.amount) + ' has been added to your account by ' + creditor.name)
+        n.put()
+
+        debtor.giveNotification(n)
+
     def removeMe(self):
         payments = Payment.query(Payment.debt == self.key).fetch()
 
         for payment in payments:
             payment.key.delete()
 
-        debtor = user.User.query(user.User.key == self.debtor).fetch()[0]
+        debtor = self.queryUser(self.debtor)
         creditor = self.getCurrentUser()
 
-        # TODO implement real user thingy
-        # n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
-        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.googleID)
+        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
         n.put()
 
         debtor.giveNotification(n)
 
         self.key.delete()
+
+    def queryUser(self, key):
+        return user.User.query(user.User.key == key).fetch()[0]

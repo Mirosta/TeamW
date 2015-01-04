@@ -5,6 +5,8 @@ from debt import Debt
 
 from payme.controller.exceptions import OwnerInGroupError
 
+from payme.controller.globals import Global
+
 import user
 
 import logging
@@ -15,6 +17,14 @@ from payme.controller.globals import Global
 class Group (Entity):
 
     users = ndb.KeyProperty(kind='User', repeated=True)
+
+    def isUpdateAllowed(self):
+        return self.key in self.getCurrentUser().groups
+
+     # Get key for the current user
+    def getCurrentUser(self):
+        #TODO return Global.apiController.getCurrentUser()
+        return user.User.query(user.User.googleID == 'john').fetch()[0]
 
     # Get key for the current user
     def getCurrentUser(self):

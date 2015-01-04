@@ -39,3 +39,11 @@ class OwnerInGroupError(PaymeError):
 class MissingFieldError(PaymeError):
     def __init__(self):
         super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)
+
+class AttributeNotFound(PaymeError):
+    def __init__(self):
+        super(AttributeNotFound, self).__init__(PaymeError.Types.SERVER_ERROR)
+
+class UpdateNotAllowed(PaymeError):
+    def __init__(self):
+        super(UpdateNotAllowed, self).__init__(PaymeError.Types.SERVER_ERROR)

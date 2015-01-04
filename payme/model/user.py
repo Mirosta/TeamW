@@ -5,12 +5,13 @@ import debt
 from payme.model.debt import Debt
 from payme.controller.exceptions import SecurityError
 from payme.model.notification import Notification
+from payme.model.actionable import Actionable
 
 from payme.controller.globals import Global
 
 from google.appengine.ext import ndb
 
-class User (Entity):
+class User (Entity, Actionable):
     # Database for users
 
     googleID = ndb.StringProperty()
@@ -26,6 +27,12 @@ class User (Entity):
 
     # notification queue
     messageQueue = ndb.KeyProperty(kind=Notification, repeated=True)
+
+    def isUpdateAllowed(self):
+        return self.getCurrentUser() == self.key
+
+    def update(self, values):
+        super(self, values)
 
     # Hacky way to return user for model
     def getMe(self):
