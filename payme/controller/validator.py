@@ -5,18 +5,18 @@ from payme.model.debt import Debt
 from payme.model.group import Group
 from payme.model.payment import Payment
 from globals import Global
-import time
+import datetime
 
 
 all_required = []
 required_fields = {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
-    Group: [],
+    Group: ['name', 'users'],
     Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
 json_convert = {
-    ndb.DateTimeProperty: lambda x: time.strptime(x, Global.JSONDateTime),
+    ndb.DateTimeProperty: lambda x: datetime.datetime.strptime(x, Global.JSONDateTime),
     ndb.KeyProperty: lambda x: Key(urlsafe=x)
 }
 
@@ -50,7 +50,9 @@ def update(json_str, type_class):
 def set_attributes(entity, json_obj, type_class):
     for key, value in json_obj.iteritems():
         convert = json_convert.get(type(type_class._properties[key]))
-        if convert is not None:
-            entity.key = convert(value)
-        else:
-            entity.key = value
+        if isinstance(value, list):
+            value = []
+            for elem in value:
+                value.append(elem if convert is None else convert(elem))
+            convert = None
+        setattr(entity, key, value if convert is None else convert(value))

@@ -4,7 +4,7 @@ class Global:
 
     controller = None
 
-    JSONDateTime = '%Y/%m/%d %H:%M:%S'
+    JSONDateTime = '%Y-%m-%d %H:%M:%S'
     
     # Show debug messages
     debug = True
