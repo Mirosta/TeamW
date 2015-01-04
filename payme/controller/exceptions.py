@@ -20,7 +20,7 @@ class PaymeError(Exception):
         if Global.debug:
             return traceback.format_exc()
         else:
-            return codes[self.getErrorCode()]
+            return self.codes[self.getErrorCode()]
 
 # Page not found - 404
 class NotFoundError(PaymeError):
@@ -64,4 +64,7 @@ class MissingFieldError(InternalError):
     pass
         
 class UnsupportedMethod(InternalError):
+    pass
+
+class InvalidVerbType(InternalError):
     pass
