@@ -75,8 +75,8 @@ class BuildDB(PageHandler):
 
 #           Give John notification
         self.output += 'Sending John notification...<br>'
-        john.giveNotification(notification1)
-        john.giveNotification(notification2)
+        currentUser.giveNotification(notification1)
+        currentUser.giveNotification(notification2)
         david.giveNotification(notification3)
 
         self.output += 'Done... <br>'
