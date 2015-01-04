@@ -46,7 +46,7 @@ class Controller (webapp2.RequestHandler):
         'friends': FriendHandler(),
         'groups': GroupHandler(),
         'user': UserHandler(),
-        'debt': DebtHandler(),
+        'debts': DebtHandler(),
         'payments': PaymentsHandler(),
         'help': HelpHandler(),
         'history': HistoryHandler(),
