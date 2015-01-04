@@ -51,17 +51,16 @@ class InvalidParameterError(BadRequestError):
 class PageNotFoundError(NotFoundError):
     pass
 
-class MissingFieldError(PaymeError):
-    def __init__(self):
-        super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)
+class MissingFieldError(InternalError):
+    pass
 
-class AttributeNotFound(PaymeError):
-    def __init__(self):
-        super(AttributeNotFound, self).__init__(PaymeError.Types.SERVER_ERROR)
+class AttributeNotFound(InternalError):
+    pass
 
-class UpdateNotAllowed(PaymeError):
-    def __init__(self):
-        super(UpdateNotAllowed, self).__init__(PaymeError.Types.SERVER_ERROR)class NoTemplateError(InternalError):
+class UpdateNotAllowed(InternalError):
+    pass
+        
+class NoTemplateError(InternalError):
     pass
 
 class SecurityError(PermissionDeniedError):
