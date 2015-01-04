@@ -30,6 +30,9 @@ class Debt(Actionable):
     def isUpdateAllowed(self):
         return self.getCurrentUser().key == self.creditor
 
+    def isRemoveAllowed(self):
+        return self.isAddAllowed()
+
     # Get key for the current user
     def getCurrentUser(self):
         #TODO return Global.apiController.getCurrentUser()
