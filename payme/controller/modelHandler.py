@@ -177,7 +177,7 @@ class ModelAddHandler(VerbHandler):
                 entity.put()
             else:
                 raise AddNotAllowed()
-            return Debt._properties
+            return self.type._properties
         except Exception as e:
             raise e
 
