@@ -186,6 +186,7 @@ group1.update();
 */
 //Example: Remove group 1
 //group1.remove();
+
 //Example: Create a new group in the DB, with no users
 /*
 var newGroup = groups.newInstance({"name": "New Group"}); //Properties can be passed in when creating a new group

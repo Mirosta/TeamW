@@ -68,7 +68,7 @@ function loadGroupsIntoDashboard() {
 }
 
 function loadFriendsIntoDashboard() {
-  var template = '<div>{{googleID}}<span class="pull-right bold" style="color:{{readOnly.numberClass}};">{{readOnly.netAmount}}</span><br></div>';
+  var template = '<div>{{name}}<span class="pull-right bold" style="color:{{readOnly.numberClass}};">{{readOnly.netAmount}}</span><br></div>';
   friends.getAll(function(success, friendData) {
     $('#friends-content-div').html(""); 
     for (i=0; i < friendData.length; i++) {
