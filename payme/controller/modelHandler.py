@@ -160,11 +160,11 @@ class ModelAddHandler(VerbHandler):
 
     def postAPI(self, controller, parameter, postData):
         try:
-            entity = validator.validate(postData, self.type)
+            entity = validator.create(postData, self.type)
             # add new entity to database
             entity.put()
-        except InvalidParameterError:
-            return '{"success": 0}'
+        except InvalidParameterError as e:
+            raise e
         return '{"success": 1}'
 
 class ModelRemoveHandler(VerbHandler):
@@ -175,7 +175,7 @@ class ModelRemoveHandler(VerbHandler):
 
     def postAPI(self, controller, parameter, postData):
         try:
-            entity = validator.validate(postData, self.type)
+            entity = validator.retrieve(postData, self.type)
             # remove entity from database
             if self.type == Debt:
                 entity.removeMe()

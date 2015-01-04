@@ -58,6 +58,7 @@ class Parameter(object):
             return int(parameterValue)
         if self.getType() == Parameter.Type.String:
             return parameterValue
+            
 # Class for handling content - be it pages or verbs
 class ContentHandler(object):
     
@@ -145,4 +146,3 @@ class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile, accessLevel = 1):
         super(VerbHandler, self).__init__(templateFile, accessLevel)
-

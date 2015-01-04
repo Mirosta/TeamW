@@ -1,41 +1,67 @@
+from payme.controller.globals import Global
+import sys, traceback
+
 # Super class for all application exceptions
 class PaymeError(Exception):
-    class Types:
-        NOT_FOUND = 404
-        PERMISSION_DENIED = 403
-        SERVER_ERROR = 500
-        BAD_REQUEST = 400
-        
-    def __init__(self, errorType):
-        self.errorType = errorType
+    codes = {
+        404: 'Page not found',
+        403: 'Permission denied',
+        500: 'Internal server error',
+        400: 'Bad request',
+    }
+
+    def __init__(self, errorCode):
+        self.errorCode = errorCode
         
     def getErrorCode(self):
-        return self.errorType
+        return self.errorCode
+        
+    def getErrorMessage(self):
+        if Global.debug:
+            return traceback.format_exc()
+        else:
+            return codes[self.getErrorCode()]
 
-class InvalidParameterError(PaymeError):
+# Page not found - 404
+class NotFoundError(PaymeError):
     def __init__(self):
-        super(InvalidParameterError, self).__init__(PaymeError.Types.BAD_REQUEST)
+        super(NotFoundError, self).__init__(404)
 
-class PageNotFoundError(PaymeError):
+# Permission denied - 403
+class PermissionDeniedError(PaymeError):
     def __init__(self):
-        super(PageNotFoundError, self).__init__(PaymeError.Types.NOT_FOUND)
+        super(PermissionDeniedError, self).__init__(403)
 
-class NoTemplateError(PaymeError):
+# Internal error - 500
+class InternalError(PaymeError):
     def __init__(self):
-        super(NoTemplateError, self).__init__(PaymeError.Types.SERVER_ERROR)
+        super(InternalError, self).__init__(500)
+        
+# Bad request - 400
+class BadRequestError(PaymeError):
+    def __init__(self):
+        super(BadRequestError, self).__init__(400)
 
-class SecurityError(PaymeError):
-    def __init__(self):
-        super(SecurityError, self).__init__(PaymeError.Types.PERMISSION_DENIED)
+class InvalidParameterError(BadRequestError):
+    pass
 
-class OAuthCodeError(PaymeError):
-    def __init__(self):
-        super(OAuthCodeError, self).__init__(PaymeError.Types.SERVER_ERROR)
+class PageNotFoundError(NotFoundError):
+    pass
 
-class OwnerInGroupError(PaymeError):
-    def __init__(self):
-        super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)
+class NoTemplateError(InternalError):
+    pass
 
-class MissingFieldError(PaymeError):
-    def __init__(self):
-        super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)
+class SecurityError(PermissionDeniedError):
+    pass
+
+class OAuthCodeError(InternalError):
+    pass
+
+class OwnerInGroupError(InternalError):
+    pass
+
+class MissingFieldError(InternalError):
+    pass
+        
+class UnsupportedMethod(InternalError):
+    pass
