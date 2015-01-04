@@ -50,15 +50,15 @@
               <div id="notificationContainer">
                 <div id="notificationsBody" class="notifications"></div>
                 <hr>
-                <div id="notificationFooter" style="float:right;"><a href="#">see all</a></div>
+                <div id="notificationFooter" style="float:right;"><a href="">see all</a></div>
               </div>
             </li>
           {% endif %}
           {% if controller.getAccessLevel() > 0 %}
             <li><a href="../help">help!</a></li>
             <li><a href="../home">dashboard</a></li>
-            <li><a href="user/profile">user profile</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
+            <li><a href="../user/profile">user profile</a></li>
+            <li><a href="#"><i class="glyphicon glyphicon-log-out"></i></a></li>
           {% else %}
           {% endif %}
           </ul>
