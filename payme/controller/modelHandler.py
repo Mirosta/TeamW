@@ -178,7 +178,7 @@ class ModelRemoveHandler(VerbHandler):
             entity = validator.validate(postData, self.type)
             # remove entity from database
             if self.type == Debt:
-                entity.removeMe()
+               entity.removeMe()
         except InvalidParameterError:
             return '{"success": 0}'
         return '{"success": 1}'
