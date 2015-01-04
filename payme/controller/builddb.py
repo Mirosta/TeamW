@@ -75,8 +75,8 @@ class BuildDB(PageHandler):
 
 #           Give John notification
         self.output += 'Sending John notification...<br>'
-        john.giveNotification(notification1)
-        john.giveNotification(notification2)
+        currentUser.giveNotification(notification1)
+        currentUser.giveNotification(notification2)
         david.giveNotification(notification3)
 
         self.output += 'Done... <br>'
@@ -161,7 +161,7 @@ class BuildDB(PageHandler):
 class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
-            return obj.strftime('%Y/%m/%d %H:%M:%S')
+            return obj.strftime(Global.JSONDateTime)
         elif isinstance(obj, ndb.Key):
             return obj.urlsafe()
         elif isinstance(obj, ndb.Model):

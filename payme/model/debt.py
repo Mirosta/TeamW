@@ -54,7 +54,7 @@ class Debt(Actionable):
 
     # Get key for the current user
     def getCurrentUser(self):
-        return Global.apiController.getCurrentUser()
+        return Global.controller.getCurrentUser()
 
     def getAmount(self):
         return self.amount
@@ -98,7 +98,7 @@ class Debt(Actionable):
         debtor = self.queryUser(self.debtor)
         creditor = self.getCurrentUser()
 
-        n = Notification(type=Notification.Type.INFO, content='A debt of GBP' + "{0:.2f}".format(self.amount) + ' has been added to your account by ' + creditor.name)
+        n = Notification(type=Notification.Type.INFO, content='A debt of ' + Global.formatCurrency(self.amount) + ' has been added to your account by ' + creditor.name)
         n.put()
 
         debtor.giveNotification(n)
@@ -114,7 +114,7 @@ class Debt(Actionable):
 
         # TODO implement real user thingy
         # n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
-        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.googleID)
+        n = Notification(type=Notification.Type.INFO, content='Debt of ' + Global.formatCurrency(self.amount) + ' has been removed by ' + creditor.googleID)
         n.put()
 
         debtor.giveNotification(n)

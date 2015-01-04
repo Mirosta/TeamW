@@ -3,10 +3,13 @@ import math
 class Global:
 
     controller = None
+
+    JSONDateTime = '%Y-%m-%d %H:%M:%S'
     
     # Show debug messages
     debug = True
 
+    @classmethod
     def formatCurrency(amount, symbol="\xa3"):
         negative = amount < 0
         negativeStr = ""
