@@ -1,4 +1,4 @@
-        {{ page.header() }}
+{{ page.header() }}
           <div style="width:100%;">
             <div class="row">
               <h1 class="page-header bold">
@@ -82,7 +82,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4> 
+            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4>
           </div>
           <div class="modal-body">
             <label for="addDebt-amount">e-mail:</label>
@@ -102,7 +102,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">delete friend :-(</h4> 
+            <h4 class="modal-title">delete friend :-(</h4>
           </div>
           <div class="modal-body">
             are you sure that you want to delete -insert user here- from your friends list?
@@ -133,7 +133,6 @@
           var day = date.getDate();
           var month = date.getMonth() + 1;
           var year = date.getFullYear();
-
           $('#date').val( day + "/" + month + "/" + year);
           $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
         });
