@@ -153,16 +153,17 @@ class ModelHandler(PageHandler):
             
 class ModelAddHandler(VerbHandler):
     
-    def __init__(self, view):
-        super(self.__class__, self).__init__(None)
+    def __init__(self, view = None):
+        super(self.__class__, self).__init__(view)
 
     def postAPI(self, controller, parameter, postData):
         entity = validator.validate(postData)
         # add new entity to database
+        return '{"success": 1}'
 
 class ModelUpdateHandler(VerbHandler):
 
-    def __init__(self, view):
+    def __init__(self):
         super(self.__class__, self).__init__(None)
 
     def postAPI(self, controller, parameter, postData):
@@ -172,10 +173,10 @@ class ModelUpdateHandler(VerbHandler):
 
 class ModelRemoveHandler(VerbHandler):
 
-    def __init__(self, view):
+    def __init__(self):
         super(self.__class__, self).__init__(None)
 
     def postAPI(self, controller, parameter, postData):
         entity = validator.validate(postData)
-        # add new entity to database
+        # remove entity from database
 
