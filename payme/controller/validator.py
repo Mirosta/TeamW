@@ -1,26 +1,29 @@
-from payme.controller.exceptions import InvalidParameterError, MissingFieldError
 import json
 from google.appengine.ext.ndb import Key
-from google.appengine.ext import db
 from google.appengine.ext import ndb
 from payme.model.debt import Debt
 from payme.model.group import Group
 from payme.model.payment import Payment
-from payme.model.user import User
 
 
 all_required = []
-required_fields = \
-{
+required_fields = {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
     Group: [],
     Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
+json_convert = {
+    ndb.DateTimeProperty: lambda x: x,
+    ndb.KeyProperty: lambda x: Key(urlsafe=x)
+}
+
 
 def create(json_str, type_class):
     json_obj = json.loads(json_str)
-    return type_class(**json_obj)
+    entity = type_class()
+    set_attributes(entity, json_obj, type_class)
+    return entity
 
 
 def retrieve(json_str, type_class, key_id = None):
@@ -38,5 +41,14 @@ def update(json_str, type_class):
     if entity is None:
         return None
     del json_obj['key']
-    entity.populate(**json_obj)
+    set_attributes(entity, json_obj, type_class)
     return entity
+
+
+def set_attributes(entity, json_obj, type_class):
+    for key, value in json_obj.iteritems():
+        convert = json_convert.get(type(type_class._properties[key]))
+        if convert is not None:
+            entity.key = convert(value)
+        else:
+            entity.key = value
