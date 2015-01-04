@@ -11,7 +11,7 @@ class FriendHandler(ModelHandler):
         super(FriendHandler, self).__init__('friends', {'add' : FriendHandler.AddHandler()}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount')])
         # super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))
 
-    def postAPI(self, controller, parameter):
+    def postAPI(self, controller, parameter, postData):
         return '{error: "Not yet implemented"}'
 
     # def getAPI(self, controller, parameter):

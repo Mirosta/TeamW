@@ -1,8 +1,10 @@
-#Imports here
 from entity import Entity
 from group import Group
+from notification import Notification
+import debt
 from payme.model.debt import Debt
 from payme.controller.exceptions import SecurityError
+from payme.model.notification import Notification
 
 from payme.controller.globals import Global
 
@@ -22,9 +24,16 @@ class User (Entity):
 
     uniqueProperty = 'googleID'
 
+    # notification queue
+    messageQueue = ndb.KeyProperty(kind=Notification, repeated=True)
+
+    # Hacky way to return user for model
+    def getMe(self):
+        return [self]
+
     # Get key for the current user
     def getCurrentUser(self):
-        # return Global.apiController.getCurrentUser().key
+        #TODO return Global.apiController.getCurrentUser().key
         return User.query(User.googleID == 'john').fetch()[0].key
 
     def isMe(self):
@@ -102,6 +111,12 @@ class User (Entity):
         if self.isMe():
             self.friends.append(friend)
             self.put()
+
+            n = Notification(type=Notification.Type.FRIEND_REQUEST,
+                             content=self.name + ' tried to add you as a friend.')
+            n.put()
+
+            friend.giveNotification(n)
         else:
             raise SecurityError()
 
@@ -128,6 +143,40 @@ class User (Entity):
             creditAmounts.append(credit.getAmountRemaining())
 
         return {self : creditAmounts}
+
+    # add a notification to the user's message queue
+    def giveNotification(self, notificationObj):
+        self.messageQueue.append(notificationObj.key)
+        self.put()
+
+    # retrieve a notification from the message queue (if present)
+    def getNotifications(self):
+
+        output = []
+
+        for notification in self.messageQueue:
+            output.append(Notification.query(Notification.key == notification).fetch()[0])
+
+        return output
+
+    def getAllPayments(self):
+        debts = self.getDRs()
+        credits = self.getCRs()
+
+        payments = []
+
+        for debt in debts:
+            payments.extend(debt.getPayments())
+
+        for credit in credits:
+            payments.extend(credit.getPayments())
+
+        return payments
+
+    def removeGroup(self, group):
+        if group.key in self.groups:
+            self.groups.remove(group.key)
+        self.put()
 
     # debug
     def retrieveUserName(self):

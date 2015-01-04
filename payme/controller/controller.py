@@ -11,7 +11,6 @@ from contentHandler import Parameter
 from payme.controller.pages.homepageHandler import HomepageHandler
 from payme.controller.pages.helpHandler import HelpHandler
 from payme.controller.pages.historyHandler import HistoryHandler
-from payme.controller.pages.groupHandler import GroupHandler
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from payme.controller.pages.friendHandler import FriendHandler
@@ -20,10 +19,13 @@ from payme.controller.pages.oAuthLogin import OAuthLoginHandler, OAuthHandler
 from payme.model.user import User
 from apiclient.discovery import build
 
+from payme.controller.builddb import BuildDB
+
 # Supported HTTP verbs
 from payme.controller.pages.userHandler import UserHandler
 from payme.controller.pages.debtHandler import DebtHandler
 from payme.controller.pages.paymentsHandler import PaymentsHandler
+from payme.controller.pages.notificationHandler import NotificationHandler
 
 from payme.controller.globals import Global
 
@@ -47,7 +49,9 @@ class Controller (webapp2.RequestHandler):
         'debt': DebtHandler(),
         'payments': PaymentsHandler(),
         'help': HelpHandler(),
-        'history': HistoryHandler()
+        'history': HistoryHandler(),
+        'notifications': NotificationHandler(),
+        'builddb': BuildDB()
     }
 
     homePage = 'home'
@@ -131,10 +135,10 @@ class Controller (webapp2.RequestHandler):
         logging.info('Content Handler: ' + contentHandler.__str__())
         if self.isAPI:
             if httpVerb == HTTPVerb.GET: return contentHandler.getAPI(self, parameter)
-            elif httpVerb == HTTPVerb.POST: return contentHandler.postAPI(self, parameter)
+            elif httpVerb == HTTPVerb.POST: return contentHandler.postAPI(self, parameter, self.request.body)
         else:
             if httpVerb == HTTPVerb.GET: return contentHandler.getHTML(self, parameter)
-            elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter)
+            elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter, self.request.POST)
 
     #We have credentials, now do something with them
     def onLogin(self, credentials):
@@ -158,18 +162,13 @@ class Controller (webapp2.RequestHandler):
 
     def getCurrentUser(self):
         if self.currentUser == None:
-            logging.info('Current user is none')
             if not 'user' in self.session:
-                logging.info('User not set in session')
                 return None
             else:
-                logging.info('User set in session with key ' + self.session['user'])
                 matchingUsers = User.query(User.key == Key(urlsafe=self.session['user'])).fetch()
                 if matchingUsers.__len__() < 1:
-                    logging.info('No users matching that key')
                     return None
                 else:
-                    logging.info('Found user matching that key ' + matchingUsers[0].name)
                     self.currentUser = matchingUsers[0]
         return self.currentUser
 

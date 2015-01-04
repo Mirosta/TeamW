@@ -18,7 +18,7 @@ class Group (Entity):
 
     # Get key for the current user
     def getCurrentUser(self):
-        # return Global.apiController.getCurrentUser().key
+        #TODO return Global.apiController.getCurrentUser().key
         return user.User.query(user.User.googleID == 'john').fetch()[0].key
 
     def addMember(self, user):
@@ -154,4 +154,6 @@ class Group (Entity):
     def queryDebts(self):
         return Debt.query(Debt.debtor == self.currentUser.key)
 
-
+    def removeMe(self):
+        self.getCurrentUser().removeGroup(self.key)
+        self.key.delete()

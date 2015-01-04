@@ -1,29 +1,20 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
-from payme.controller.modelHandler import ModelHandler, RelatedModel
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
 
 import json
 from payme.model.user import User
 
-class UserHandler(PageHandler):
+class UserHandler(ModelHandler):
 
     def __init__(self):
-        super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String), {'login': UserHandler.LoginHandler(), 'profile' : UserHandler.ProfileHandler()}) #This page has no view, but it does have verbs
-
-    def getAPI(self, controller, parameter):
-
-        # Dummy test, fetch by GoogleID
-        user = User.query(User.googleID == parameter).fetch(10)
-
-        if user.__len__() == 0:
-            output = 'Not found'
-        else:
-            output = user[0].to_dict()
-            output['readOnly'] = {'netWorth': user[0].getOE()}
-
-        return self.serialize({'results': output})
-
-        # Actual implementation below:
-        # return self.serialize(self.queryUser(parameter))
+        # super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String), {'login': UserHandler.LoginHandler(), 'profile' : UserHandler.ProfileHandler()}) #This page has no view, but it does have verbs
+        super(UserHandler, self).__init__(None, {'login': UserHandler.LoginHandler(),
+                                                 'profile': UserHandler.ProfileHandler()},
+                                          'getMe',
+                                          User, [],
+                                          [ReadOnlyFunction('getOE', 'netWorth'),
+                                           ReadOnlyFunction('getCR', 'debt'),
+                                           ReadOnlyFunction('getDR', 'credit')])
 
     class LoginHandler(VerbHandler):
 

@@ -6,25 +6,13 @@ from payme.model.payment import Payment
 
 class DebtHandler(ModelHandler):
 
-    # dummy for currentUser
-    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
-
     def __init__(self):
         super(DebtHandler, self).__init__(None,
                                           {'add': AddHandler(), 'pay': PayHandler()},
                                           'getCRs',
                                           Debt,
-                                          [RelatedModel(Payment, 'debt', 'payments'),
-                                           ReadOnlyFunction('getStatus', 'status')])
-
-    # def getAPI(self, controller, parameter):
-    #     if parameter == Parameter.NoneGiven:
-    #         return self.displayAllDebt()
-    #     if parameter == Parameter.Invalid:
-    #         return self.onInvalidParameter() # change
-    #     # if int(parameter) != 1:
-    #     #     return self.onUnknownFriend() # change
-    #     return self.displayDebtOweTo(parameter)
+                                          [RelatedModel(Payment, 'debt', 'payments')],
+                                          [ReadOnlyFunction('getStatus', 'status')])
 
     # returns all debt owed by that user - CHECKED
     def displayAllDebt(self):
