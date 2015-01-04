@@ -6,8 +6,12 @@ from google.appengine.ext import ndb
 
 class Actionable(ndb.Model):
 
+    # Attributes of the model classes. To be overridden to
+    # specify which attributes in the model cannot be updated/changed
     notUpdatableAttributes = []
 
+    # A generic update method that takes a map of attr_name -> value.
+    # Checks against the notUpdatableAttributes list above.
     def update(self, values):
 
         if self.isUpdateAllowed():
@@ -34,8 +38,3 @@ class Actionable(ndb.Model):
 
     def isAddAllowed(self):
         return True
-
-# to update debt        validate    creditor
-#           payment                 debtor
-#           user attrs              user (that is the user)
-#           group                   group is include in user's group list
