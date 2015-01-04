@@ -11,7 +11,7 @@ import time
 all_required = []
 required_fields = {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
-    Group: [],
+    Group: ['name', ],
     Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
@@ -51,6 +51,6 @@ def set_attributes(entity, json_obj, type_class):
     for key, value in json_obj.iteritems():
         convert = json_convert.get(type(type_class._properties[key]))
         if convert is not None:
-            entity.key = convert(value)
+            setattr(entity, key, convert(value))
         else:
-            entity.key = value
+            setattr(entity, key, value)
