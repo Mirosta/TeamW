@@ -51,6 +51,6 @@ class RemoveHandler(ModelRemoveHandler):
         super(RemoveHandler, self).__init__('remove')
 
     def postAPI(self, controller, parameter, postData):
-        debt = validator.retrieve(postData, self.type)
-        debt.removeMe()
+        group = validator.retrieve(postData, self.type)
+        group.removeMe()
         return '{"success": 1}'
