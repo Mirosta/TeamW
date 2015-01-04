@@ -84,6 +84,8 @@ class Controller (webapp2.RequestHandler):
         self.handleRequest(HTTPVerb.POST, pageName, verbName)
 
     def handleRequest(self, httpVerb, pageName, verbName):
+        logging.info("HTTPVerb %s, pageName %s, verbName %s" % (httpVerb, pageName, verbName))
+
         if verbName == None: verbName = ''
 
         if pageName not in Controller.pages:
@@ -96,6 +98,7 @@ class Controller (webapp2.RequestHandler):
 
         # If the page has a verb with that name, use that
         if page.hasVerb(verbName):
+            logging.info("Page has verb " + str(verbName))
             contentHandler = page.getVerb(verbName)
             if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
                 if httpVerb == HTTPVerb.GET:
@@ -104,6 +107,7 @@ class Controller (webapp2.RequestHandler):
                 return
         # Otherwise check if pages accepts parameters
         else:
+            logging.info("Page has parameter " + str(verbName))
             contentHandler = page
             parameter = verbName
 
@@ -207,8 +211,8 @@ logging.debug('Loaded controller')
 
 # Define the routes.
 routes = webapp2.WSGIApplication([
-    webapp2.SimpleRoute(r'^/api/(\w+)(?:/(\w+))?/?', APIController, 'api'),
-    webapp2.SimpleRoute(r'^/(\w+)(?:/(\w+))?/?', HTMLController, 'html'),
+    webapp2.SimpleRoute(r'^/api/([\w-]+)(?:/([\w-]+))?/?', APIController, 'api'),
+    webapp2.SimpleRoute(r'^/([\w-]+)(?:/([\w-]+))?/?', HTMLController, 'html'),
     webapp2.Route(r'/', webapp2.RedirectHandler, defaults={'_uri': '/' + Controller.homePage}),
 ], debug=True, config=config)
 

@@ -40,10 +40,6 @@ class ModelHandler(PageHandler):
         self.readOnlyFunctions = readOnlyFunctions #example: [ReadOnlyFunction('getOE','netAmount'), ReadOnlyFunction('getCR','Owe'), ReadOnlyFunction('getDR', 'Own')]
         self.hiddenFields = hiddenFields
 
-    def getHTML(self, controller, parameter):
-        logging.info("Hello world world world " + self.templateFile)
-        return super(ModelHandler, self).getHTML(controller, parameter)
-
     def getRequestParameter(self, controller, parameterName, default, paramType):
         if controller.request.get(parameterName) != "":
                 validationParameter = Parameter(paramType, False, True)
@@ -63,6 +59,7 @@ class ModelHandler(PageHandler):
             return self.onInvalidParameter() # change
         # if int(parameter) != 1:
         #     return self.onUnknownFriend() # change
+        logging.info("Parameter: " + str(parameter))
         return self.getOne(controller, parameter) #If a parameter is given and is valid, lookup by the key given
 
     #Gets all model instances
