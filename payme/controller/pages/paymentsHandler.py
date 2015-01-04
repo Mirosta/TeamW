@@ -1,6 +1,5 @@
-from payme.controller.contentHandler import PageHandler, Parameter
-from payme.controller.contentHandler import VerbHandler
-from payme.controller.modelHandler import ModelHandler
+from payme.controller.contentHandler import PageHandler, VerbHandler, Parameter
+from payme.controller.modelHandler import ModelHandler, ReadOnlyFunction
 from payme.model.payment import Payment
 
 
