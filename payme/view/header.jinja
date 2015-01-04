@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../home"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;margin-left:10px;" class="green">payme.</span></a>
+          <a class="navbar-brand" href="../home"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;" class="green">payme.</span></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse" style="position:relative;">
           <ul class="nav navbar-nav navbar-right">
@@ -50,15 +50,15 @@
               <div id="notificationContainer">
                 <div id="notificationsBody" class="notifications"></div>
                 <hr>
-                <div id="notificationFooter" style="float:right;"><a href="#">see all</a></div>
+                <div id="notificationFooter" style="float:right;"><a href="">see all</a></div>
               </div>
             </li>
           {% endif %}
           {% if controller.getAccessLevel() > 0 %}
             <li><a href="../help">help!</a></li>
             <li><a href="../home">dashboard</a></li>
-            <li><a href="user/profile">user profile</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
+            <li><a href="../user/profile">user profile</a></li>
+            <li><a href="#"><i class="glyphicon glyphicon-log-out"></i></a></li>
           {% else %}
           {% endif %}
           </ul>
@@ -81,10 +81,6 @@
           <ul class="nav nav-sidebar top-buffer">
             <li><a href="../friends">manage friends</a></li>
             <li><a href="../groups">manage groups</a></li>
-          </ul>
-          <hr>
-          <ul class="nav nav-sidebar top-buffer">
-            <li><a href="/friends/add">add friend</a></li>
           </ul>
         </div>
         {% endif %}
