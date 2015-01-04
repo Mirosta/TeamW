@@ -12,7 +12,7 @@ class Validator:
     def __init__(self):
         pass
 
-    def validate(self, json_str, type_class, required_fields):
+    def validate(self, json_str, type_class, required_fields = []):
         json_obj = json.loads(json_str)
         entity = type_class()
         try:
@@ -32,9 +32,11 @@ if __name__ == '__main__':
     validator = Validator()
     validator.validate('''
     {
-        "amount": 1
+        "amount": 1,
+        "description": "test"
     }
     ''', Debt, [])
+
 
 class MissingFieldError(Exception):
     pass
