@@ -6,7 +6,7 @@ from google.appengine.ext import ndb
 
 class Actionable(ndb.Model):
 
-    notUpdatableAttributes = ['amount', 'created', 'uniqueProperty', 'googleID', 'payer', 'debt', 'creditor', 'debtor', 'content', 'type']
+    notUpdatableAttributes = []
 
     def update(self, values):
 

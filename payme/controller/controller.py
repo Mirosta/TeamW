@@ -198,14 +198,15 @@ class HTMLController(Controller):
     def __init__(self, request = None, response = None):
         super(HTMLController, self).__init__(False)
         super(Controller, self).__init__(request, response)
-        Global.htmlController = self
+        Global.controller = self
 
 # Controller for handling API requests
 class APIController(Controller):
     def __init__(self, request = None, response = None):
         super(APIController, self).__init__(True)
         super(Controller, self).__init__(request, response)
-        Global.apiController = self
+        Global.controller = self
+        logging.info("Set API Controller in globals")
 
 config = {}
 config['webapp2_extras.sessions'] = {

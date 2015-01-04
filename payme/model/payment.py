@@ -3,6 +3,7 @@ from payme.model.notification import Notification
 from payme.controller.exceptions import SecurityError
 from actionable import Actionable
 import debt
+import logging
 
 from payme.controller.globals import Global
 
@@ -10,6 +11,8 @@ import user
 
 class Payment(Actionable):
     'A Payment object is used to store the the payment(s) that contribute towards a debt.'
+
+    notUpdatableAttributes = ['payer', 'debt', 'created', 'amount']
 
     payer = ndb.KeyProperty(kind='User')
     debt = ndb.KeyProperty(kind='Debt')
@@ -28,39 +31,42 @@ class Payment(Actionable):
     disputed = ndb.BooleanProperty(default=False)
 
     def isAddAllowed(self):
-        return self.getCurrentUser().key == self.payer
+        return self.getCurrentUser().key == self.payer and self.queryDebt(self.debt).getAmount() - (self.queryDebt(self.debt).getAmountPaid() + self.amount) >= 0
+
+    def queryDebt(self, debtKey):
+        return debt.Debt.query(debt.Debt.key == debtKey).fetch()[0]
 
     def isUpdateAllowed(self):
+        logging.info("Checking that current user is the creditor for this payment")
+        logging.info(str(self.getCurrentUser()))
         return self.getCurrentUser().key == self.getDebt().creditor
 
     def isRemoveAllowed(self):
         return self.isUpdateAllowed()
 
     def update(self, values):
-        super(self, values)
+
+        super(self.__class__, self).update(values)
 
         if 'disputed' in values.keys():
             if values['disputed'] is True:
-                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.date.strftime('%x')) + " .")
-                n.put()
+                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
 
-                user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
             else:
-                n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + "{0:.2f}".format(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.date.strftime('%x')) + " has been resolved.")
-                n.put()
+                n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + "{0:.2f}".format(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.created.strftime('%x')) + " has been resolved.")
 
-                user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
+            n.put()
+            user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
 
         if 'approvedByCreditor' in values.keys():
-            n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.date.strftime('%x')) + " .")
+            n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
             n.put()
 
             user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
 
     # Get key for the current user
     def getCurrentUser(self):
-        #TODO return Global.apiController.getCurrentUser()
-        return user.User.query(user.User.googleID == 'john').fetch()[0]
+        return Global.controller.getCurrentUser()
 
     def getPayer(self):
         return user.User.query(user.User.key == self.payer)

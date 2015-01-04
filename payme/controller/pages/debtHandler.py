@@ -17,7 +17,9 @@ class DebtHandler(ModelHandler):
                                           'getCRs',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
-                                          [ReadOnlyFunction('getStatus', 'status')])
+                                          [ReadOnlyFunction('getStatus', 'status'),
+                                           ReadOnlyFunction('getAmountPaid', 'amountPaid'),
+                                           ReadOnlyFunction('getAmountRemaining', 'amountRemaining')])
 
     # returns all debt owed by that user - CHECKED
     def displayAllDebt(self):

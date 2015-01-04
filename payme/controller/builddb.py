@@ -3,10 +3,11 @@ from payme.model.debt import Debt
 from payme.model.payment import Payment
 from payme.model.group import Group
 from payme.model.notification import Notification
+from payme.controller.contentHandler import PageHandler
 
 from datetime import date, datetime
 
-from payme.controller.contentHandler import PageHandler
+from payme.controller.globals import Global
 
 import json
 
@@ -18,11 +19,17 @@ class BuildDB(PageHandler):
         super(BuildDB, self).__init__('testingPage')
         self.output = ''
 
+     # Get key for the current user
+    def getCurrentUser(self):
+        return Global.controller.getCurrentUser()
+
 #   MAIN
     def getHTML(self, controller, parameter):
         self.output += "Starting... <br>"
 
 #         CREATE STUFF!! - ONLY RUN ONCE
+
+        currentUser = self.getCurrentUser()
 
         self.output += 'Creating users... <br>'
         try:
@@ -34,12 +41,12 @@ class BuildDB(PageHandler):
             david = self.queryUser('david')
             dingdong = self.queryUser('dingdong')
 
-
         self.output += 'Creating group, Wolfpack... <br>'
         group = self.createNewGroup('Wolfpack')
 
-        self.output += 'Creating debt (Dingdong to John)... <br>'
+        self.output += 'Creating debt (Dingdong to John and you and John)... <br>'
         debt = self.createDebt(dingdong.key, john.key, 5000)
+        debt = self.createDebt(currentUser.key, john.key, 5000)
 
         self.output += 'Creating payments... <br>'
         payment = self.createPayments(john.key, debt.key, 300)
@@ -52,16 +59,18 @@ class BuildDB(PageHandler):
 #         ASSOCIATE STUFF!! - ONLY RUN ONCE
 
 #         Add friends
-        self.output += 'Adding David and Dingdong to John... <br>'
-        john.addFriend(david.key)
-        john.addFriend(dingdong.key)
+        self.output += 'Becoming friends with John, David and Dingdong <br>'
+        currentUser.addFriend(john.key)
+        currentUser.addFriend(david.key)
+        currentUser.addFriend(dingdong.key)
 
 #         Add group
-        self.output += 'Adding Wolpack to John <br>'
-        john.addGroup(group.key)
+        self.output += 'Adding Wolfpack to you... <br>'
+        currentUser.addGroup(group.key)
 
 #         Add member of the group
-        self.output += 'Adding Dingdong to John\'s Wolfpack...<br>'
+        self.output += 'Adding Dingdong to your Wolfpack...<br>'
+        group.addMember(john.key)
         group.addMember(dingdong.key)
 
 #           Give John notification

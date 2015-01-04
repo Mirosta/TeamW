@@ -1,8 +1,8 @@
 import math
 
 class Global:
-    htmlController = None
-    apiController = None
+
+    controller = None
     
     # Show debug messages
     debug = True

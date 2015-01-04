@@ -13,16 +13,35 @@ import logging
 class Debt(Actionable):
     'Represents a debt that one user owes to another'
 
+    notUpdatableAttributes = ['debtor', 'creditor', 'amount', 'created']
+
     debtor = ndb.KeyProperty(kind="User")
     creditor = ndb.KeyProperty(kind="User")
     amount = ndb.IntegerProperty()
     description = ndb.StringProperty()
-    isPaid = ndb.BooleanProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
-    amountPaid = ndb.IntegerProperty()
 
     # Able to dispute debt as the debtor
     disputed = ndb.BooleanProperty(default=False)
+
+    def update(self, values):
+
+        super(self.__class__, self).update(values)
+
+        isIOU = self.getCurrentUser() == self.debtor
+
+        logging.info(str(values.keys()))
+
+        if 'disputed' in values.keys():
+            logging.info('in disputed')
+            if values['disputed'] is True:
+                logging.info('creating notification....')
+                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your proposed debt of GBP" + "{0:.2f}".format(self.amount) + " created on " + str(self.created.strftime('%x')) + " .")
+            else:
+                n = Notification(type=Notification.Type.INFO, content="Your disputed debt of GBP" + "{0:.2f}".format(self.amount) + " with " + self.getCurrentUser().name + " created on " + str(self.created.strftime('%x')) + " has been resolved.")
+
+        n.put()
+        user.User.query(user.User.key == (isIOU and self.creditor or self.debtor)).fetch()[0].giveNotification(n)
 
     def isAddAllowed(self):
         return self.getCurrentUser().key == self.creditor or self.getCurrentUser().key == self.debtor
@@ -35,8 +54,7 @@ class Debt(Actionable):
 
     # Get key for the current user
     def getCurrentUser(self):
-        #TODO return Global.apiController.getCurrentUser()
-        return user.User.query(user.User.googleID == 'john').fetch()[0]
+        return Global.apiController.getCurrentUser()
 
     def getAmount(self):
         return self.amount
@@ -62,9 +80,11 @@ class Debt(Actionable):
         if self.disputed:
             return "INDISPUTE"
 
+        amountPaid = self.getAmountPaid()
+
         # otherwise work out the progress of the payments
-        if self.amountPaid > 0:
-            if self.amountPaid >= self.amount:
+        if amountPaid > 0:
+            if amountPaid >= self.amount:
                 return "PAID"
             else:
                 return "INPROGRESS"

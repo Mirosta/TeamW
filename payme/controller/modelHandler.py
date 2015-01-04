@@ -77,7 +77,7 @@ class ModelHandler(PageHandler):
 
     #Gets all model instances
     def getAll(self, controller, count = None, offset = 0, sortBy = None):
-        currentUser = User.query(User.googleID == 'john').fetch()[0] #TODO: Use current user - controller.getCurrentUser()
+        currentUser = controller.getCurrentUser()
         if self.getAllFunction != "":
             function = getattr(currentUser, self.getAllFunction)
             models = function()

@@ -5,9 +5,6 @@ from payme.model.group import Group
 
 class GroupHandler(ModelHandler):
 
-    # dummy for currentUser
-    #currentUser = User.query(User.googleID == 'john').fetch(10)[0]
-
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
         super(GroupHandler, self).__init__("groups", {'add': ModelAddHandler()}, 'getGroups', Group, [],

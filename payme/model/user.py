@@ -14,6 +14,8 @@ from google.appengine.ext import ndb
 class User (Entity, Actionable):
     # Database for users
 
+    notUpdatableAttributes = ['googleID', 'email', 'created', 'uniqueProperty']
+
     googleID = ndb.StringProperty()
     familyName = ndb.StringProperty()
     email = ndb.StringProperty()
@@ -40,8 +42,7 @@ class User (Entity, Actionable):
 
     # Get key for the current user
     def getCurrentUser(self):
-        #TODO return Global.apiController.getCurrentUser().key
-        return User.query(User.googleID == 'john').fetch()[0].key
+        return Global.controller.getCurrentUser().key
 
     def isMe(self):
         return self.getCurrentUser() == self.key
@@ -96,7 +97,10 @@ class User (Entity, Actionable):
 
     # Get owner equities
     def getOE(self):
-        return self.getDR() - self.getCR()
+        if self.isMe():
+            return self.getDR() - self.getCR()
+        else:
+            return self.getCR() - self.getDR()
 
     # create new group
     def addGroup(self, group):

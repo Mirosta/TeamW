@@ -132,20 +132,40 @@ class TestPage(PageHandler):
 #         self.output += 'Done... <br>'
 #         # self.output += "<br>" + self.serialize(group)
 
-        john = self.queryUser('john')
-        dingdong = self.queryUser('dingdong')
+        # john = self.queryUser('john')
+        # dingdong = self.queryUser('dingdong')
 
         # alex = self.createUser('alex', "Alex Peterson")
-        alex = self.queryUser('alex')
+        # dingdong = self.queryUser('alex')
         # alex.key.delete()
 
         # self.output += str(getattr(alex, 'name'))
 
         # self.createDebt(alex.key, john.key, 5000)
 
-        debt = Debt.query(Debt.creditor == alex.key).fetch()[0]
+        # debt = Debt.query(Debt.creditor == dingdong.key).fetch()[0]
+        # self.output += self.serialize(debt)
+        #
+        # debt.update({'disputed': True})
+
+        alex = self.queryUserByName('Alex')
+        pollawat = self.queryUserByName('Pollawat')
+
+        # pollawat.addFriend(alex.key)
+        # alex.addFriend(pollawat.key)
+
+        debt = Debt.query(Debt.creditor == alex.key, Debt.debtor == pollawat.key).fetch()[0]
+
+        # payment = self.createPayments(pollawat.key, debt.key, 10)
+
+        payment = Payment.query(Payment.payer == pollawat.key).fetch()[0]
+
+        payment.update({'disputed': True})
+
+        # self.createDebt(alex.key, pollawat.key, 100)
+
         # self.output += str(getattr(alex, 'name'))
-        debt.notifyDebtor()
+        # debt.notifyDebtor()
 
         # alex.update({'name': 'Alex A Peterson'})
 
@@ -163,6 +183,23 @@ class TestPage(PageHandler):
 
     def queryUser(self, key):
         user = User.query(User.googleID == key).fetch(10)
+
+        if user.__len__() != 0:
+            return user[0]
+        else:
+            return '{error: "User not found"}'
+
+    def queryUserByKey(self, key):
+        user = User.query(User.key == key).fetch(10)
+
+        if user.__len__() != 0:
+            return user[0]
+        else:
+            return '{error: "User not found"}'
+
+
+    def queryUserByName(self, key):
+        user = User.query(User.name == key).fetch(10)
 
         if user.__len__() != 0:
             return user[0]
