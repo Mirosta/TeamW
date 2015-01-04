@@ -5,7 +5,7 @@ class JSONDummy(PageHandler):
     def __init__(self):
         super(JSONDummy, self).__init__('lyuboTest', Parameter(Parameter.Type.Int, False, True))
 
-    def postAPI(self, controller, parameter):
+    def postAPI(self, controller, parameter, postData):
         return '{error: "Not yet implemented"}'
 
     def getAPI(self, controller, parameter):

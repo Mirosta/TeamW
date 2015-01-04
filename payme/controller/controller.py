@@ -11,7 +11,6 @@ from contentHandler import Parameter
 from payme.controller.pages.homepageHandler import HomepageHandler
 from payme.controller.pages.helpHandler import HelpHandler
 from payme.controller.pages.historyHandler import HistoryHandler
-from payme.controller.pages.groupHandler import GroupHandler
 from dbTesting import TestPage
 from exceptions import PageNotFoundError, InvalidParameterError
 from payme.controller.pages.friendHandler import FriendHandler
@@ -136,10 +135,10 @@ class Controller (webapp2.RequestHandler):
         logging.info('Content Handler: ' + contentHandler.__str__())
         if self.isAPI:
             if httpVerb == HTTPVerb.GET: return contentHandler.getAPI(self, parameter)
-            elif httpVerb == HTTPVerb.POST: return contentHandler.postAPI(self, parameter)
+            elif httpVerb == HTTPVerb.POST: return contentHandler.postAPI(self, parameter, self.request.body)
         else:
             if httpVerb == HTTPVerb.GET: return contentHandler.getHTML(self, parameter)
-            elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter)
+            elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter, self.request.POST)
 
     #We have credentials, now do something with them
     def onLogin(self, credentials):

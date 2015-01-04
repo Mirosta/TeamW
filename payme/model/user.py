@@ -33,7 +33,7 @@ class User (Entity):
 
     # Get key for the current user
     def getCurrentUser(self):
-        # return Global.apiController.getCurrentUser().key
+        #TODO return Global.apiController.getCurrentUser().key
         return User.query(User.googleID == 'john').fetch()[0].key
 
     def isMe(self):
@@ -111,6 +111,12 @@ class User (Entity):
         if self.isMe():
             self.friends.append(friend)
             self.put()
+
+            n = Notification(type=Notification.Type.FRIEND_REQUEST,
+                             content=self.name + ' tried to add you as a friend.')
+            n.put()
+
+            friend.giveNotification(n)
         else:
             raise SecurityError()
 
@@ -139,8 +145,8 @@ class User (Entity):
         return {self : creditAmounts}
 
     # add a notification to the user's message queue
-    def giveNotification(self, notification):
-        self.messageQueue.append(notification)
+    def giveNotification(self, notificationObj):
+        self.messageQueue.append(notificationObj.key)
         self.put()
 
     # retrieve a notification from the message queue (if present)
@@ -166,6 +172,11 @@ class User (Entity):
             payments.extend(credit.getPayments())
 
         return payments
+
+    def removeGroup(self, group):
+        if group.key in self.groups:
+            self.groups.remove(group.key)
+        self.put()
 
     # debug
     def retrieveUserName(self):

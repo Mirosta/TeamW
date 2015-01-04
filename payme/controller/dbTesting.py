@@ -85,51 +85,64 @@ class TestPage(PageHandler):
 
         # self.output += "<br>" + self.serialize(group)
 
+#
+# #         CREATE STUFF!! - ONLY RUN ONCE
+#
+#         self.output += 'Creating users... <br>'
+#         john = self.createUser('john', "John Smith")
+#         david = self.createUser('david', "David Hutchinson")
+#         dingdong = self.createUser('dingdong', "Ding Dong")
+#
+#         self.output += 'Creating group, Wolfpack... <br>'
+#         group = self.createNewGroup('Wolfpack')
+#
+#         self.output += 'Creating debt (Dingdong to John)... <br>'
+#         debt = self.createDebt(dingdong.key, john.key, 5000)
+#
+#         self.output += 'Creating payments... <br>'
 
-#         CREATE STUFF!! - ONLY RUN ONCE
+        # payment = self.createPayments(john.key, debt.key, 300)
+#
+#         self.output += 'Create notifications... <br><br>'
+#         notification1 = self.createNotification(Notification.Type.INFO, 'Test notification 1')
+#         notification2 = self.createNotification(Notification.Type.INFO, 'Test notification 2')
+#         notification3 = self.createNotification(Notification.Type.INFO, 'Test notification 3')
+#
+# #         ASSOCIATE STUFF!! - ONLY RUN ONCE
+#
+# #         Add friends
+#         self.output += 'Adding David and Dingdong to John... <br>'
+#         john.addFriend(david.key)
+#         john.addFriend(dingdong.key)
+#
+# #         Add group
+#         self.output += 'Adding Wolpack to John <br>'
+#         john.addGroup(group.key)
+#
+# #         Add member of the group
+#         self.output += 'Adding Dingdong to John\'s Wolfpack...<br>'
+#         group.addMember(dingdong.key)
+#
+# #           Give John notification
+#         self.output += 'Sending John notification...<br>'
+#         john.giveNotification(notification1.key)
+#         john.giveNotification(notification2.key)
+#         david.giveNotification(notification3.key)
+#
+#         self.output += 'Done... <br>'
+#         # self.output += "<br>" + self.serialize(group)
 
-        self.output += 'Creating users... <br>'
-        john = self.createUser('john', "John Smith")
-        david = self.createUser('david', "David Hutchinson")
-        dingdong = self.createUser('dingdong', "Ding Dong")
+        john = self.queryUser('john')
+        dingdong = self.queryUser('dingdong')
 
-        self.output += 'Creating group, Wolfpack... <br>'
-        group = self.createNewGroup('Wolfpack')
+        # debt = self.createDebt(dingdong.key, john.key, 5000)
 
-        self.output += 'Creating debt (Dingdong to John)... <br>'
-        debt = self.createDebt(dingdong.key, john.key, 5000)
+        # debt = Debt.query(Debt.creditor == dingdong.key).fetch()[0]
+        # payment = Payment.query(Payment.payer == john.key).fetch()[0]
 
-        self.output += 'Creating payments... <br>'
-        payment = self.createPayments(john.key, debt.key, 300)
+        # payment.raiseDispute()
 
-        self.output += 'Create notifications... <br><br>'
-        notification1 = self.createNotification(Notification.Type.INFO, 'Test notification 1')
-        notification2 = self.createNotification(Notification.Type.INFO, 'Test notification 2')
-        notification3 = self.createNotification(Notification.Type.INFO, 'Test notification 3')
-
-#         ASSOCIATE STUFF!! - ONLY RUN ONCE
-
-#         Add friends
-        self.output += 'Adding David and Dingdong to John... <br>'
-        john.addFriend(david.key)
-        john.addFriend(dingdong.key)
-
-#         Add group
-        self.output += 'Adding Wolpack to John <br>'
-        john.addGroup(group.key)
-
-#         Add member of the group
-        self.output += 'Adding Dingdong to John\'s Wolfpack...<br>'
-        group.addMember(dingdong.key)
-
-#           Give John notification
-        self.output += 'Sending John notification...<br>'
-        john.giveNotification(notification1.key)
-        john.giveNotification(notification2.key)
-        david.giveNotification(notification3.key)
-
-        self.output += 'Done... <br>'
-        # self.output += "<br>" + self.serialize(group)
+        # debt.removeMe()
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)

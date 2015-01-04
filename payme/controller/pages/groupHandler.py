@@ -10,12 +10,12 @@ class GroupHandler(ModelHandler):
 
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
-        super(GroupHandler, self).__init__(None, {}, 'getGroups', Group, [],
+        super(GroupHandler, self).__init__("groups", {}, 'getGroups', Group, [],
                                            [ReadOnlyFunction('getNetAmount', 'netAmount'),
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])
 
-    def postAPI(self, controller, parameter):
+    def postAPI(self, controller, parameter, postData):
         return '{error: "Not yet implemented"}'
 
     # def getAPI(self, controller, parameter):
