@@ -11,7 +11,7 @@ import datetime
 all_required = []
 required_fields = {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
-    Group: ['name', ],
+    Group: ['name', 'users'],
     Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
