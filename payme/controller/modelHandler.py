@@ -9,6 +9,7 @@ from datetime import date, datetime
 import sys
 import types
 from payme.controller.exceptions import InvalidParameterError
+from payme.model.debt import Debt
 from payme.model.user import User
 
 
@@ -156,11 +157,27 @@ class ModelAddHandler(VerbHandler):
 
     def postAPI(self, controller, parameter, postData):
         try:
-            entity = validator.validate(postData, self.type)
+            entity = validator.create(postData, self.type)
             # add new entity to database
-        except InvalidParameterError:
-            return '{"success": 0}'
+            entity.put()
+        except InvalidParameterError as e:
+            raise e
         return '{"success": 1}'
 
+class ModelRemoveHandler(VerbHandler):
+
+    def __init__(self, type, view = None):
+        super(self.__class__, self).__init__(view)
+        self.type = type
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            entity = validator.retrieve(postData, self.type)
+            # remove entity from database
+            if self.type == Debt:
+                entity.removeMe()
+        except InvalidParameterError as e:
+            raise e
+        return '{"success": 1}'
 
 

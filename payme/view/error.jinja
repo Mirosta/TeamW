@@ -1,0 +1,8 @@
+{{ page.header() }}
+
+<div class="row">
+    <h1 class="page-header bold"> {{page.getErrorCode()}}. That's an error.</h1>
+    <p>{{page.getErrorMessage()}}</p>
+</div>
+
+{{ page.footer() }}
