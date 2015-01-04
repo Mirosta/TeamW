@@ -5,7 +5,7 @@ from debt import Debt
 
 from payme.controller.exceptions import OwnerInGroupError
 
-import user
+
 
 import logging
 
@@ -155,3 +155,4 @@ class Group (Entity):
         return Debt.query(Debt.debtor == self.currentUser.key)
 
 
+import user
