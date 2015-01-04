@@ -4,6 +4,8 @@ from google.appengine.ext import ndb
 from payme.model.debt import Debt
 from payme.model.group import Group
 from payme.model.payment import Payment
+from globals import Global
+import time
 
 
 all_required = []
@@ -14,7 +16,7 @@ required_fields = {
 }
 
 json_convert = {
-    ndb.DateTimeProperty: lambda x: x,
+    ndb.DateTimeProperty: lambda x: time.strptime(x, Global.JSONDateTime),
     ndb.KeyProperty: lambda x: Key(urlsafe=x)
 }
 
