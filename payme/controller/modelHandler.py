@@ -108,8 +108,6 @@ class ModelHandler(PageHandler):
             else:
                 return json.JSONEncoder.default(self, obj)
             
-            
-            
 class ModelAddHandler(VerbHandler):
     
     def __init__(self):

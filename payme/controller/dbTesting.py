@@ -134,10 +134,15 @@ class TestPage(PageHandler):
 
         john = self.queryUser('john')
         dingdong = self.queryUser('dingdong')
-        # debt = Debt.query(Debt.creditor == dingdong.key).fetch()[0]
-        payment = Payment.query(Payment.payer == john.key).fetch()[0]
 
-        payment.raiseDispute()
+        # debt = self.createDebt(dingdong.key, john.key, 5000)
+
+        # debt = Debt.query(Debt.creditor == dingdong.key).fetch()[0]
+        # payment = Payment.query(Payment.payer == john.key).fetch()[0]
+
+        # payment.raiseDispute()
+
+        # debt.removeMe()
 
 #   LEAVE THIS ALONE!
         return super(TestPage, self).getHTML(controller, parameter)
