@@ -61,7 +61,7 @@ class Debt(Actionable):
 
         # otherwise work out the progress of the payments
         if self.amountPaid > 0:
-            if self.amountPaid == self.amount:
+            if self.amountPaid >= self.amount:
                 return "PAID"
             else:
                 return "INPROGRESS"
