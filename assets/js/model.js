@@ -109,6 +109,7 @@ function ModelClass(modelUrl)
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
 var groups = new ModelClass("groups");
+
 var friends = new ModelClass("friends");
 //Model objects have .update, .create and .remove methods
 /*

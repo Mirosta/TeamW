@@ -3,7 +3,7 @@ import logging
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
-from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler, JsonVerbHandler
 from datetime import date, datetime
 import sys
 import types
@@ -147,11 +147,12 @@ class ModelHandler(PageHandler):
                 return obj.to_dict()
             else:
                 return json.JSONEncoder.default(self, obj)
+
             
 class ModelAddHandler(VerbHandler):
     
-    def __init__(self):
-        super(ModelAddHandler, self).__init__('add')
+    def __init__(self, view, ad):
+        super(ModelAddHandler, self).__init__(None)
 
-    def postAPI(self, controller, parameter):
+    def postAPI(self, controller, parameter, postData):
         pass
