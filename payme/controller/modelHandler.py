@@ -161,22 +161,5 @@ class ModelAddHandler(VerbHandler):
         # add new entity to database
         return '{"success": 1}'
 
-class ModelUpdateHandler(VerbHandler):
-
-    def __init__(self):
-        super(self.__class__, self).__init__(None)
-
-    def postAPI(self, controller, parameter, postData):
-        entity = validator.validate(postData)
-        # add new entity to database
-
-
-class ModelRemoveHandler(VerbHandler):
-
-    def __init__(self):
-        super(self.__class__, self).__init__(None)
-
-    def postAPI(self, controller, parameter, postData):
-        entity = validator.validate(postData)
-        # remove entity from database
+    
 
