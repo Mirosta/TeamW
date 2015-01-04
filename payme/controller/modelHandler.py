@@ -7,11 +7,8 @@ from google.appengine.ext.ndb import Key
 from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
-import sys
-import types
-from payme.controller.exceptions import InvalidParameterError, InvalidVerbType, AddNotAllowed
-from payme.model.debt import Debt
-from payme.model.user import User
+
+from payme.controller.exceptions import InvalidVerbType, AddNotAllowed
 
 
 class RelatedModel:

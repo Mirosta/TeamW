@@ -74,8 +74,7 @@ class Group (Entity, Actionable):
 
             d.put()
 
-
-    #TODO: Implement methods
+    # Get amount owed to that group
     def getDebtAmount(self):
 
         output = 0
@@ -85,13 +84,10 @@ class Group (Entity, Actionable):
 
         return output
 
-        # return super(Group, self).getDebtAmount()
-
+    # Get amount owned to that group
     def getCreditAmount(self):
 
         output = 0
-
-        logging.info('!!!!!!!!!!!!!!!!!!!!' + str(self.users.__len__()))
 
         for u in self.users:
 
@@ -99,8 +95,7 @@ class Group (Entity, Actionable):
 
         return output
 
-        # return super(Group, self).getNetCreditAmount()
-
+    # Return dict of mapping between user and net amount
     def getNetAmounts(self):
 
         output = []
@@ -111,8 +106,7 @@ class Group (Entity, Actionable):
 
         return output
 
-        # return super(Group, self).getNetAmounts()
-
+    #
     def getCredits(self):
 
         output = []
@@ -131,6 +125,7 @@ class Group (Entity, Actionable):
 
         return output
 
+
     def getDebtsAmounts(self):
 
         output = []
@@ -139,8 +134,6 @@ class Group (Entity, Actionable):
             output.append(u.getDebtAmounts)
 
         return output
-
-        # return super(Group, self).getDebtsAmounts()
 
     def getCreditsAmount(self):
 
@@ -151,13 +144,10 @@ class Group (Entity, Actionable):
 
         return output
 
-        # return super(Group, self).getCreditsAmount()
-
     def getNetAmount(self):
         return self.getCreditAmount() - self.getDebtAmount()
 
-        # return super(Group, self).getNetAmount()
-
+    # Helper function to query all debts associated to the user in this group
     def queryDebts(self):
         return Debt.query(Debt.debtor == self.currentUser.key)
 
