@@ -46,6 +46,12 @@ class User (Entity, Actionable):
     def isMe(self):
         return self.getCurrentUser() == self.key
 
+    def getDRKeys(self):
+        if self.isMe():
+            return map(lambda debt: debt.key, Debt.query(Debt.creditor == self.key).fetch())
+        else:
+            return map(lambda debt: debt.key, Debt.query(Debt.creditor == self.key, Debt.debtor == self.getCurrentUser()).fetch())
+
     # Get list of assets
     def getDRs(self):
         if self.isMe():
@@ -59,6 +65,12 @@ class User (Entity, Actionable):
             return Debt.query(Debt.debtor == self.key).fetch()
         else:
             return Debt.query(Debt.debtor == self.key, Debt.creditor == self.getCurrentUser()).fetch()
+
+    def getCRKeys(self):
+        if self.isMe():
+            return map(lambda credit: credit.key, Debt.query(Debt.debtor == self.key).fetch())
+        else:
+            return map(lambda credit: credit.key, Debt.query(Debt.debtor == self.key, Debt.creditor == self.getCurrentUser()).fetch())
 
     # Get assets amount
     def getDR(self):

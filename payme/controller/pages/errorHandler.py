@@ -29,7 +29,7 @@ class ErrorHandler(PageHandler):
     # Get the error message of the page
     def getErrorMessage(self):
         if self.isInternal:
-            return self.exception.getErrorMessage()
+            return self.exception.getErrorMessage().replace("\n", "<br>")
         else:
-            return PaymeError.codes[self.getErrorCode()]
+            return PaymeError.codes[self.getErrorCode()].replace("\n", "<br>")
 

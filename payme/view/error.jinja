@@ -1,8 +1,8 @@
 {{ page.header() }}
-
+<link rel="stylesheet" href="../assets/css/error.css">
 <div class="row">
     <h1 class="page-header bold"> {{page.getErrorCode()}}. That's an error.</h1>
-    <p>{{page.getErrorMessage()}}</p>
+    <p class="error">{{page.getErrorMessage()}}</p>
 </div>
 
 {{ page.footer() }}
