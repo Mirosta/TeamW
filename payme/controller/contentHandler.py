@@ -7,7 +7,7 @@ import json
 from datetime import date, datetime
 
 from google.appengine.ext import ndb
-from payme.controller.validator import validate
+
 from payme.model.user import User
 
 FOOTER = "footer"
