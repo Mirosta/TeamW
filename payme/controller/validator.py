@@ -30,7 +30,7 @@ def create(json_str, type_class):
 def retrieve(json_str, type_class, key_id = None):
     if key_id is None:
         key_id = json.loads(json_str)['key']
-    return type_class.get_by_id(key_id)
+    return type_class.query(type_class.key == Key(urlsafe=key_id)).fetch(1)[0]
 
 
 def update(json_str, type_class):

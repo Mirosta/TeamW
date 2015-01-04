@@ -23,6 +23,7 @@ function addFriendsToContainer() {
     console.log(data);
     for (i=0; i<data.length; i++) {
       data[i].readOnly.numberClass = (data[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+      data[i].readOnly.netAmount = penceToPound(data[i].readOnly.netAmount);
       if (data[i].profilePicture === null) {
         data[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
       } 

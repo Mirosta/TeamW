@@ -84,17 +84,6 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
-    <!-- Toggle icon -->
-    <script>
-      function toggleChevron(e) {
-          $(e.target)
-              .prev('.panel-heading')
-              .find('i')
-              .toggleClass('glyphicon-plus glyphicon-minus');
-      }
-      $('#accordion').on('hidden.bs.collapse', toggleChevron);
-      $('#accordion').on('shown.bs.collapse', toggleChevron);
-    </script>
 
     <script>
       $(document).ready(function() {
