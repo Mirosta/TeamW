@@ -53,3 +53,11 @@ class Debt(ndb.Model):
 
     def getPayments(self):
         return Payment.query(Payment.debt == self.key).fetch()
+
+    def removeMe(self):
+        payments = Payment.query(Payment.debt == self.key).fetch()
+
+        for payment in payments:
+            payment.delete()
+
+        self.key.delete()

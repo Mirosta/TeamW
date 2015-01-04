@@ -154,4 +154,6 @@ class Group (Entity):
     def queryDebts(self):
         return Debt.query(Debt.debtor == self.currentUser.key)
 
-
+    def removeMe(self):
+        self.getCurrentUser().removeGroup(self.key)
+        self.key.delete()
