@@ -1,5 +1,6 @@
 import json
 import logging
+from jinja2 import utils
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
@@ -157,6 +158,8 @@ class ModelHandler(PageHandler):
                 return obj.urlsafe()
             elif isinstance(obj, ndb.Model):
                 return obj.to_dict()
+            elif isinstance(obj, str):
+                return json.JSONEncoder.default(self, str(utils.escape(obj)))
             else:
                 return json.JSONEncoder.default(self, obj)
 
