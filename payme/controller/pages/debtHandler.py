@@ -1,5 +1,5 @@
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler, ModelRemoveHandler
 from payme.model.debt import Debt
 from payme.model.user import User
 from payme.model.payment import Payment
@@ -8,7 +8,9 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': ModelAddHandler(Debt, 'add'), 'pay': PayHandler()},
+                                          {'add': ModelAddHandler(Debt, 'add'),
+                                           'pay': PayHandler(),
+                                           'remove': ModelRemoveHandler(Debt, 'remove')},
                                           'getCRs',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
