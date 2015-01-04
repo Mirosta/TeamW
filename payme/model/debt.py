@@ -52,4 +52,4 @@ class Debt(ndb.Model):
             return "UNPAID"
 
     def getPayments(self):
-        return Payment.query(Payment.debt == self.key)
+        return Payment.query(Payment.debt == self.key).fetch()
