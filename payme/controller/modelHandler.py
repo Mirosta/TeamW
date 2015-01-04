@@ -36,7 +36,8 @@ class ModelHandler(PageHandler):
         #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
 
-        requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass])]
+        requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass]),
+                         ('update', ModelUpdateHandler, [modelClass])]
 
         for requiredVerb in requiredVerbs:
             if verbs.has_key(requiredVerb[0]):
