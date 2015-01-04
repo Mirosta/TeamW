@@ -1,4 +1,4 @@
-from payme.controller.contentHandler import PageHandler, Parameter
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from payme.model.user import User
 from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
 from payme.model.group import Group
@@ -10,7 +10,7 @@ class GroupHandler(ModelHandler):
 
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
-        super(GroupHandler, self).__init__("groups", {}, 'getGroups', Group, [],
+        super(GroupHandler, self).__init__("groups", {'add': AddHandler()}, 'getGroups', Group, [],
                                            [ReadOnlyFunction('getNetAmount', 'netAmount'),
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])
@@ -41,3 +41,12 @@ class GroupHandler(ModelHandler):
         return '{error: "Invalid group ID"}'
     def onUnknownGroup(self):
         return '{error: "No group with that ID"}'
+
+
+class AddHandler(VerbHandler):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('add')
+
+    def getAPI(self, controller, parameter):
+        return '{"test"}'
