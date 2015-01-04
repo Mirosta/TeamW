@@ -23,7 +23,7 @@ class HasUniqueProperty(ndb.Model):
         return newKey
 
 
-#http://squeeville.com/2009/01/30/add-a-unique-constraint-to-google-app-engine/
+# http://squeeville.com/2009/01/30/add-a-unique-constraint-to-google-app-engine/
 class Unique(ndb.Model):
     modelKey = ndb.KeyProperty(indexed=True)
 
