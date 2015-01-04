@@ -12,7 +12,6 @@ from payme.controller.globals import Global
 from google.appengine.ext import ndb
 
 class User (Entity, Actionable):
-    # Database for users
 
     notUpdatableAttributes = ['googleID', 'email', 'created', 'uniqueProperty']
 
