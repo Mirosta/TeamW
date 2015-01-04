@@ -50,16 +50,16 @@ class Payment(Actionable):
 
         if 'disputed' in values.keys():
             if values['disputed'] is True:
-                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
+                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your payment of " + Global.formatCurrency(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
 
             else:
-                n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + "{0:.2f}".format(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.created.strftime('%x')) + " has been resolved.")
+                n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + Global.formatCurrency(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.created.strftime('%x')) + " has been resolved.")
 
             n.put()
             user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
 
         if 'approvedByCreditor' in values.keys():
-            n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
+            n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of " + Global.formatCurrency(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
             n.put()
 
             user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
