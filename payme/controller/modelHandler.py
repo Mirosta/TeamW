@@ -179,8 +179,8 @@ class ModelRemoveHandler(VerbHandler):
             # remove entity from database
             if self.type == Debt:
                 entity.removeMe()
-        except InvalidParameterError:
-            return '{"success": 0}'
+        except InvalidParameterError as e:
+            raise e
         return '{"success": 1}'
 
 
