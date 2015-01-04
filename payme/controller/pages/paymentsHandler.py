@@ -6,10 +6,5 @@ from payme.model.payment import Payment
 class PaymentsHandler(ModelHandler):
 
     def __init__(self):
-        super(PaymentsHandler, self).__init__('payments', {'add' : PaymentsHandler.AddHandler()}, 'getAllPayments', Payment, [], [ReadOnlyFunction("getPayee", "payee")])
+        super(PaymentsHandler, self).__init__('payments', {'add' : ModelAddHandler('addPayment')}, 'getAllPayments', Payment, [], [ReadOnlyFunction("getPayee", "payee")])
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
-
-    class AddHandler(ModelAddHandler):
-        def __init__(self):
-            super(PaymentsHandler.AddHandler, self).__init__('addPayment')
-            self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
