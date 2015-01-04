@@ -67,3 +67,16 @@ body {
 .main .page-header {
   margin-top: 0;
 }
+
+
+/*
+ * Form content
+ */
+
+ .form {
+   
+ }
+ 
+ .form-textarea{
+   height: 70px;
+ }

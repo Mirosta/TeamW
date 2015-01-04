@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+    <head>
+        <title>Login Failure</title>
+        <style>
+            div.Error
+            {
+                color: red;
+            }
+            div.Message
+            {
+                display: block;
+                padding-left: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='Error'>
+            Unable to login, there was an error in the login process:
+            <div class='Message'>{{ page.errorMessage }}</div>
+        </div>
+    </body>
+</html>
+{%  endautoescape %}

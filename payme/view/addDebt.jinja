@@ -1,0 +1,212 @@
+{{ page.header() }}
+
+<div class="row">
+    <h1 class="page-header bold">add debt</h1>
+</div>
+<div class="row">
+    <!-- start of form -->
+    <form class="col-md-5 form-horizontal grey-bordered-box pull-left" role="form">
+        <h2 class="bold">new debt</h2>
+        <hr class="top-buffer">
+        <div class="form-group">
+            <label for="debtor" class="col-md-1 control-label form-label top-buffer">debtor:</label>
+            <div class="col-md-5 top-buffer">
+                <select class="form-control" id="debtor">
+                    <option>trisha</option>
+                    <option>alex</option>
+                    <option>polly</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="debtor-friend" class="col-md-2 control-label form-label">debtor type:</label>
+            <div class="col-md-4">
+                <label class="radio-inline">
+                    <input checked type="radio" name="debtor-type" id="debtor-friend" value="friend" >friend</label>
+                <label class="radio-inline">
+                    <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ammount" class="col-md-1 control-label form-label">ammount:</label>
+            <div class="col-md-5">
+                <input type="number" class="form-control" id="ammount" value="1" min="1"></div>
+        </div>
+        <div class="form-group">
+            <label for="date" class="col-md-1 control-label form-label">date:</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" id="date"></div>
+        </div>
+        <div class="form-group">
+            <label for="description" class="col-md-1 control-label form-label">description:</label>
+            <div class="col-md-5">
+                <textarea class="form-control textarea" id="description" maxlength="256"></textarea>
+                <div id="chars-left">256 characters left</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="split" class="col-md-1 control-label form-label">splitting:</label>
+            <div class="col-md-5">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="split" value="split">split money between debtor(s)?</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-3 col-md-offset-2">
+                <button type="submit" class="btn btn-primary" id="submit">submit</button>
+            </div>
+        </div>
+    </form>
+    <!-- frequent debtors -->
+    <div class="col-md-6 col-md-offset-1 grey-bordered-box pull-right">
+        <h2 class="bold">frequent debtors</h2>
+        <hr class="top-buffer">
+        <table class="table table-hover" id="frequent-debtors">
+            <thead>
+            <tr>
+                <th>debtor</th>
+                <th>debtor type</th>
+                <th>average ammount</th>
+                <th>current balance</th>
+            </tr>
+            <tbody>
+            <tr>
+                <td>trisha</td>
+                <td>friend</td>
+                <td>15</td>
+                <td class="balance">-100</td>
+            </tr>
+            <tr>
+                <td>polly</td>
+                <td>friend</td>
+                <td>10</td>
+                <td class="balance">-150</td>
+            </tr>
+            <tr>
+                <td>house</td>
+                <td>group</td>
+                <td>333</td>
+                <td class="balance">+300</td>
+            </tr>
+            <tr>
+                <td>hartley crew</td>
+                <td>group</td>
+                <td>3</td>
+                <td class="balance">+15</td>
+            </tr>
+            <tr>
+                <td>trisha</td>
+                <td>friend</td>
+                <td>15</td>
+                <td class="balance">-100</td>
+            </tr>
+            <tr>
+                <td>polly</td>
+                <td>friend</td>
+                <td>10</td>
+                <td class="balance">-150</td>
+            </tr>
+            <tr>
+                <td>house</td>
+                <td>group</td>
+                <td>333</td>
+                <td class="balance">+300</td>
+            </tr>
+            <tr>
+                <td>hartley crew</td>
+                <td>group</td>
+                <td>3</td>
+                <td class="balance">+15</td>
+            </tr>
+            <tr>
+                <td>house</td>
+                <td>group</td>
+                <td>333</td>
+                <td class="balance">+300</td>
+            </tr>
+            <tr>
+                <td>house</td>
+                <td>group</td>
+                <td>333</td>
+                <td class="balance">+300</td>
+            </tr>
+            </tbody>
+            </thead>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-md-12 grey-bordered-box top-buffer" id="debt-split">
+            <h2 class="bold">debt split</h2>
+            <hr class="top-buffer">
+            <table class="table">
+                <tbody>
+                    <tr id="split-name">
+                        <td class="bold">name</td>
+                    </tr>
+                    <tr id="split-check">
+                        <td class="bold">split</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+<!-- jQuery scripts -->
+<script>
+    $(document).ready(function() {
+        //hide debt-split by default
+        $('#debt-split').hide();
+        //datepicker for date of debt input field
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        $('#date').val( day + "/" + month + "/" + year);
+        $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+
+        //character counter for debt description
+        $('#description').keyup(function() {
+            var max = parseInt($(this).attr("maxlength"));
+            var count = $(this).val().length;
+            if(count >= max) {
+                $('#chars-left').text("0 characters left");
+            } else {
+                var remaining =  max - count;
+                $('#chars-left').text(remaining + " characters left");
+            }
+        });
+
+        //colour the balance
+        $('.balance:contains("-")').css("color","red");
+        $('.balance:contains("+")').css("color","green");
+
+         //toggle debt-split visibility
+        $('#split').change(function () {
+            if($(this).prop("checked")){
+                $('#debt-split').show();
+                //populate table data -- possibly separate function
+                $('#split-name').append(
+                        "<td>trisha</td>" +
+                        "<td>alex</td>" +
+                        "<td>polly</td>"
+                );
+
+            }else {
+                $('#debt-split').hide();
+            }
+        });
+
+    });
+</script>
+
+{{ page.footer() }}

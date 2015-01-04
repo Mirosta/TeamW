@@ -1,0 +1,63 @@
+    {{ page.header() }}
+            <div class="row">
+              <h1 class="page-header bold">your dashboard</h1>
+            </div>
+            <div class="row">
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                  <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"> 
+                        recent transactions
+                        <span class="pull-right">
+                          <i class="glyphicon glyphicon-plus"></i>
+                        </span>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body" id="dshbrd-recent-div">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end of accordion div -->
+            <div class="row">
+              <div class="col-md-6 grey-bordered-box side-margin pull-left">
+                <h2 class="bold">friends<span class="pull-right">£</span></h2>
+                <hr class="top-buffer">
+                <div class="top-buffer" id="friends-content-div" style="font-size:18px;">
+                </div>
+              </div>
+              <div class="col-md-5 grey-bordered-box side-margin pull-right">
+                <h2 class="bold">groups<span class="pull-right">£</span></h2>
+                <hr class="top-buffer">
+                <div class="top-buffer" id="groups-content-div" style="font-size:18px;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- Toggle icon -->
+    <script>
+      function toggleChevron(e) {
+          $(e.target)
+              .prev('.panel-heading')
+              .find('i')
+              .toggleClass('glyphicon-plus glyphicon-minus');
+      }
+      $('#accordion').on('hidden.bs.collapse', toggleChevron);
+      $('#accordion').on('shown.bs.collapse', toggleChevron);
+    </script>
+
+    <script src="../assets/js/pages/home.js"></script>
+    {{ page.footer() }}

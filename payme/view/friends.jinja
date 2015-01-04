@@ -1,0 +1,104 @@
+        {{ page.header() }}
+          <div style="width:100%;">
+            <div class="row">
+              <h1 class="page-header bold">
+                friends
+                <span class="pull-right">
+                  <!-- Button to add friends -->
+                  <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add-debt-modal"><span class="glyphicon glyphicon-plus"></span></button>
+                </span>
+              </h1>
+            </div>
+            <div class="row">
+              <div class="col-md-12 side-margin pull-left" id="friends-list-div">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="add-debt-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title bold">add debt</h4>
+          </div>
+          <div class="modal-body">
+            <div style="width:100%;">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="debtor" class="col-md-2 control-label form-label top-buffer">debtor:</label>
+                    <div class="col-md-5 top-buffer">
+                        <select class="form-control" id="debtor">
+                            <option>trisha</option>
+                            <option>alex</option>
+                            <option>polly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="debtor-friend" class="col-md-2 control-label form-label">debtor type:</label>
+                    <div class="col-md-4">
+                        <label class="radio-inline">
+                            <input checked type="radio" name="debtor-type" id="debtor-friend" value="friend" >friend</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="amount" class="col-md-2 control-label form-label">amount:</label>
+                    <div class="col-md-7">
+                        <input type="number" class="form-control" id="amount" value="1" min="1"></div>
+                </div>
+                <div class="form-group">
+                    <label for="date" class="col-md-2 control-label form-label">date:</label>
+                    <div class="col-md-7">
+                        <input type="text" id="date" class="form-control"></div>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="col-md-2 control-label form-label">description:</label>
+                    <div class="col-md-7">
+                        <textarea class="form-control textarea" id="description" maxlength="256"></textarea>
+                        <div id="chars-left">256 characters left</div>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+            <button type="button" class="btn btn-primary">submit</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+
+    <script>
+      $(document).ready(function() {
+        $('#add-debt-modal').on('shown.bs.modal', function() {
+          //datepicker for date of debt input field
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+
+          $('#date').val( day + "/" + month + "/" + year);
+          $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+        });
+      });
+    </script>
+    <script src="../assets/js/pages/friends.js"></script>
+
+  {{ page.footer() }}

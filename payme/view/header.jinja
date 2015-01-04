@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>payme</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/stylesheet.css">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script src="../assets/js/util.js"></script>  
+    <script src="../assets/js/model.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../home"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;margin-left:10px;" class="green">payme.</span></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          {% if controller.getCurrentUser() is not none %}
+            <li><a class="no-hover">Hi {{ controller.getCurrentUser().name }}</a></li>
+          {% endif %}
+          {% if controller.getAccessLevel() > 0 %}
+            <li><a href="../help">help!</a></li>
+            <li><a href="../home">dashboard</a></li>
+            <li><a href="user/profile">user profile</a></li>
+            <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
+          {% else %}
+          {% endif %}
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+  <div class="container-fluid">
+      <div class="row">
+        {% if controller.getAccessLevel() > 0 %}
+        <div class="col-md-2 sidebar" id="sidebar-div">
+          <ul class="nav nav-sidebar">
+            <li><a href="../history">past transactions</a></li>
+            <li><a href="/payments/add">make payment</a></li>
+            <li><a href="/debts/add">add debt</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-sidebar top-buffer">
+            <li><a href="../friends">manage friends</a></li>
+            <li><a href="../groups">manage groups</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-sidebar top-buffer">
+            <li><a href="/friends/add">add friend</a></li>
+          </ul>
+        </div>
+        {% endif %}
+        <div class="col-md-10 col-md-offset-2 main">
+          <div style="width:100%;">

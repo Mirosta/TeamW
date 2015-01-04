@@ -1,30 +1,36 @@
-class Entity:
-    empCount = 0
+from google.appengine.ext import ndb
+from uniqueModel import HasUniqueProperty
 
-    def __init__(self, name):
-        pass
+
+
+class Entity(HasUniqueProperty):
+
+    name = ndb.StringProperty()
 
     def getDebts(self):
+        """
+        :rtype: dict of {User: Debt[]}
+        :return:
+        """
         pass
 
     def getCredits(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getDebtsAmounts(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getCreditsAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetAmounts(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getDebtAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetCreditAmount(self):
-        pass
+        raise NotImplementedError('The subclass has forgotten to implement this method')
 
     def getNetAmount(self):
-        pass
-
+        raise NotImplementedError('The subclass has forgotten to implement this method')
