@@ -65,6 +65,7 @@ function Model(modelUrl, idOrObj)
 function ModelClass(modelUrl)
 {
     this.modelUrl = modelUrl;
+    models[this.modelUrl] = this;
     var getAllUrl = "/";
     var allResultsProperty = "results";
     var thisObj = this;
@@ -130,6 +131,8 @@ function ModelClass(modelUrl)
 }
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
+var models = {};
+
 var groups = new ModelClass("groups");
 
 var friends = new ModelClass("friends");
