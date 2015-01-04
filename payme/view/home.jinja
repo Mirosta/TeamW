@@ -16,55 +16,7 @@
                     </h4>
                   </div>
                   <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                    <div class="panel-body">
-                      <table id="example" class="table table-striped" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>payment by...</th>
-                                <th>payment to...</th>
-                                <th>date</th>
-                                <th>amount paid (£)</th>
-                                <th>remaining debt</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>12/12/2012</td>
-                                <td>61</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Yuri Berry</td>
-                                <td>Chief Marketing Officer (CMO)</td>
-                                <td>14/12/2012</td>
-                                <td>40</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Caesar Vance</td>
-                                <td>Pre-Sales Support</td>
-                                <td>15/12/2012</td>
-                                <td>21</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Doris Wilder</td>
-                                <td>Sales Assistant</td>
-                                <td>24/12/2012</td>
-                                <td>23</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Angelica Ramos</td>
-                                <td>Chief Executive Officer (CEO)</td>
-                                <td>30/12/2012</td>
-                                <td>47</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                      </table>
+                    <div class="panel-body" id="dshbrd-recent-div">
                     </div>
                   </div>
                 </div>
@@ -75,13 +27,7 @@
               <div class="col-md-6 grey-bordered-box side-margin pull-left">
                 <h2 class="bold">friends<span class="pull-right">£</span></h2>
                 <hr class="top-buffer">
-                <div class="top-buffer" id="friends-content-div">
-                  <span style="font-size:18px;">
-                    Alex <span class="pull-right bold" style="color:#26A65B;">+133</span><br>
-                    Lyubomir <span class="pull-right bold" style="color:red;">-500</span><br>
-                    James <span class="pull-right bold" style="color:#26A65B;">+283</span><br>
-                    Thomas <span class="pull-right bold" style="color:red;">-7</span><br>
-                  </span>
+                <div class="top-buffer" id="friends-content-div" style="font-size:18px;">
                 </div>
               </div>
               <div class="col-md-5 grey-bordered-box side-margin pull-right">
@@ -104,18 +50,6 @@
     <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
     <script src="/assets/js/util.js"></script>
     <script src="/assets/js/model.js"></script>
-    <!-- DataTables initialisation options -->
-    <script>
-      $(document).ready(function() {
-        $('#example').DataTable({
-          "pageLength": 5,
-          "bLengthChange": false,
-          "bFilter": false, 
-          "paging": false,
-          "info": false
-        });
-      });
-    </script>
 
     <!-- Toggle icon -->
     <script>
