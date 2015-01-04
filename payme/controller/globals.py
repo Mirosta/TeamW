@@ -7,7 +7,7 @@ class Global:
     # Show debug messages
     debug = True
 
-    def formatCurrency(amount, symbol="£"):
+    def formatCurrency(amount, symbol="\xa3"):
         negative = amount < 0
         negativeStr = ""
         if negative:
