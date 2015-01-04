@@ -9,7 +9,7 @@ from payme.model.payment import Payment
 from payme.model.user import User
 
 
-all_required = ['key']
+all_required = []
 required_fields = \
 {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
