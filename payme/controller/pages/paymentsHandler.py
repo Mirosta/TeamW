@@ -16,3 +16,4 @@ class PaymentsHandler(ModelHandler):
                                               [],
                                               [ReadOnlyFunction("getPayee", "payee")])
         self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+
