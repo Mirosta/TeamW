@@ -1,4 +1,5 @@
 import logging
+import sys
 from google.appengine.ext.ndb.key import Key
 
 import webapp2
@@ -11,8 +12,9 @@ from contentHandler import Parameter
 from payme.controller.pages.homepageHandler import HomepageHandler
 from payme.controller.pages.helpHandler import HelpHandler
 from payme.controller.pages.historyHandler import HistoryHandler
+from payme.controller.pages.errorHandler import ErrorHandler
 from dbTesting import TestPage
-from exceptions import PageNotFoundError, InvalidParameterError
+from exceptions import PageNotFoundError, InvalidParameterError, PaymeError, InternalError
 from payme.controller.pages.friendHandler import FriendHandler
 from payme.controller.pages.groupHandler import GroupHandler
 from payme.controller.pages.oAuthLogin import OAuthLoginHandler, OAuthHandler
@@ -38,7 +40,9 @@ serviceHttp = httplib2.Http()
 userInfoService = build('oauth2', 'v2', http=serviceHttp)
 # Main controller. Handles the map of pages and what not.
 class Controller (webapp2.RequestHandler):
-
+    
+    errorHandler = ErrorHandler()
+    
     pages = {
         'home': HomepageHandler(),
         'oauth': OAuthHandler(),
@@ -51,7 +55,8 @@ class Controller (webapp2.RequestHandler):
         'help': HelpHandler(),
         'history': HistoryHandler(),
         'notifications': NotificationHandler(),
-        'builddb': BuildDB()
+        'builddb': BuildDB(),
+        'error': errorHandler,
     }
 
     homePage = 'home'
@@ -84,52 +89,61 @@ class Controller (webapp2.RequestHandler):
         self.handleRequest(HTTPVerb.POST, pageName, verbName)
 
     def handleRequest(self, httpVerb, pageName, verbName):
-        if verbName == None: verbName = ''
+        
+        try:
+            if verbName == None: verbName = ''
 
-        if pageName not in Controller.pages:
-            raise PageNotFoundError()   
+            if pageName not in Controller.pages:
+                raise PageNotFoundError()   
 
-        page = Controller.pages[pageName]
+            page = Controller.pages[pageName]
 
-        contentHandler = None
-        parameter = None
+            contentHandler = None
+            parameter = None
 
-        # If the page has a verb with that name, use that
-        if page.hasVerb(verbName):
-            contentHandler = page.getVerb(verbName)
-            if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
-                if httpVerb == HTTPVerb.GET:
-                    self.session['redirectTo'] = '/' + pageName + '/' + verbName
-                self.redirect(self.loginPage)
-                return
-        # Otherwise check if pages accepts parameters
-        else:
-            contentHandler = page
-            parameter = verbName
-
-            if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
-                if httpVerb == HTTPVerb.GET:
-                    self.session['redirectTo'] = '/' + pageName + '/' + verbName
-                self.redirect(self.loginPage)
-                return
-
-            if parameter == "":
-                if page.getParameter().isRequired():
-                    raise InvalidParameterError()
-                else:
-                    parameter = Parameter.NoneGiven
+            # If the page has a verb with that name, use that
+            if page.hasVerb(verbName):
+                contentHandler = page.getVerb(verbName)
+                if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
+                    if httpVerb == HTTPVerb.GET:
+                        self.session['redirectTo'] = '/' + pageName + '/' + verbName
+                    self.redirect(self.loginPage)
+                    return
+            # Otherwise check if pages accepts parameters
             else:
-                # If the parameter is invalid, and this isn't allowed, throw an error. Otherwise mark the param as invalid.
-                if not page.validateParameter(parameter):
-                    if page.getParameter().canBeInvalid():
-                        parameter = Parameter.Invalid
-                    else:
+                contentHandler = page
+                parameter = verbName
+
+                if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
+                    if httpVerb == HTTPVerb.GET:
+                        self.session['redirectTo'] = '/' + pageName + '/' + verbName
+                    self.redirect(self.loginPage)
+                    return
+
+                if parameter == "":
+                    if page.getParameter().isRequired():
                         raise InvalidParameterError()
+                    else:
+                        parameter = Parameter.NoneGiven
+                else:
+                    # If the parameter is invalid, and this isn't allowed, throw an error. Otherwise mark the param as invalid.
+                    if not page.validateParameter(parameter):
+                        if page.getParameter().canBeInvalid():
+                            parameter = Parameter.Invalid
+                        else:
+                            raise InvalidParameterError()
 
-        response = self.sendToContentHandler(contentHandler, parameter, httpVerb)
-
-        if response != None:
-            self.response.write(response)
+            response = self.sendToContentHandler(contentHandler, parameter, httpVerb)
+                
+        # Catch every possible exception
+        except PaymeError, e:
+            response = self.errorHandler.handleError(self, e)
+        except:
+            e = sys.exc_info()[0]
+            response = self.errorHandler.handleError(self, InternalError())
+            
+            
+        self.response.write(response)
 
     def sendToContentHandler(self, contentHandler, parameter, httpVerb):
         logging.info('Content Handler: ' + contentHandler.__str__())

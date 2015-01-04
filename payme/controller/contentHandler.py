@@ -144,7 +144,6 @@ class VerbHandler(ContentHandler):
         super(VerbHandler, self).__init__(templateFile, accessLevel)
 
 
-
 class JsonVerbHandler(VerbHandler):
 
     def __init__(self, templateFile, accessLevel = 1):
