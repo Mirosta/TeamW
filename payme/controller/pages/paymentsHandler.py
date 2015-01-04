@@ -6,15 +6,11 @@ from payme.model.payment import Payment
 
 class PaymentsHandler(ModelHandler):
 
-  def __init__(self):
-      super(PaymentsHandler, self).__init__('payments', {'add' : PaymentsHandler.AddHandler()}, 'getAllPayments', Payment, [], [])
-      self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
-
-  def getHTML(self, controller, parameter):
-      return super(PaymentsHandler, self).getHTML(controller, parameter)
-
-  class AddHandler(VerbHandler):
-
     def __init__(self):
-      super(PaymentsHandler.AddHandler, self).__init__('addPayment')
-      self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+        super(PaymentsHandler, self).__init__('payments', {'add' : PaymentsHandler.AddHandler()}, 'getAllPayments', Payment, [], [])
+        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+
+    class AddHandler(VerbHandler):
+        def __init__(self):
+            super(PaymentsHandler.AddHandler, self).__init__('addPayment')
+            self.parameter = Parameter(Parameter.Type.NoParameter, False, False)

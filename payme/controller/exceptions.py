@@ -35,3 +35,7 @@ class OAuthCodeError(PaymeError):
 class OwnerInGroupError(PaymeError):
     def __init__(self):
         super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)
+
+class MissingFieldError(PaymeError):
+    def __init__(self):
+        super(OwnerInGroupError, self).__init__(PaymeError.Types.SERVER_ERROR)

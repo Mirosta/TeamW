@@ -1,5 +1,5 @@
 from google.appengine.api.datastore_errors import BadValueError
-from payme.controller.exceptions import InvalidParameterError
+from payme.controller.exceptions import InvalidParameterError, MissingFieldError
 import json
 from payme.model.debt import Debt
 from payme.model.group import Group
@@ -37,6 +37,3 @@ if __name__ == '__main__':
     }
     ''', Debt, [])
 
-
-class MissingFieldError(Exception):
-    pass

@@ -29,36 +29,59 @@ class ReadOnlyFunction:
 class ModelHandler(PageHandler):
 
     def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = []):
+        #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
         self.getAllFunction = getAllFunction
         self.modelClass = modelClass
-        self.relatedModels = relatedModels#[RelatedModel('Payment', 'debt')]
+        self.relatedModels = relatedModels#[RelatedModel(Payment, 'debt', 'payments')]
         self.readOnlyFunctions = readOnlyFunctions #example: [ReadOnlyFunction('getOE','netAmount'), ReadOnlyFunction('getCR','Owe'), ReadOnlyFunction('getDR', 'Own')]
+
+    def getHTML(self, controller, parameter):
+        logging.info("Hello world world world " + self.templateFile)
+        return super(ModelHandler, self).getHTML(controller, parameter)
+
+    def getRequestParameter(self, controller, parameterName, default):
+        if controller.request.get(parameterName) != "":
+                validationParameter = Parameter(Parameter.Type.Int, False, True)
+                if validationParameter.validate(controller.request.get(parameterName)):
+                    return int(controller.request.get(parameterName))
+
+        return default
 
     #Called by the controller when someone visits a /api/ link
     def getAPI(self, controller, parameter):
         if parameter == Parameter.NoneGiven: #If no parameter is given, assume they want all
-            return self.getAll(controller)
+            count = self.getRequestParameter(controller, "count", -1)
+            offset = self.getRequestParameter(controller, "offset", 0)
+
+            return self.getAll(controller, count, offset)
         if parameter == Parameter.Invalid:
             return self.onInvalidParameter() # change
         # if int(parameter) != 1:
         #     return self.onUnknownFriend() # change
         return self.getOne(controller, parameter) #If a parameter is given and is valid, lookup by the key given
 
-    #Gets all models
-    def getAll(self, controller):
-        currentUser = User.query(User.googleID == 'john').fetch()[0] # controller.getCurrentUser()
-        function = getattr(currentUser, self.getAllFunction)
-        models = function()
+    #Gets all model instances
+    def getAll(self, controller, count = 0, offset = 0, sortBy = None):
+        currentUser = User.query(User.googleID == 'john').fetch()[0] #TODO: Use current user - controller.getCurrentUser()
+        if self.getAllFunction != "":
+            function = getattr(currentUser, self.getAllFunction)
+            models = function()
+        else:
+            models = [currentUser]
         modelsOutput = []
 
         for model in models:
             data = self.getOneInner(controller, model)
 
             modelsOutput.append(data)
-
+        logging.info('From: ' + str(offset) + " to: " + str(count))
+        modelsOutput = modelsOutput[offset:(offset + count)]
+        if not sortBy is None:
+            modelsOutput.sort()
         return self.serialize({'results': modelsOutput})
 
+    #Get one model instance by ID
     def getOne(self, controller, parameter):
         models = self.modelClass.query(self.modelClass.key == Key(urlsafe=parameter)).fetch()
         if models.__len__() < 1:

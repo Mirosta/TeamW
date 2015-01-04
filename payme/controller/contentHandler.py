@@ -37,6 +37,19 @@ class Parameter(object):
     def canBeInvalid(self):
         return self.beInvalid
 
+    def validate(self, parameterValue):
+        if self.getType() == Parameter.Type.NoParameter:
+            return parameterValue == Parameter.NoneGiven
+
+        if self.getType() == Parameter.Type.Int:
+            try:
+                val = int(parameterValue)
+                return True
+            except ValueError:
+                return False
+
+        return True
+
 # Class for handling content - be it pages or verbs
 class ContentHandler(object):
     
@@ -50,6 +63,7 @@ class ContentHandler(object):
     
     def __init__(self, templateFile, accessLevel = 1):
         self.templateFile = templateFile
+        logging.info("Set template file " + templateFile.__str__())
         self.accessLevel = accessLevel
         self.lastController = None
     
@@ -64,7 +78,7 @@ class ContentHandler(object):
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
         return template.render({'page': self, 'controller': controller})
         
-    def postHTML(self, controller, parameter):
+    def postHTML(self, controller, parameter, postData):
         self.lastController = controller
         # Need to error out here
         pass
@@ -74,7 +88,7 @@ class ContentHandler(object):
         # Need to error out here
         pass
         
-    def postAPI(self, controller, parameter):
+    def postAPI(self, controller, parameter, postData):
         self.lastController = controller
         # Need to error out here
         pass
@@ -102,18 +116,8 @@ class PageHandler(ContentHandler):
     def getParameter(self):
         return self.parameter
         
-    def validateParameter(self, parameter):
-        if self.getParameter().getType() == Parameter.Type.NoParameter:
-            return parameter == Parameter.NoneGiven
-        
-        if self.getParameter().getType() == Parameter.Type.Int:
-            try:
-                val = int(parameter)
-                return True
-            except ValueError:
-                return False
-        
-        return True
+    def validateParameter(self, parameterValue):
+        self.getParameter().validate(parameterValue)
 
     # Helper function to query user and handles user not found
     def queryUser(self, key):
