@@ -1,30 +1,58 @@
 from google.appengine.ext import ndb
 from payme.model.notification import Notification
 from payme.controller.exceptions import SecurityError
+from actionable import Actionable
 import debt
 
 from payme.controller.globals import Global
 
 import user
 
-class Payment(ndb.Model):
+class Payment(Actionable):
     'A Payment object is used to store the the payment(s) that contribute towards a debt.'
 
     payer = ndb.KeyProperty(kind='User')
     debt = ndb.KeyProperty(kind='Debt')
 
     amount = ndb.IntegerProperty()
-    date = ndb.DateTimeProperty(auto_now_add=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     description = ndb.StringProperty()
 
-    # the debtor of the debt
-    approvedByDebtor = ndb.BooleanProperty(default=False)
+    # # the debtor of the debt
+    # approvedByDebtor = ndb.BooleanProperty(default=False)
 
     # the creditor of the debt i.e. the Payer
     approvedByCreditor = ndb.BooleanProperty(default=False)
 
     # the creditor of the debt can dispute an individual payment (payment has to be made to be disputed)
     disputed = ndb.BooleanProperty(default=False)
+
+    def isAddAllowed(self):
+        return self.getCurrentUser().key == self.payer
+
+    def isUpdateAllowed(self):
+        return self.getCurrentUser().key == self.getDebt().creditor
+
+    def update(self, values):
+        super(self, values)
+
+        if 'disputed' in values.keys():
+            if values['disputed'] is True:
+                n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has disputed your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.date.strftime('%x')) + " .")
+                n.put()
+
+                user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
+            else:
+                n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + "{0:.2f}".format(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.date.strftime('%x')) + " has been resolved.")
+                n.put()
+
+                user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
+
+        if 'approvedByCreditor' in values.keys():
+            n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.date.strftime('%x')) + " .")
+            n.put()
+
+            user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
 
     # Get key for the current user
     def getCurrentUser(self):
@@ -57,10 +85,7 @@ class Payment(ndb.Model):
         self.disputed = True
         self.put()
 
-        n = Notification(type=Notification.Type.INFO, content=" Your payment of GBP" + "{0:.2f}".format(self.amount) + " made on " + str(self.date.strftime('%x')) + " has been disputed.")
-        n.put()
 
-        user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
 
     # unpaid = none, inProgress = one approved,
     # paid = both approved, inDispute = disputed

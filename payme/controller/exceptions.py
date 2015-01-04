@@ -13,6 +13,9 @@ class PaymeError(Exception):
     def __init__(self, errorCode):
         self.errorCode = errorCode
         
+    def __init__(self, errorType):
+        self.errorType = errorType
+        
     def getErrorCode(self):
         return self.errorCode
         
@@ -48,6 +51,15 @@ class InvalidParameterError(BadRequestError):
 class PageNotFoundError(NotFoundError):
     pass
 
+class MissingFieldError(InternalError):
+    pass
+
+class AttributeNotFound(InternalError):
+    pass
+
+class UpdateNotAllowed(InternalError):
+    pass
+        
 class NoTemplateError(InternalError):
     pass
 

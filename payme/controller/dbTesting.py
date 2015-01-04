@@ -135,6 +135,20 @@ class TestPage(PageHandler):
         john = self.queryUser('john')
         dingdong = self.queryUser('dingdong')
 
+        # alex = self.createUser('alex', "Alex Peterson")
+        alex = self.queryUser('alex')
+        # alex.key.delete()
+
+        # self.output += str(getattr(alex, 'name'))
+
+        # self.createDebt(alex.key, john.key, 5000)
+
+        debt = Debt.query(Debt.creditor == alex.key).fetch()[0]
+        # self.output += str(getattr(alex, 'name'))
+        debt.notifyDebtor()
+
+        # alex.update({'name': 'Alex A Peterson'})
+
         # debt = self.createDebt(dingdong.key, john.key, 5000)
 
         # debt = Debt.query(Debt.creditor == dingdong.key).fetch()[0]
@@ -159,7 +173,7 @@ class TestPage(PageHandler):
     def createUser(self, userName, name):
 
         # u = User(id=userName, userName=userName, name=name, dateOfBirth=date(year, mth, day))
-        u = User(googleID=userName, email='cock@email.com')
+        u = User(googleID=userName, email='cock@email.com', name=name)
         u.put()
 
         return u

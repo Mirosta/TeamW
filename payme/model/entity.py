@@ -1,6 +1,8 @@
 from google.appengine.ext import ndb
 from uniqueModel import HasUniqueProperty
 
+
+
 class Entity(HasUniqueProperty):
 
     name = ndb.StringProperty()

@@ -1,11 +1,14 @@
 from google.appengine.ext import ndb
+from actionable import Actionable
 
-class Notification(ndb.Model):
+class Notification(Actionable):
     'A Notification object is used to store (for display) information following a user action'
 
     # Type of notification, i.e. info, error, success (blue, red, green?)
     type = ndb.StringProperty()
     content = ndb.StringProperty()
+
+    seen = ndb.BooleanProperty(default=False)
 
     # possibly unnecessary, useful for setting type neatly?
     class Type:
