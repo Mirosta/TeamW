@@ -25,7 +25,11 @@ class Actionable(ndb.Model):
         else:
             raise UpdateNotAllowed()
 
-    def isUpdateAllowed(self): # override me
+    # Methods to override in each model class if not True by default
+    def isRemoveAllowed(self):
+        return True
+
+    def isUpdateAllowed(self):
         return True
 
     def isAddAllowed(self):

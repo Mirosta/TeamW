@@ -33,6 +33,9 @@ class Payment(Actionable):
     def isUpdateAllowed(self):
         return self.getCurrentUser().key == self.getDebt().creditor
 
+    def isRemoveAllowed(self):
+        return self.isUpdateAllowed()
+
     def update(self, values):
         super(self, values)
 

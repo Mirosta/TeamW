@@ -6,6 +6,7 @@ class Notification(Actionable):
 
     # Type of notification, i.e. info, error, success (blue, red, green?)
     type = ndb.StringProperty()
+
     content = ndb.StringProperty()
 
     seen = ndb.BooleanProperty(default=False)
