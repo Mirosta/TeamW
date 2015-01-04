@@ -176,11 +176,7 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.create(postData, self.type)
             # add new entity to database
-            if entity.isAddAllowed():
-                entity.put()
-            else:
-                raise AddNotAllowed()
-            return self.type._properties
+            return '{"success": 1}'
         except Exception as e:
             raise e
 

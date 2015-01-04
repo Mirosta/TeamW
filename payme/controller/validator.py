@@ -20,9 +20,6 @@ required_fields = \
 
 def create(json_str, type_class):
     json_obj = json.loads(json_str)
-    for key in required_fields[type_class].extend(all_required):
-        if key not in json_obj:
-            raise MissingFieldError()
     return type_class(**json_obj)
 
 
