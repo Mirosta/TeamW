@@ -95,3 +95,15 @@ function apiCall(url, httpMethod, object, callback)
         dataType: "json"
     });
 }
+
+// Convert pence to £XX.XX
+function penceToPound(amount) {
+  var negative = amount < 0;
+  if(negative) amount = -amount;
+  
+  var decimal = amount % 100;
+  var whole = (amount - decimal)/100;
+  if(decimal < 10) decimal = "0" + decimal;
+  
+  return (negative ? "-" : "") + "£" + whole + "." + decimal;
+}

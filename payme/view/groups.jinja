@@ -4,30 +4,12 @@
               <h1 class="page-header bold">
                 groups
                 <span class="pull-right">
-                  <!-- Button to add friends -->
-                  +
+                  <button class="btn btn-default" type="button" data-toggle="modal" data-target="#add-debt-modal"><span class="glyphicon glyphicon-plus"></span></button>
                 </span>
               </h1>
             </div>
             <div class="row">
-              <div class="col-md-12 side-margin pull-left">
-                <div class="user-container">
-                  <div class="pull-left">
-                    <img src="http://i.imgur.com/GTxcoJv.png" class="img-rounded" width="25">
-                    <span style="font-size:16px">House</span>
-                  </div>
-                  <div class="btn-group pull-right" role="group">
-                    <button type="button" class="btn btn-default">
-                      <i class="glyphicon glyphicon-gbp"></i>
-                    </button>
-                    <button type="button" class="btn btn-default">
-                      <i class="glyphicon glyphicon-trash"></i>
-                    </button>
-                    <button type="button" class="btn btn-default">
-                      <b>...</b>
-                    </button>
-                  </div>
-                </div>
+              <div class="col-md-12 side-margin pull-left" id="groups-list-div">
               </div>
             </div>
           </div>
@@ -35,35 +17,5 @@
       </div>
     </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <!-- DataTables -->
-    <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-
-    <!-- DataTables initialisation options -->
-    <script>
-      $(document).ready(function() {
-        $('#example').DataTable({
-          "pageLength": 5,
-          "bLengthChange": false,
-          "bFilter": false, 
-          "paging": false,
-          "info": false
-        });
-      });
-    </script>
-
-    <!-- Toggle icon -->
-    <script>
-      function toggleChevron(e) {
-          $(e.target)
-              .prev('.panel-heading')
-              .find('i')
-              .toggleClass('glyphicon-plus glyphicon-minus');
-      }
-      $('#accordion').on('hidden.bs.collapse', toggleChevron);
-      $('#accordion').on('shown.bs.collapse', toggleChevron);
-    </script>
+    <script src="../assets/js/pages/groups.js"></script>
   {{ page.footer() }}
