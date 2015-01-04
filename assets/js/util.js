@@ -34,10 +34,10 @@ function getVariable(templateValues, variableParts, offset)
 {
     if(offset >= variableParts.length - 1)
     {
-        if(typeof templateValues[variableParts[offset]] !== "undefined") return templateValues[variableParts[offset]].toString();
+        if(templateValues[variableParts[offset]] === undefined || templateValues[variableParts[offset]] === null) return templateValues[variableParts[offset]].toString();
         else return "";
     }
-    if(typeof templateValues[variableParts[offset]] !== "undefined") return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
+    if(templateValues[variableParts[offset]] === undefined || templateValues[variableParts[offset]] === null) return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
     else return "";
 }
 
