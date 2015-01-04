@@ -9,7 +9,7 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': ModelAddHandler('add'),
+                                          {'add': ModelAddHandler('addDebt'),
                                            'pay': PayHandler(),
                                            'remove': RemoveHandler()},
                                           'getCRs',

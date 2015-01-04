@@ -39,8 +39,9 @@ class ModelHandler(PageHandler):
         requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass])]
 
         for requiredVerb in requiredVerbs:
-            if verbs.has_key(requiredVerb[0]) and not isinstance(verbs[requiredVerb[0]], requiredVerb[1]):
-                raise InvalidVerbType
+            if verbs.has_key(requiredVerb[0]):
+                if not isinstance(verbs[requiredVerb[0]], requiredVerb[1]):
+                    raise InvalidVerbType
             else:
                 verbs[requiredVerb[0]] = requiredVerb[1](None)
             verbs[requiredVerb[0]].setup(*requiredVerb[2])
