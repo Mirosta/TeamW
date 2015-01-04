@@ -5,9 +5,6 @@ from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFu
 
 class FriendHandler(ModelHandler):
 
-    # dummy for currentUser
-    # currentUser = User.query(User.googleID == 'john').fetch(10)[0]
-
     def __init__(self):
         super(FriendHandler, self).__init__('friends', {'add' : FriendHandler.AddHandler()}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount'), ReadOnlyFunction('getDRKeys', 'debts'), ReadOnlyFunction('getCRKeys', 'credits')], ['credentials', 'friends', 'groups', 'messageQueue'])
         # super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))

@@ -9,13 +9,12 @@ from payme.model.payment import Payment
 from payme.model.user import User
 
 
-all_required = ['key']
+all_required = []
 required_fields = \
 {
     Debt: ['debtor', 'creditor', 'amount', 'description', 'isPaid', 'created', 'amountPaid'],
     Group: [],
-    Payment: [],
-    User: []
+    Payment: ['payer', 'debt', 'amount', 'created', 'description']
 }
 
 
@@ -30,12 +29,17 @@ def create(json_str, type_class):
 def retrieve(json_str, type_class, key_id = None):
     if key_id is None:
         key_id = json.loads(json_str)['key']
-    return type_class.query(type_class.key == Key(urlsafe=key_id)).fetch(1)[0]
+    results = type_class.query(type_class.key == Key(urlsafe=key_id)).fetch(1)
+    if len(results) < 1:
+        return None
+    return results[0]
 
 
 def update(json_str, type_class):
     json_obj = json.loads(json_str)
     entity = retrieve(json_str, type_class, json_obj['key'])
+    if entity is None:
+        return None
     del json_obj['key']
     entity.populate(**json_obj)
     return entity

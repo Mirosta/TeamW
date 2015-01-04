@@ -8,28 +8,25 @@ from payme.controller.exceptions import OwnerInGroupError
 from payme.controller.globals import Global
 
 import user
-
+from actionable import Actionable
 import logging
 
 from payme.controller.globals import Global
 
 # Group is made by passing a list of users. When addDebt is called, it will add 'debt' passed to every user in the group.
-class Group (Entity):
+class Group (Entity, Actionable):
 
     users = ndb.KeyProperty(kind='User', repeated=True)
 
     def isUpdateAllowed(self):
         return self.key in self.getCurrentUser().groups
 
+    def isRemoveAllowed(self):
+        return self.isUpdateAllowed()
+
      # Get key for the current user
     def getCurrentUser(self):
-        #TODO return Global.apiController.getCurrentUser()
-        return user.User.query(user.User.googleID == 'john').fetch()[0]
-
-    # Get key for the current user
-    def getCurrentUser(self):
-        #TODO return Global.apiController.getCurrentUser().key
-        return user.User.query(user.User.googleID == 'john').fetch()[0].key
+        return Global.controller.getCurrentUser()
 
     def addMember(self, user):
         if self.getCurrentUser() == user:

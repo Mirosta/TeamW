@@ -9,7 +9,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
-from payme.controller.exceptions import InvalidParameterError, InvalidVerbType
+from payme.controller.exceptions import InvalidParameterError, InvalidVerbType, AddNotAllowed
 from payme.model.debt import Debt
 from payme.model.user import User
 
@@ -78,7 +78,7 @@ class ModelHandler(PageHandler):
 
     #Gets all model instances
     def getAll(self, controller, count = None, offset = 0, sortBy = None):
-        currentUser = User.query(User.googleID == 'john').fetch()[0] #TODO: Use current user - controller.getCurrentUser()
+        currentUser = controller.getCurrentUser()
         if self.getAllFunction != "":
             function = getattr(currentUser, self.getAllFunction)
             models = function()
@@ -176,8 +176,11 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.create(postData, self.type)
             # add new entity to database
-            entity.put()
-            return '{"success": 1}'
+            if entity.isAddAllowed():
+                entity.put()
+            else:
+                raise AddNotAllowed()
+            return self.type._properties
         except Exception as e:
             raise e
 
