@@ -1,8 +1,8 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
 from payme.controller.exceptions import UnsupportedMethod
 from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
+import logging
 
-import json
 from payme.model.user import User
 
 class UserHandler(ModelHandler):
@@ -10,7 +10,9 @@ class UserHandler(ModelHandler):
     def __init__(self):
         # super(UserHandler, self).__init__(None, Parameter(Parameter.Type.String), {'login': UserHandler.LoginHandler(), 'profile' : UserHandler.ProfileHandler()}) #This page has no view, but it does have verbs
         super(UserHandler, self).__init__(None, {'login': UserHandler.LoginHandler(),
-                                                 'profile': UserHandler.ProfileHandler()},
+                                                 'logout': UserHandler.LogoutHandler(),
+                                                 'profile': UserHandler.ProfileHandler(),
+                                                 'redirect': UserHandler.RedirectHandler()},
                                           'getMe',
                                           User, [],
                                           [ReadOnlyFunction('getOE', 'netWorth'),
@@ -28,7 +30,23 @@ class UserHandler(ModelHandler):
             self.accessLevel = 0
 
         def getHTML(self, controller, parameter):
+            if not controller.getCurrentUser() is None:
+                controller.redirect(controller.homePage)
+                return
             return super(UserHandler.LoginHandler, self).getHTML(controller, parameter)
+
+    class RedirectHandler(VerbHandler):
+        def __init__(self):
+            super(UserHandler.RedirectHandler, self).__init__(None)
+
+        def getHTML(self, controller, parameter):
+            if controller.session.has_key('redirectTo'):
+                redirect = controller.session['redirectTo']
+            else:
+                redirect = controller.homePage
+            controller.redirect(redirect)
+            return
+
 
     class LogoutHandler(VerbHandler):
 
@@ -36,7 +54,9 @@ class UserHandler(ModelHandler):
             super(UserHandler.LogoutHandler, self).__init__('logout')
 
         def getHTML(self, controller, parameter):
-            return super(UserHandler.LogoutHandler, self).getHTML(controller, parameter)
+            controller.session.clear()
+            controller.redirect(controller.loginPage)
+            return
 
     class ProfileHandler(VerbHandler):
 

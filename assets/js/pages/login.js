@@ -19,5 +19,5 @@ function onStoreEdit(e)
 
 function onLogin()
 {
-    window.location.href = '/home';
+    window.location.href = '/user/redirect';
 }
