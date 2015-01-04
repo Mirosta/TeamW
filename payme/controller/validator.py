@@ -23,6 +23,6 @@ def retrieve(json_str, type_class, required_fields=[]):
         for key in required_fields:
             if key not in json_obj:
                 raise MissingFieldError()
-        return type_class.query(**json_obj).fetch(1)[0]
-    except Exception as e:
-        raise e
+        return type_class.query(type_class.key == json_obj[key]).fetch(1)[0]
+    except:
+        raise InvalidParameterError()

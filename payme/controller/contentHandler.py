@@ -72,7 +72,6 @@ class ContentHandler(object):
     
     def __init__(self, templateFile, accessLevel = 1):
         self.templateFile = templateFile
-        logging.info("Set template file " + templateFile.__str__())
         self.accessLevel = accessLevel
         self.lastController = None
 
@@ -129,7 +128,7 @@ class PageHandler(ContentHandler):
         return self.parameter
         
     def validateParameter(self, parameterValue):
-        self.getParameter().validate(parameterValue)
+        return self.getParameter().validate(parameterValue)
 
     # Helper function to query user and handles user not found
     def queryUser(self, key):
