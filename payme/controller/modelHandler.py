@@ -29,13 +29,14 @@ class ReadOnlyFunction:
 
 class ModelHandler(PageHandler):
 
-    def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = []):
+    def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = [], hiddenFields = []):
         #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
         self.getAllFunction = getAllFunction
         self.modelClass = modelClass
         self.relatedModels = relatedModels#[RelatedModel(Payment, 'debt', 'payments')]
         self.readOnlyFunctions = readOnlyFunctions #example: [ReadOnlyFunction('getOE','netAmount'), ReadOnlyFunction('getCR','Owe'), ReadOnlyFunction('getDR', 'Own')]
+        self.hiddenFields = hiddenFields
 
     def getHTML(self, controller, parameter):
         logging.info("Hello world world world " + self.templateFile)
@@ -101,6 +102,12 @@ class ModelHandler(PageHandler):
 
     def getOneInner(self, controller, model):
         data = model.to_dict()
+        data['key'] = model.key
+
+        for hiddenField in self.hiddenFields:
+            if data.has_key(hiddenField):
+                data.pop(hiddenField)
+
         data['readOnly'] = {}
 
         for relatedModel in self.relatedModels:

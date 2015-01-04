@@ -8,7 +8,7 @@ class FriendHandler(ModelHandler):
     # currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
-        super(FriendHandler, self).__init__('friends', {}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount')])
+        super(FriendHandler, self).__init__('friends', {}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount')], ['credentials', 'friends', 'groups', 'messageQueue'])
         # super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))
 
     def postAPI(self, controller, parameter, postData):
