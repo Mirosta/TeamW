@@ -177,5 +177,5 @@ class ModelRemoveHandler(VerbHandler):
 
     def postAPI(self, controller, parameter, postData):
         entity = validator.validate(postData)
-        # add new entity to database
+        # remove entity from database
 
