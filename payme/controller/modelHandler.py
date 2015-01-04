@@ -3,10 +3,12 @@ import logging
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
+from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
+from payme.controller.exceptions import InvalidParameterError
 from payme.model.user import User
 
 
@@ -151,8 +153,13 @@ class ModelHandler(PageHandler):
             
 class ModelAddHandler(VerbHandler):
     
-    def __init__(self, view, ad):
-        super(ModelAddHandler, self).__init__(None)
+    def __init__(self, view = None):
+        super(self.__class__, self).__init__(view)
 
     def postAPI(self, controller, parameter, postData):
-        pass
+        entity = validator.validate(postData)
+        # add new entity to database
+        return '{"success": 1}'
+
+    
+

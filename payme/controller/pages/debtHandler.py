@@ -1,5 +1,5 @@
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler
 from payme.model.debt import Debt
 from payme.model.user import User
 from payme.model.payment import Payment
@@ -8,7 +8,7 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': AddHandler(), 'pay': PayHandler()},
+                                          {'add': ModelAddHandler('add'), 'pay': PayHandler()},
                                           'getCRs',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
@@ -51,14 +51,6 @@ class DebtHandler(ModelHandler):
     #     return '{error: "No friend with that ID"}'
 
 
-class AddHandler(VerbHandler):
-
-    def __init__(self):
-        super(AddHandler, self).__init__('add')
-        self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
-
-    def getHTML(self, controller, parameter):
-        return super(AddHandler, self).getHTML(controller, parameter)
 
 class PayHandler(VerbHandler):
 
