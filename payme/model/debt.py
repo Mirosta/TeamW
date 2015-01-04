@@ -89,7 +89,9 @@ class Debt(Actionable):
         debtor = self.queryUser(self.debtor)
         creditor = self.getCurrentUser()
 
-        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
+        # TODO implement real user thingy
+        # n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
+        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.googleID)
         n.put()
 
         debtor.giveNotification(n)

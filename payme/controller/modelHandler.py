@@ -3,10 +3,13 @@ import logging
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
-from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler, JsonVerbHandler
+from payme.controller import validator
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
+from payme.controller.exceptions import InvalidParameterError
+from payme.model.debt import Debt
 from payme.model.user import User
 
 
@@ -38,10 +41,6 @@ class ModelHandler(PageHandler):
         self.readOnlyFunctions = readOnlyFunctions #example: [ReadOnlyFunction('getOE','netAmount'), ReadOnlyFunction('getCR','Owe'), ReadOnlyFunction('getDR', 'Own')]
         self.hiddenFields = hiddenFields
 
-    def getHTML(self, controller, parameter):
-        logging.info("Hello world world world " + self.templateFile)
-        return super(ModelHandler, self).getHTML(controller, parameter)
-
     def getRequestParameter(self, controller, parameterName, default, paramType):
         if controller.request.get(parameterName) != "":
                 validationParameter = Parameter(paramType, False, True)
@@ -61,6 +60,7 @@ class ModelHandler(PageHandler):
             return self.onInvalidParameter() # change
         # if int(parameter) != 1:
         #     return self.onUnknownFriend() # change
+        logging.info("Parameter: " + str(parameter))
         return self.getOne(controller, parameter) #If a parameter is given and is valid, lookup by the key given
 
     #Gets all model instances
@@ -150,9 +150,34 @@ class ModelHandler(PageHandler):
 
             
 class ModelAddHandler(VerbHandler):
-    
-    def __init__(self, view, ad):
-        super(ModelAddHandler, self).__init__(None)
+
+    def __init__(self, type, view = None):
+        super(self.__class__, self).__init__(view)
+        self.type = type
 
     def postAPI(self, controller, parameter, postData):
-        pass
+        try:
+            entity = validator.create(postData, self.type)
+            # add new entity to database
+            entity.put()
+        except InvalidParameterError as e:
+            raise e
+        return '{"success": 1}'
+
+class ModelRemoveHandler(VerbHandler):
+
+    def __init__(self, type, view = None):
+        super(self.__class__, self).__init__(view)
+        self.type = type
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            entity = validator.retrieve(postData, self.type)
+            # remove entity from database
+            if self.type == Debt:
+                entity.removeMe()
+        except InvalidParameterError as e:
+            raise e
+        return '{"success": 1}'
+
+

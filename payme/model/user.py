@@ -120,9 +120,10 @@ class User (Entity, Actionable):
             self.put()
 
             n = Notification(type=Notification.Type.FRIEND_REQUEST,
-                             content=self.name + ' tried to add you as a friend.')
+                             content=str(self.name) + ' tried to add you as a friend.')
             n.put()
 
+            friend = User.query(User.key == friend).fetch()[0]
             friend.giveNotification(n)
         else:
             raise SecurityError()

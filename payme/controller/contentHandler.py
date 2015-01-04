@@ -7,7 +7,7 @@ import json
 from datetime import date, datetime
 
 from google.appengine.ext import ndb
-from payme.controller.validator import validate
+
 from payme.model.user import User
 
 FOOTER = "footer"
@@ -58,6 +58,7 @@ class Parameter(object):
             return int(parameterValue)
         if self.getType() == Parameter.Type.String:
             return parameterValue
+            
 # Class for handling content - be it pages or verbs
 class ContentHandler(object):
     
@@ -71,7 +72,6 @@ class ContentHandler(object):
     
     def __init__(self, templateFile, accessLevel = 1):
         self.templateFile = templateFile
-        logging.info("Set template file " + templateFile.__str__())
         self.accessLevel = accessLevel
         self.lastController = None
 
@@ -128,7 +128,7 @@ class PageHandler(ContentHandler):
         return self.parameter
         
     def validateParameter(self, parameterValue):
-        self.getParameter().validate(parameterValue)
+        return self.getParameter().validate(parameterValue)
 
     # Helper function to query user and handles user not found
     def queryUser(self, key):
@@ -145,16 +145,3 @@ class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile, accessLevel = 1):
         super(VerbHandler, self).__init__(templateFile, accessLevel)
-
-
-
-class JsonVerbHandler(VerbHandler):
-
-    def __init__(self, templateFile, accessLevel = 1):
-        super(JsonVerbHandler, self).__init__(templateFile, accessLevel)
-
-    def parse_json(self, json_str):
-        import json
-        json_obj = json.loads(json_str)
-        entity = validate(json_obj)  # returns Bad request error on failure to validate (InvalidParameterError)
-

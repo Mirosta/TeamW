@@ -66,9 +66,9 @@ class BuildDB(PageHandler):
 
 #           Give John notification
         self.output += 'Sending John notification...<br>'
-        john.giveNotification(notification1.key)
-        john.giveNotification(notification2.key)
-        david.giveNotification(notification3.key)
+        john.giveNotification(notification1)
+        john.giveNotification(notification2)
+        david.giveNotification(notification3)
 
         self.output += 'Done... <br>'
         # self.output += "<br>" + self.serialize(group)

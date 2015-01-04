@@ -1,6 +1,6 @@
-from payme.controller.contentHandler import PageHandler, Parameter
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from payme.model.user import User
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler
 from payme.model.group import Group
 
 class GroupHandler(ModelHandler):
@@ -10,7 +10,7 @@ class GroupHandler(ModelHandler):
 
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
-        super(GroupHandler, self).__init__("groups", {}, 'getGroups', Group, [],
+        super(GroupHandler, self).__init__("groups", {'add': ModelAddHandler(Group)}, 'getGroups', Group, [],
                                            [ReadOnlyFunction('getNetAmount', 'netAmount'),
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])

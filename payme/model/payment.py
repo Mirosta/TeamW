@@ -65,6 +65,9 @@ class Payment(Actionable):
     def getDebt(self):
         return debt.Debt.query(debt.Debt.key == self.debt).fetch()[0]
 
+    def getPayee(self):
+        return self.getDebt().debtor
+
     def getAmount(self):
         return self.amount
 
