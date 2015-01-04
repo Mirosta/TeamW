@@ -15,7 +15,7 @@ function processTemplate(template, templateValues)
         if(nextValue >= 0 && endValue >= 0)
         {
             var variableName = template.substring(nextValue + 2, endValue);
-            variableValue = getVariable(templateValues, variableName.split("."), 0);
+            variableValue = getVariable(templateValues, variableName.split("."), 0).toString();
             additionalSkip = endValue - nextValue + 2;
             outputLength = nextValue - offset;
         }
@@ -34,10 +34,22 @@ function getVariable(templateValues, variableParts, offset)
 {
     if(offset >= variableParts.length - 1)
     {
-        if(templateValues[variableParts[offset]] !== undefined && templateValues[variableParts[offset]] !== null) return templateValues[variableParts[offset]].toString();
+        if(templateValues[variableParts[offset]] !== undefined && templateValues[variableParts[offset]] !== null) return templateValues[variableParts[offset]];
         else return "";
     }
     if(templateValues[variableParts[offset]] !== undefined && templateValues[variableParts[offset]] !== null) return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
+    else return "";
+}
+
+function setVariable(templateValues, variableParts, offset, value, arrayIndex)
+{
+    if(offset >= variableParts.length - 1)
+    {
+        if(templateValues[variableParts[offset]] !== undefined && templateValues[variableParts[offset]] !== null)
+            if (arrayIndex === undefined || arrayIndex ===null) templateValues[variableParts[offset]] = value;
+            else templateValues[variableParts[offset]][arrayIndex] = value;
+    }
+    if(templateValues[variableParts[offset]] !== undefined && templateValues[variableParts[offset]] !== null) setVariable(templateValues[variableParts[offset]], variableParts, ++offset, value, arrayIndex);
     else return "";
 }
 
@@ -94,6 +106,86 @@ function apiCall(url, httpMethod, object, callback)
         },
         dataType: "json"
     });
+}
+
+//Callback is in format function(success, data)
+function lookupField(types, object, callback)
+{
+    var noTypes = 0;
+    for(type in types)
+    {
+        noTypes+= types[type].length;
+    }
+    var typeSynch = new Synchronise(noTypes,
+        function(success, error)
+        {
+            if(success) callback(success, object);
+            else callback(success, error);
+        });
+    var typeComplete = function(success, error)
+    {
+        if(success) typeSynch.complete();
+        else typeSynch.failed(error);
+    };
+
+    for(type in types)
+    {
+        for(var i = 0; i < types[type].length; i++)
+        {
+            var objectParts = types[type][i].split(".");
+            var key = getVariable(object, objectParts, 0);
+            if(key.constructor === Array)
+            {
+                var synch = new Synchronise(key.length, typeComplete);
+                for(var k = 0; k < key.length; k++)
+                {
+                    var subKey = key[k];
+                    var objectForKey = models[type].get(onFieldLookup(object, objectParts, k, synch), subKey);
+                }
+            }
+            else
+            {
+                var objectForKey = models[type].get(onFieldLookup(object, objectParts, undefined, typeSynch), key);
+            }
+        }
+    }
+}
+
+//Callback is function(success, error)
+function Synchronise(count, callback)
+{
+    this.count = count;
+    this.progress = 0;
+    this.hasFailed = false;
+    this.complete = function()
+    {
+        this.progress++;
+        if(this.progress >= this.count && !this.hasFailed)
+        {
+            callback(true);
+        }
+    };
+    this.failed = function(error)
+    {
+        this.hasFailed = true;
+        callback(false, error);
+    };
+}
+
+function onFieldLookup(object, objectParts, offset, synchronise)
+{
+    return function (success, data)
+    {
+        if(success)
+        {
+            setVariable(object, objectParts, 0, data, offset);
+            synchronise.complete();
+        }
+        else
+        {
+            synchronise.failed(data);
+        }
+    };
 }
 
 // Convert pence to £XX.XX
