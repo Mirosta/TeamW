@@ -116,6 +116,7 @@ class User (Entity):
                              content=str(self.name) + ' tried to add you as a friend.')
             n.put()
 
+            friend = User.query(User.key == friend).fetch()[0]
             friend.giveNotification(n)
         else:
             raise SecurityError()
