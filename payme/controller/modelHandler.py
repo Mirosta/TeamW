@@ -162,7 +162,7 @@ class ModelHandler(PageHandler):
 class ModelAddHandler(VerbHandler):
 
     def __init__(self, view = None):
-        super(self.__class__, self).__init__(view)
+        super(ModelAddHandler, self).__init__(view)
 
     def setup(self, type):
         self.type = type
@@ -179,7 +179,7 @@ class ModelAddHandler(VerbHandler):
 class ModelRemoveHandler(VerbHandler):
 
     def __init__(self, view = None):
-        super(self.__class__, self).__init__(view)
+        super(ModelRemoveHandler, self).__init__(view)
 
     def setup(self, type):
         self.type = type

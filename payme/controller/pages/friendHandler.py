@@ -1,6 +1,7 @@
 from payme.controller.contentHandler import PageHandler, VerbHandler, Parameter
 from payme.model.user import User
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler
+
 
 class FriendHandler(ModelHandler):
 
@@ -8,7 +9,7 @@ class FriendHandler(ModelHandler):
     # currentUser = User.query(User.googleID == 'john').fetch(10)[0]
 
     def __init__(self):
-        super(FriendHandler, self).__init__('friends', {'add' : FriendHandler.AddHandler()}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount')], ['credentials', 'friends', 'groups', 'messageQueue'])
+        super(FriendHandler, self).__init__('friends', {'add' : FriendHandler.AddHandler()}, 'getFriends', User, [], [ReadOnlyFunction('getOE', 'netAmount'), ReadOnlyFunction('getDRs', 'debts'), ReadOnlyFunction('getCRs', 'credits')], ['credentials', 'friends', 'groups', 'messageQueue'])
         # super(FriendHandler, self).__init__('friends', Parameter(Parameter.Type.Int, False, True))
 
     def postAPI(self, controller, parameter, postData):
@@ -60,7 +61,7 @@ class FriendHandler(ModelHandler):
         return '{error: "No friend with that ID"}'
 
 
-    class AddHandler(VerbHandler):
+    class AddHandler(ModelAddHandler):
 
         def __init__(self):
             super(FriendHandler.AddHandler, self).__init__('addFriend')

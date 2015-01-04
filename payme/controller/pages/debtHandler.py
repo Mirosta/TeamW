@@ -8,9 +8,9 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': ModelAddHandler(Debt, 'add'),
+                                          {'add': ModelAddHandler('add'),
                                            'pay': PayHandler(),
-                                           'remove': ModelRemoveHandler(Debt, 'remove')},
+                                           'remove': ModelRemoveHandler('remove')},
                                           'getCRs',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
