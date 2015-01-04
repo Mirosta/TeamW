@@ -41,7 +41,7 @@ class DebtHandler(ModelHandler):
 
     # debug - helper for function above
     def queryUserByID(self, googleID):
-        return User.query(User.googleID == googleID).fetch(10)[0]
+        return User.query(User.googleID == googleID).fetch()[0]
 
     def onInvalidParameter(self):
         return '{error: "Invalid debt key"}'

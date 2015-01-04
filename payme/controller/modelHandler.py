@@ -3,7 +3,7 @@ import logging
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
-from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler, JsonVerbHandler
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
