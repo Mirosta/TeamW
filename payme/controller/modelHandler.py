@@ -161,6 +161,7 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.validate(postData, self.type)
             # add new entity to database
+            entity.key.put()
         except InvalidParameterError:
             return '{"success": 0}'
         return '{"success": 1}'
