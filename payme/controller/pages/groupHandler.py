@@ -10,7 +10,9 @@ class GroupHandler(ModelHandler):
 
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
-        super(GroupHandler, self).__init__("groups", {'add': AddHandler()}, 'getGroups', Group, [],
+        super(GroupHandler, self).__init__("groups",
+                                           {'add': AddHandler()},
+                                           'getGroups', Group, [],
                                            [ReadOnlyFunction('getNetAmount', 'netAmount'),
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])
