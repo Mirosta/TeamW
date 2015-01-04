@@ -1,4 +1,5 @@
 from payme.controller.contentHandler import ContentHandler, Parameter, VerbHandler, PageHandler
+from payme.controller.exceptions import UnsupportedMethod
 from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction
 
 import json
@@ -16,6 +17,9 @@ class UserHandler(ModelHandler):
                                            ReadOnlyFunction('getCR', 'debt'),
                                            ReadOnlyFunction('getDR', 'credit')],
                                           ['credentials'])
+
+    def getOne(self, controller, parameter):
+        raise UnsupportedMethod
 
     class LoginHandler(VerbHandler):
 

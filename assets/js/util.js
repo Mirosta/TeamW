@@ -32,13 +32,12 @@ function processTemplate(template, templateValues)
 
 function getVariable(templateValues, variableParts, offset)
 {
-    console.log(templateValues)
     if(offset >= variableParts.length - 1)
     {
-        if(templateValues[variableParts[offset]]) return templateValues[variableParts[offset]].toString();
+        if(typeof templateValues[variableParts[offset]] !== "undefined") return templateValues[variableParts[offset]].toString();
         else return "";
     }
-    if(templateValues[variableParts[offset]]) return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
+    if(typeof templateValues[variableParts[offset]] !== "undefined") return getVariable(templateValues[variableParts[offset]], variableParts, ++offset);
     else return "";
 }
 
