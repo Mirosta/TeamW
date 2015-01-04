@@ -8,7 +8,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
-from payme.controller.exceptions import InvalidParameterError
+from payme.controller.exceptions import InvalidParameterError, InvalidVerbType
 from payme.model.debt import Debt
 from payme.model.user import User
 
@@ -35,6 +35,16 @@ class ModelHandler(PageHandler):
     def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = [], hiddenFields = []):
         #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
+
+        requiredVerbs = [('add', ModelAddHandler, [modelClass]), ('remove', ModelRemoveHandler, [modelClass])]
+
+        for requiredVerb in requiredVerbs:
+            if verbs.has_key(requiredVerb[0]) and not isinstance(verbs[requiredVerb[0]], requiredVerb[1]):
+                raise InvalidVerbType
+            else:
+                verbs[requiredVerb[0]] = requiredVerb[1](None)
+            verbs[requiredVerb[0]].setup(*requiredVerb[2])
+
         self.getAllFunction = getAllFunction
         self.modelClass = modelClass
         self.relatedModels = relatedModels#[RelatedModel(Payment, 'debt', 'payments')]
@@ -151,8 +161,10 @@ class ModelHandler(PageHandler):
             
 class ModelAddHandler(VerbHandler):
 
-    def __init__(self, type, view = None):
+    def __init__(self, view = None):
         super(self.__class__, self).__init__(view)
+
+    def setup(self, type):
         self.type = type
 
     def postAPI(self, controller, parameter, postData):
@@ -166,8 +178,10 @@ class ModelAddHandler(VerbHandler):
 
 class ModelRemoveHandler(VerbHandler):
 
-    def __init__(self, type, view = None):
+    def __init__(self, view = None):
         super(self.__class__, self).__init__(view)
+
+    def setup(self, type):
         self.type = type
 
     def postAPI(self, controller, parameter, postData):
