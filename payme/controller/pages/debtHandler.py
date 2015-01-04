@@ -64,6 +64,8 @@ class RemoveHandler(ModelRemoveHandler):
     def postAPI(self, controller, parameter, postData):
         debt = validator.retrieve(postData, self.type)
         debt.removeMe()
+        return '{"success": 1}'
+
 
 class PayHandler(VerbHandler):
 

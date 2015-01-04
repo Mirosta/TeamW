@@ -8,7 +8,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
-from payme.controller.exceptions import InvalidParameterError, InvalidVerbType
+from payme.controller.exceptions import InvalidParameterError, InvalidVerbType, AddNotAllowed
 from payme.model.debt import Debt
 from payme.model.user import User
 
@@ -173,8 +173,11 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.create(postData, self.type)
             # add new entity to database
-            entity.put()
-            return '{"success": 1}'
+            if entity.isAddAllowed():
+                entity.put()
+            else:
+                raise AddNotAllowed()
+            return Debt._properties
         except Exception as e:
             raise e
 
