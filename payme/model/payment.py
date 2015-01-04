@@ -96,7 +96,7 @@ class Payment(Actionable):
 
 
 
-    # approved = creditor approves, awaiting_approval = one approved,
+    # approved = creditor approves, awaiting_approval = not approved,
     # in_dispute = disputed
     def getStatus(self):
 
