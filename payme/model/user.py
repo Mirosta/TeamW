@@ -145,8 +145,8 @@ class User (Entity):
         return {self : creditAmounts}
 
     # add a notification to the user's message queue
-    def giveNotification(self, notification):
-        self.messageQueue.append(notification.key)
+    def giveNotification(self, notificationObj):
+        self.messageQueue.append(notificationObj.key)
         self.put()
 
     # retrieve a notification from the message queue (if present)

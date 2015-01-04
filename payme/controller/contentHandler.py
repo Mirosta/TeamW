@@ -51,6 +51,13 @@ class Parameter(object):
 
         return True
 
+    def cast(self, parameterValue):
+        if self.getType() == Parameter.Type.NoParameter:
+            return parameterValue == Parameter.NoneGiven
+        if self.getType() == Parameter.Type.Int:
+            return int(parameterValue)
+        if self.getType() == Parameter.Type.String:
+            return parameterValue
 # Class for handling content - be it pages or verbs
 class ContentHandler(object):
     
