@@ -76,7 +76,7 @@ class Debt(ndb.Model):
 
         # TODO implement real user thingy
         # n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.name)
-        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + creditor.googleID)
+        n = Notification(type=Notification.Type.INFO, content='Debt of GBP' + "{0:.2f}".format(self.amount) + ' has been removed by ' + str(creditor.googleID))
         n.put()
 
         debtor.giveNotification(n)

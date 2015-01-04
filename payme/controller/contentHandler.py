@@ -58,6 +58,7 @@ class Parameter(object):
             return int(parameterValue)
         if self.getType() == Parameter.Type.String:
             return parameterValue
+            
 # Class for handling content - be it pages or verbs
 class ContentHandler(object):
     
@@ -74,13 +75,16 @@ class ContentHandler(object):
         logging.info("Set template file " + templateFile.__str__())
         self.accessLevel = accessLevel
         self.lastController = None
+
     
     def getHTML(self, controller, parameter):
         self.lastController = controller
+        logging.info("Hi")
         return self.renderTemplate(controller, self.templateFile)
 
     def renderTemplate(self, controller, templateFile):
         # Get the template and render it
+        logging.info("Rendering Template")
         self.lastController = controller
         if templateFile == None: raise NoTemplateError()
         template = ContentHandler.JINJA_ENVIRONMENT.get_template(templateFile + ContentHandler.TEMPLATE_EXTENSION)
@@ -142,15 +146,3 @@ class VerbHandler(ContentHandler):
 
     def __init__(self, templateFile, accessLevel = 1):
         super(VerbHandler, self).__init__(templateFile, accessLevel)
-
-
-class JsonVerbHandler(VerbHandler):
-
-    def __init__(self, templateFile, accessLevel = 1):
-        super(JsonVerbHandler, self).__init__(templateFile, accessLevel)
-
-    def parse_json(self, json_str):
-        import json
-        json_obj = json.loads(json_str)
-        entity = validate(json_obj)  # returns Bad request error on failure to validate (InvalidParameterError)
-

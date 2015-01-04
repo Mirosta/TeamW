@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from payme.model.notification import Notification
+from payme.controller.exceptions import SecurityError
 import debt
 
 from payme.controller.globals import Global
@@ -36,6 +37,9 @@ class Payment(ndb.Model):
     def getDebt(self):
         return debt.Debt.query(debt.Debt.key == self.debt).fetch()[0]
 
+    def getPayee(self):
+        return self.getDebt().debtor
+
     def getAmount(self):
         return self.amount
 
@@ -46,6 +50,10 @@ class Payment(ndb.Model):
         return self.description
 
     def raiseDispute(self):
+
+        if self.getDebt().getCreditor() != self.getCurrentUser().key:
+            raise SecurityError()
+
         self.disputed = True
         self.put()
 

@@ -3,10 +3,13 @@ import logging
 from operator import itemgetter
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import Key
-from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler, JsonVerbHandler
+from payme.controller import validator
+from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 import sys
 import types
+from payme.controller.exceptions import InvalidParameterError
+from payme.model.debt import Debt
 from payme.model.user import User
 
 
@@ -29,13 +32,14 @@ class ReadOnlyFunction:
 
 class ModelHandler(PageHandler):
 
-    def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = []):
+    def __init__(self, view, verbs, getAllFunction, modelClass, relatedModels = [], readOnlyFunctions = [], hiddenFields = []):
         #logging.info("Setting template file " + view.__str__())
         super(ModelHandler, self).__init__(view, Parameter(Parameter.Type.String), verbs)
         self.getAllFunction = getAllFunction
         self.modelClass = modelClass
         self.relatedModels = relatedModels#[RelatedModel(Payment, 'debt', 'payments')]
         self.readOnlyFunctions = readOnlyFunctions #example: [ReadOnlyFunction('getOE','netAmount'), ReadOnlyFunction('getCR','Owe'), ReadOnlyFunction('getDR', 'Own')]
+        self.hiddenFields = hiddenFields
 
     def getHTML(self, controller, parameter):
         logging.info("Hello world world world " + self.templateFile)
@@ -101,6 +105,12 @@ class ModelHandler(PageHandler):
 
     def getOneInner(self, controller, model):
         data = model.to_dict()
+        data['key'] = model.key
+
+        for hiddenField in self.hiddenFields:
+            if data.has_key(hiddenField):
+                data.pop(hiddenField)
+
         data['readOnly'] = {}
 
         for relatedModel in self.relatedModels:
@@ -143,9 +153,34 @@ class ModelHandler(PageHandler):
 
             
 class ModelAddHandler(VerbHandler):
-    
-    def __init__(self, view, ad):
-        super(ModelAddHandler, self).__init__(None)
+
+    def __init__(self, type, view = None):
+        super(self.__class__, self).__init__(view)
+        self.type = type
 
     def postAPI(self, controller, parameter, postData):
-        pass
+        try:
+            entity = validator.validate(postData, self.type)
+            # add new entity to database
+            entity.key.put()
+        except InvalidParameterError:
+            return '{"success": 0}'
+        return '{"success": 1}'
+
+class ModelRemoveHandler(VerbHandler):
+
+    def __init__(self, type, view = None):
+        super(self.__class__, self).__init__(view)
+        self.type = type
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            entity = validator.validate(postData, self.type)
+            # remove entity from database
+            if self.type == Debt:
+                entity.removeMe()
+        except InvalidParameterError:
+            return '{"success": 0}'
+        return '{"success": 1}'
+
+

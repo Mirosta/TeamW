@@ -38,6 +38,28 @@ function Model(modelUrl, idOrObj)
         //Remove object in DB
         apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
     };
+    this.getFields = function()
+    {
+        var retArr = [];
+        var strippedThis = stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']);
+        for(key in strippedThis)
+        {
+            if(typeof strippedThis[key] !== "function")
+            {
+                retArr.push(key);
+            }
+        }
+
+        for(key in thisObj.readOnly)
+        {
+            if(typeof thisObj.readOnly[key] !== "function")
+            {
+                retArr.push("readOnly." + key);
+            }
+        }
+
+        return retArr;
+    };
 }
 
 function ModelClass(modelUrl)
@@ -109,7 +131,17 @@ function ModelClass(modelUrl)
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
 var groups = new ModelClass("groups");
+
 var friends = new ModelClass("friends");
+
+var payments = new ModelClass("payments");
+
+var user = new ModelClass("user");
+
+var debts = new ModelClass("debts");
+
+var notifications = new ModelClass("notifications");
+
 //Model objects have .update, .create and .remove methods
 /*
 Example: Get all groups

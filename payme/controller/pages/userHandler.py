@@ -14,7 +14,8 @@ class UserHandler(ModelHandler):
                                           User, [],
                                           [ReadOnlyFunction('getOE', 'netWorth'),
                                            ReadOnlyFunction('getCR', 'debt'),
-                                           ReadOnlyFunction('getDR', 'credit')])
+                                           ReadOnlyFunction('getDR', 'credit')],
+                                          ['credentials'])
 
     class LoginHandler(VerbHandler):
 
