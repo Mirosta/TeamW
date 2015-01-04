@@ -161,7 +161,7 @@ class BuildDB(PageHandler):
 class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
-            return obj.strftime('%Y/%m/%d %H:%M:%S')
+            return obj.strftime(Global.JSONDateTime)
         elif isinstance(obj, ndb.Key):
             return obj.urlsafe()
         elif isinstance(obj, ndb.Model):
