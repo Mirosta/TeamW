@@ -30,8 +30,6 @@ function addFriendsToContainer() {
       friendsListDiv.append( processTemplate(template, data[i]) );
     }
   });
-
-  $('.pay-button').attr("data-toggle", "modal");
-  $('.pay-button').attr("data-target", "#add-debt-modal"); 
+  
 }              
 
