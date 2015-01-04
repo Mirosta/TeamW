@@ -158,8 +158,11 @@ class ModelAddHandler(VerbHandler):
         self.type = type
 
     def postAPI(self, controller, parameter, postData):
-        entity = validator.validate(postData, self.type)
-        # add new entity to database
+        try:
+            entity = validator.validate(postData, self.type)
+            # add new entity to database
+        except InvalidParameterError:
+            return '{"success": 0}'
         return '{"success": 1}'
 
 
