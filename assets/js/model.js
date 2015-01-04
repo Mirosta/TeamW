@@ -133,6 +133,15 @@ function ModelClass(modelUrl)
 var groups = new ModelClass("groups");
 
 var friends = new ModelClass("friends");
+
+var payments = new ModelClass("payments");
+
+var user = new ModelClass("user");
+
+var debts = new ModelClass("debts");
+
+var notifications = new ModelClass("notifications");
+
 //Model objects have .update, .create and .remove methods
 /*
 Example: Get all groups
