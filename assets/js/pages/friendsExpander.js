@@ -62,7 +62,7 @@ function addFriendsToContainer($container) {
         '<span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">' +
         '{{readOnly.netAmount}}</span>)</div>' +
         '<div class="btn-group pull-right pay-button" role="group">' +
-        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-payment-modal">' +
+        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal">' +
         '<i class="glyphicon glyphicon-gbp"></i></button>' +
         '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal">' +
         '<i class="glyphicon glyphicon-trash"></i>' +
@@ -174,7 +174,7 @@ function expandFriend(e)
                         var description = $('textarea#paymentDescription').val();
                         var payment = payments.newInstance({
                             "debt": debtKey,
-                            "amount": parseInt(amount),
+                            "amount": parseFloat(amount) * 100,
                             "description": description
                         });
                         payment.create(function(success, data) { if(success) location.reload();});

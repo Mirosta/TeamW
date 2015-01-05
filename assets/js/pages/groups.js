@@ -103,7 +103,15 @@ function initialisePage() {
                   }
                });
         });
-        
+        $('#remove-group-member-modal').on('show.bs.modal', function(e) {
+            var groupKey = $(e.relatedTarget).data('groupKey');
+            var memberKey = $(e.relatedTarget).data('key');
+
+            $('#remove-group-member-btn').click(function() {
+                removeGroupMember(groupKey, memberKey);
+            });
+            location.reload();
+        });
     });
   });
 }
