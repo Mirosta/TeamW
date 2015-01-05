@@ -164,6 +164,7 @@ class Controller (webapp2.RequestHandler):
         credentials.authorize(serviceHttp)
         userDetails = userInfoService.userinfo().get().execute()
         existingUser = User.query(User.googleID == userDetails['id']).fetch()
+        logging.info(credentials)
         logging.info('Login: ' + userDetails['id'])
         if existingUser.__len__() < 1: #No users found
             logging.info('Adding user')
