@@ -6,8 +6,6 @@ function initialisePage() {
   $(document).ready(function () {
     addFriendsToContainer();
       getCurrUser();
-     // the key of the friend to be removed
-      var friendKey;
     $('#add-debt-modal').on('shown.bs.modal', function(e) {
       var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
       $('#debtor').text(debtorName);
@@ -20,10 +18,9 @@ function initialisePage() {
 
       $('#date').val( day + "/" + month + "/" + year);
       $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
-    });
 
-   //character counter for debt description
-    $('#description').keyup(function() {
+      //character counter for debt description
+      $('#description').keyup(function() {
         var max = parseInt($(this).attr("maxlength"));
         var count = $(this).val().length;
         if(count >= max) {
@@ -32,23 +29,24 @@ function initialisePage() {
             var remaining =  max - count;
             $('#chars-left').text(remaining + " characters left");
         }
+      });
+      var debtKey = $(e.relatedTarget).parent().parent().data('friend-key');
+      $('#add-debt-btn').click(function() {
+        addDebt(debtKey);
+      });
     });
 
     $('#delete-modal').on('show.bs.modal', function(e) {
-        friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
+        var friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
             $('[data-friend-key=' + friendKey + ']').remove();
-        })
+        });
     });
 
     $('#add-friend-btn').click(function() {
         var newFriend = friends.newInstance({'email': $('#email').val()});
         newFriend.create();
-    });
-
-    $('#add-debt-btn').click(function() {
-        addDebt();
     });
 
   });
@@ -107,16 +105,15 @@ function removeFriend(key) {
     });
 }
 
-function addDebt() {
+function addDebt(debtorKey) {
 
-    var debtorName = $('#debtor').val();
     var amount = $('#amount').val();
     var date = $('#date').val();
     var description = $('#description').val();
 
-    var debtParams = {'debtor': debtorName,
-                'creditor': currUser,
-                'amount': amount,
+    var debtParams = {'debtor': debtorKey,
+                'creditor': currUser.key,
+                'amount': parseInt(amount),
                 'description': description,
                 'isPaid': false,
                 'created': date,
@@ -136,5 +133,9 @@ function getCurrUser() {
             console.log("error");
             console.log(data);
         }
-    })
+    });
+}
+
+function parseDate(){
+    
 }
