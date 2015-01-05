@@ -13,6 +13,37 @@ function initialisePage() {
         });
     });
 
+    $('#add-debt-modal').on('shown.bs.modal', function(e) {
+          var groupKey = $(e.relatedTarget).parent().parent().data('group-key');
+          groups.get(groupKey, function(success, data)
+          {
+             if(success)
+             {
+                 var template =
+                     '<div>' +
+                        '<label for="debtor-check-{{readOnly.num}}">{{name}} {{familyName}}</label><input id="debtor-check-{{readOnly.num}}" data-user-key="{{key}}" type="checkbox">' +
+                     '<div>';
+                 lookupField({friend: ['users']}, data, function(success, data)
+                 {
+                     for(var i =0; i < data.length; i++)
+                     {
+                         var curFriend = data[i];
+                         curFriend.readOnly.num = i;
+                         $('#groups-list-div').append($(processTemplate(template, curFriend)));
+                     }
+                 });
+             }
+          });
+          //datepicker for date of debt input field
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+
+          $('#date').val( year + "-" + month + "-" + day);
+          $('#date').datepicker({dateFormat: "yy-mm-dd", showButtonPanel: true});
+    });
+
     $('#new-group-sbmt').click(function() {
        var newGroup = groups.newInstance({"name": $('#new-group-name').val()});
        newGroup.create(function (success, data) {
