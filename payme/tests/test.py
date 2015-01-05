@@ -87,6 +87,7 @@ class UnitTest(unittest.TestCase, PageHandler):
                              'Test notification 3')
 
             # check that group is created and associated correctly to the user
+            self.assertEqual(group.name, 'Wolfpack')
             self.assertEqual(group.key, currentUser.groups[0])
 
 #   LEAVE THIS ALONE!
@@ -107,7 +108,7 @@ class UnitTest(unittest.TestCase, PageHandler):
     def createUser(self, userName, name):
 
         # u = User(id=userName, userName=userName, name=name, dateOfBirth=date(year, mth, day))
-        u = User(googleID=userName, name=name, email='cock@email.com')
+        u = User(googleID=userName, name=name, email='user@email.com')
         u.put()
 
         return u

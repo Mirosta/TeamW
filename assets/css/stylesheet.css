@@ -128,6 +128,25 @@ hr {
   padding-bottom: 12px;
 }
 
+.friendRequestNotification {
+  background-color: #008000;
+}
+
+.infoNotification {
+  background-color: #0052a4;
+}
+
+.errorNotification {
+  background-color: #ff0000;
+}
+
+.miscNotification {
+  background-color: #374a61;
+}
+
+.successNotification {
+  background-color: lawngreen;
+}
 
 /*
  * Input fields
@@ -172,7 +191,7 @@ hr {
   border-color: rgb(128, 128, 128);
   border-style: solid;
   position: absolute;
-  width: 100%;
+  width: 320px;
   background-color: #222222;
   color: white;
   padding: 3px;

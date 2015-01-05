@@ -13,6 +13,7 @@ function setupNotificationContainer() {
   $("#notificationLink").click(function() {
     $("#notificationContainer").fadeToggle(300);
     $("#notification_count").fadeOut("slow");
+    markNotificationsSeen();
     return false;
   });
 
@@ -25,11 +26,54 @@ function setupNotificationContainer() {
 
 function setupNotifications() {
   notifications.getAll(function(success, data) {
-    var template = '<div class="col-md-12" style="border-bottom:1px solid #616161;">{{content}} </div>';
+    var template = '<div class="col-md-12 {{readOnly.notificationType}}" style="border-bottom:1px solid #616161;">{{content}} </div>';
     console.log(data);
     var maxLength = (data.length >= 11) ? 10 : data.length;
     for(i=0; i < maxLength; i++) {
+      data[i].readOnly.notificationType = returnNotificationTypeCSS(data[i].type)
       $("#notificationsBody").append( processTemplate(template, data[i]) );
     }
   });
+  getUnreadNumber();
+}
+
+function returnNotificationTypeCSS(notificationType) {
+  switch (notificationType) {
+    case "FRIEND_REQUEST":
+          return "friendRequestNotification";
+    case "INFO":
+          return "infoNotification";
+    case "ERROR":
+          return "errorNotification";
+    case "MISC":
+          return "miscNotification";
+    case "SUCCESS":
+          return "successNotification";
+  }
+}
+
+function markNotificationsSeen() {
+  notifications.getAll(function(success, data) {
+    for (var i = 0; i < data.length; i++) {
+      data[i].seen = true;
+      data[i].update();
+    }
+  });
+  getUnreadNumber();
+}
+
+function getUnreadNumber() {
+  notifications.getAll(function(success, data) {
+    var read = 0;
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].seen = false) {
+        read++;
+      }
+      updateUnreadNumber(read);
+    }
+  })
+}
+
+function updateUnreadNumber(read) {
+  $("#notificationLink>span.badge").html(read.toString());
 }
