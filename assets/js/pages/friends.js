@@ -25,8 +25,8 @@ function setupAndEventsModals()
           var month = date.getMonth() + 1;
           var year = date.getFullYear();
 
-          $('#date').val( day + "/" + month + "/" + year);
-          $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+          $('#date').val( year + "-" + month + "-" + day);
+          $('#date').datepicker({dateFormat: "yy-mm-dd", showButtonPanel: true});
     });
 
     //character counter for debt description
@@ -126,7 +126,7 @@ function addDebt(debtorKey) {
                 'amount': parseInt(amount),
                 'description': description,
                 'isPaid': false,
-                'created': date,
+                'created': date + " 00:00:00",
                 'amountPaid': 0};
 
     var newDebt = debts.newInstance(debtParams);
