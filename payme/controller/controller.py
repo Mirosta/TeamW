@@ -80,7 +80,7 @@ class Controller (webapp2.RequestHandler):
     @webapp2.cached_property
     def session(self):
         # Returns a session using the default cookie key.
-        return self.session_store.get_session(backend='memcache')
+        return self.session_store.get_session(backend='datastore')
 
     def get(self, pageName, verbName):
         self.handleRequest(HTTPVerb.GET, pageName, verbName)
@@ -105,8 +105,10 @@ class Controller (webapp2.RequestHandler):
             if page.hasVerb(verbName):
                 contentHandler = page.getVerb(verbName)
                 if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
-                    if httpVerb == HTTPVerb.GET:
+                    if httpVerb == HTTPVerb.GET and not self.isAPI:
                         self.session['redirectTo'] = '/' + pageName + '/' + verbName
+                        logging.info('Adding redirect')
+                        logging.info(self.session['redirectTo'])
                     self.redirect(self.loginPage)
                     return
             # Otherwise check if pages accepts parameters
@@ -115,7 +117,7 @@ class Controller (webapp2.RequestHandler):
                 parameter = verbName
 
                 if contentHandler.accessLevel > self.getAccessLevel(): #Redirect to login if necessary
-                    if httpVerb == HTTPVerb.GET:
+                    if httpVerb == HTTPVerb.GET  and not self.isAPI:
                         self.session['redirectTo'] = '/' + pageName + '/' + verbName
                     self.redirect(self.loginPage)
                     return
@@ -162,9 +164,12 @@ class Controller (webapp2.RequestHandler):
         credentials.authorize(serviceHttp)
         userDetails = userInfoService.userinfo().get().execute()
         existingUser = User.query(User.googleID == userDetails['id']).fetch()
+        logging.info('Login: ' + userDetails['id'])
         if existingUser.__len__() < 1: #No users found
+            logging.info('Adding user')
             self.onNewUserLogin(userDetails, credentials)
         else:
+            logging.info('Existing user ' + existingUser[0].key.urlsafe())
             self.onExistingUserLogin(existingUser[0], userDetails, credentials)
 
     def onNewUserLogin(self, userDetails, credentials):

@@ -3,6 +3,8 @@ function setupAndEventsModals()
 {
       $('#add-debt-modal').on('shown.bs.modal', function(e) {
           var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
+          var debtKey = $(e.relatedTarget).parent().parent().data('friend-key');
+
           $('#debtor').text(debtorName);
           $('#debtor').val(debtorName);
           //datepicker for date of debt input field
@@ -13,6 +15,9 @@ function setupAndEventsModals()
 
           $('#date').val( year + "-" + month + "-" + day);
           $('#date').datepicker({dateFormat: "yy-mm-dd", showButtonPanel: true});
+          $('#add-debt-btn').click(function(e) {
+          addDebt(debtKey);
+          });
     });
 
     //character counter for debt description
@@ -26,10 +31,7 @@ function setupAndEventsModals()
             $('#chars-left').text(remaining + " characters left");
         }
       });
-      $('#add-debt-btn').click(function(e) {
-          var debtKey = $(e.relatedTarget).parent().parent().data('friend-key');
-          addDebt(debtKey);
-      });
+
 
     $('#delete-friend-modal').on('show.bs.modal', function(e) {
         var friendName = $(e.relatedTarget).parent().parent().data('friend-name');

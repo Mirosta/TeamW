@@ -10,7 +10,7 @@ class DebtHandler(ModelHandler):
 
     def __init__(self):
         super(DebtHandler, self).__init__(None,
-                                          {'add': ModelAddHandler('addDebt'),
+                                          {'add': AddHandler('addDebt'),
                                            'pay': PayHandler(),
                                            'remove': RemoveHandler(),
                                            'update': ModelUpdateHandler()},
@@ -56,6 +56,19 @@ class DebtHandler(ModelHandler):
     # Not sure about this...
     # def onUnknownFriend(self):
     #     return '{error: "No friend with that ID"}'
+
+
+class AddHandler(ModelAddHandler):
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            debt = validator.create(postData, self.type)
+            # add new entity to database
+            debt.put()
+            debt.notifyDebtor()
+            return '{"success": 1}'
+        except Exception as e:
+            raise e
 
 
 class RemoveHandler(ModelRemoveHandler):
