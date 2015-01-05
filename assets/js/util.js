@@ -140,12 +140,12 @@ function lookupField(types, object, callback)
                 for(var k = 0; k < key.length; k++)
                 {
                     var subKey = key[k];
-                    var objectForKey = models[type].get(onFieldLookup(object, objectParts, k, synch), subKey);
+                    var objectForKey = models[type].get(subKey, onFieldLookup(object, objectParts, k, synch));
                 }
             }
             else
             {
-                var objectForKey = models[type].get(onFieldLookup(object, objectParts, undefined, typeSynch), key);
+                var objectForKey = models[type].get(key, onFieldLookup(object, objectParts, undefined, typeSynch));
             }
         }
     }

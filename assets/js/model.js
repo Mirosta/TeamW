@@ -70,7 +70,7 @@ function ModelClass(modelUrl)
     var allResultsProperty = "results";
     var thisObj = this;
 
-    this.get = function(callback, id) //Callback is same as util.js apiGet function
+    this.get = function(id, callback) //Callback is same as util.js apiGet function
     {
         var url = apiUrl + thisObj.modelUrl + processTemplate(getUrl, {id: id}); //Get url is a template, pass the current model obj into the template function
         //Get object from DB
@@ -167,13 +167,16 @@ var allGroups = groups.getAll(
 //Example: Get group with id 1
 //NOTE: Objects don't necessarily have integer ids, they can be strings
 /*
-var group1 = groups.get("1",
+
+var group1 = null;
+groups.get("1",
     function(success, data)
     {
         if(success)
         {
             console.log('Got group 1:');
             console.log(data);
+            group1 = data;
         }
         else
         {
