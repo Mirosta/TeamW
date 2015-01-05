@@ -113,7 +113,7 @@ function addGroupsToContainer() {
                     '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-group-modal"><i class="glyphicon glyphicon-edit"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button></div>' +
                   '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
                  '<div class="collapse moreinfo" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">' +
-                '<div class="row summaryRow"><div class="summaryTitle"><h4>friends</h4></div><div class="friends"></div></div>' +
+                '<div class="row summaryRow"><div class="summaryTitle" style="margin-left: 20px"><h4>friends</h4></div><div class="friends"></div></div>' +
                 '</div></div>';
   var groupsListDiv = $("#groups-list-div");
   groupsListDiv.html("");
@@ -136,30 +136,31 @@ function expandGroup(e)
     var $friendContainer = $target.find("div.friends");
     console.log(e);
 
-    var template = '<div class="friends-container"><div class="col-md-3"><span style="font-size:16px;" id="friend"> {{name}}</span><br> ' +
-                           '<hr style="margin-bottom:5px;">' +
-                           '</div></div>';
+    var template = '<div class="row top-buffer" >' +
+                           '<span style="font-size:16px; margin-left: 45px;" id="friend"> {{name}}</span>' +
+                           '<button type="button" class="btn btn-default" data-toggle="modal"' +
+                           ' data-target="#remove-group-member-modal" data-member-key="{{key}}" data-group-key="{{groupKey}}">' +
+                           '<i class="glyphicon glyphicon-trash"></i></button>' +
+                           '</div><hr style="margin-bottom:5px;">';
     $friendContainer.html("");
 
     groups.get(groupKey, function (success, data) {
         if(success){
             console.log(data);
             var friendsKeysArr = data.users;
-            console.log(friendsKeysArr.toString());
             for (i=0; i<friendsKeysArr.length; i++){
                 friends.get(friendsKeysArr[i], function (success, data) {
                     if(success){
                         console.log(data);
-                        $friendContainer.append(processTemplate(template, {'name' : data.name}));
+                        $friendContainer.append(processTemplate(template, {'name' : data.name, 'key' : data.key, 'groupKey' : groupKey}));
                     }
                 });
 
             }
         }else{
             console.log("failed");
-             console.log(data);
+            console.log(data);
         }
-
     });
 }
 
@@ -178,4 +179,22 @@ function removeGroup(key) {
           console.log(data);
       }
   });
+}
+
+function removeGroupMember(groupKey, memberKey) {
+
+    var memberKeyArr;
+
+    groups.get(groupKey, function(success, data) {
+        if(success){
+            memberKeyArr = data.users;
+            for (i=0; i<memberKeyArr.length; i++){
+                if(memberKeyArr[i] === memberKey){
+                    memberKeyArr.splice(i, 1);
+                }
+            }
+            data.users = memberKeyArr;
+        }
+    })
+
 }
