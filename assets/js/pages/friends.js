@@ -4,7 +4,7 @@ var currUser;
 
 function initialisePage() {
   $(document).ready(function () {
-    addFriendsToContainer();
+    addFriendsToContainer($("#friends-list-div"));
       getCurrUser();
      // the key of the friend to be removed
       var friendKey;
@@ -34,7 +34,7 @@ function initialisePage() {
         }
     });
 
-    $('#delete-modal').on('show.bs.modal', function(e) {
+    $('#delete-friend-modal').on('show.bs.modal', function(e) {
         friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
@@ -54,7 +54,7 @@ function initialisePage() {
   });
 }
 
-function addFriendsToContainer() {
+function addFriendsToContainer($container) {
     // var template = '<div class="user-container">' +
     //                   '<div class="pull-left"><img src="{{ ----- }}" class="img-rounded" width="25"><span style="font-size:16px">{{ user }}</span></div>' +
     //                   '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button></div>' +
@@ -62,12 +62,15 @@ function addFriendsToContainer() {
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}" data-friend-name="{{name}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" id="more" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
-        '<div class="collapse moreInfo" id="moreInfo-{{num}}"><div class="panel panel-default"><div class="panel-body">Test<!--<div class="row">Debts</div><div class="row">Credits</div>--></div></div></div>';
+        '<div class="collapse moreinfo" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>Debts</h4></div><div class="debts"></div></div>' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>Credits</h4></div><div class="credits"></div></div>' +
+        '</div></div></div>';
 
-    var friendsListDiv = $("#friends-list-div");
-    friendsListDiv.html("");
+    //var friendsListDiv = $("#friends-list-div");
+    $container.html("");
 
     friends.getAll(function (success, data) {
         console.log(data);
@@ -80,10 +83,11 @@ function addFriendsToContainer() {
 
             data[i].num = i;
 
-            friendsListDiv.append(processTemplate(template, data[i]));
+            $container.append(processTemplate(template, data[i]));
         }
-        //$('div.moreInfo').on('show.bs.collapse', expandFriend);
-    });}
+        $('div.moreinfo').on('show.bs.collapse', expandFriend);
+    });
+}
 
 function removeFriend(key) {
 

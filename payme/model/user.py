@@ -210,9 +210,9 @@ class User (Entity, Actionable):
         return payments
 
     def removeGroup(self, group):
-        if group.key in self.groups:
-            self.groups.remove(group.key)
-        self.put()
+        if group in self.groups:
+            self.groups.remove(group)
+            self.put()
 
     # debug
     def retrieveUserName(self):

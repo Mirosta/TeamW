@@ -142,6 +142,10 @@ function lookupField(types, object, callback)
                     var subKey = key[k];
                     var objectForKey = models[type].get(subKey, onFieldLookup(object, objectParts, k, synch));
                 }
+                if(key.length === 0)
+                {
+                    typeComplete(true)
+                }
             }
             else
             {
