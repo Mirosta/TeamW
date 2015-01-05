@@ -145,6 +145,17 @@ class User (Entity, Actionable):
         else:
             raise SecurityError()
 
+    def addFriendForce(self, friend):
+        self.friends.append(friend)
+        self.put()
+
+        n = Notification(type=Notification.Type.FRIEND_REQUEST,
+                         content=str(self.name) + ' tried to add you as a friend.')
+        n.put()
+
+        friend = User.query(User.key == friend).fetch()[0]
+        friend.giveNotification(n)
+
     def removeFriend(self, friend):
         if self.isMe():
             if friend in self.friends:

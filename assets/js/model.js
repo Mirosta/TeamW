@@ -145,6 +145,8 @@ var debts = new ModelClass("debts");
 
 var notifications = new ModelClass("notifications");
 
+var friendRequests = new ModelClass("friends/request")
+
 //Model objects have .update, .create and .remove methods
 /*
 Example: Get all groups
