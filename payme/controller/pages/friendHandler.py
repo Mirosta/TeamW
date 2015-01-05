@@ -25,4 +25,3 @@ class FriendHandler(ModelHandler):
 
         def __init__(self):
             super(FriendHandler.RequestHandler, self).__init__('requestFriend')
-
