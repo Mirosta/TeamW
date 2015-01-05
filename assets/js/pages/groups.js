@@ -9,6 +9,7 @@ function initialisePage() {
         $('#remove-group-btn').click(function() {
             removeGroup(groupKey);
             $('[data-group-key=' + groupKey + ']').remove();
+            $('#delete-modal').modal('hide');
         });
     });
   });
