@@ -10,13 +10,17 @@ class FriendHandler(ModelHandler):
     def __init__(self):
         super(FriendHandler, self).__init__('friends',
                                             {'add' : AddHandler(),
-                                             'request': RequestHandler()},
+                                             'request': FriendHandler.RequestHandler()},
                                             'getFriends', User, [],
                                             [ReadOnlyFunction('getOE', 'netAmount'),
                                              ReadOnlyFunction('getDRKeys', 'debts'),
                                              ReadOnlyFunction('getCRKeys', 'credits')],
                                             ['credentials', 'friends', 'groups', 'messageQueue'])
 
+    class RequestHandler(VerbHandler):
+
+        def __init__(self):
+            super(FriendHandler.RequestHandler, self).__init__('requestFriend')
 
 
 class AddHandler(ModelAddHandler):
@@ -28,9 +32,3 @@ class AddHandler(ModelAddHandler):
             return '{"success": 1}'
         except Exception as e:
             raise e
-
-
-class RequestHandler(VerbHandler):
-
-    def __init__(self):
-        super(FriendHandler.RequestHandler, self).__init__('requestFriend')
