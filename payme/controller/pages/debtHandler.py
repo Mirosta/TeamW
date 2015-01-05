@@ -65,7 +65,7 @@ class AddHandler(ModelAddHandler):
             debt = validator.create(postData, self.type)
             # add new entity to database
             debt.put()
-            debt.notifyDebtor()
+            #debt.notifyDebtor()
             return '{"success": 1}'
         except Exception as e:
             raise e
