@@ -15,8 +15,12 @@ function initialisePage() {
 
     $('#new-group-sbmt').click(function() {
        var newGroup = groups.newInstance({"name": $('#new-group-name').val()});
-       newGroup.create();
-       $('create-group-modal').modal('hide')
+       newGroup.create(function (success, data) {
+           if (success){
+               location.reload();
+           }
+       });
+       $('#create-group-modal').modal('hide')
     });
   });
 }
