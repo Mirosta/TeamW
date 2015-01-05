@@ -88,15 +88,15 @@
             <div id="addDebt-div">
               <form>
                 <div class="form-group">
-                  <label for="addDebt-amount">e-mail:</label>
-                  <input type="number" class="form-control" id="addDebt-amount"></input>
+                  <label for="email">e-mail:</label>
+                  <input type="text" class="form-control" id="email"></input>
                 </div>
               </form>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Submit</button>
+            <button type="button" id="submit" class="btn btn-primary">Submit</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -123,6 +123,11 @@
 
           $('#date').val( day + "/" + month + "/" + year);
           $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+        });
+
+        $('#submit').click(function() {
+            var newFriend = friends.newInstance({'email': $('#email').val()});
+            newFriend.create();
         });
       });
     </script>

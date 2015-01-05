@@ -33,6 +33,7 @@ class Debt(Actionable):
         logging.info(str(values.keys()))
 
         if 'disputed' in values.keys():
+            self._properties
             logging.info('in disputed')
             if values['disputed'] is True:
                 logging.info('creating notification....')

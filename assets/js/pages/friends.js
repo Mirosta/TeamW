@@ -14,8 +14,9 @@ function addFriendsToContainer() {
 
    var template = '<div class="user-container" style="height:40px;">' +
                     '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-                    '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
-                  '</div><hr style="margin-bottom:5px;">';
+                    '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-target="#moreinfo-{{num}}" data-toggle="collapse"><b>...</b></button> </div>' +
+                  '</div><hr style="margin-bottom:5px;">' +
+                   '<div class="collapse" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">Test</div></div></div>';
   var friendsListDiv = $("#friends-list-div");
   friendsListDiv.html("");
 
@@ -26,7 +27,8 @@ function addFriendsToContainer() {
       data[i].readOnly.netAmount = penceToPound(data[i].readOnly.netAmount);
       if (data[i].profilePicture === null) {
         data[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
-      } 
+      }
+        data[i].num = i;
       friendsListDiv.append( processTemplate(template, data[i]) );
     }
   });
