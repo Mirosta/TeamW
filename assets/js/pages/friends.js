@@ -52,7 +52,7 @@ function addFriendsToContainer() {
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
         '<div class="collapse" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">Test</div></div></div>';
     var friendsListDiv = $("#friends-list-div");
-    friendsListDiv.remove();
+    friendsListDiv.html("");
 
     friends.getAll(function (success, data) {
         console.log(data);
