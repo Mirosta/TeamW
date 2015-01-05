@@ -60,7 +60,7 @@ function addFriendsToContainer($container) {
         '<span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">' +
         '{{readOnly.netAmount}}</span>)</div>' +
         '<div class="btn-group pull-right pay-button" role="group">' +
-        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal">' +
+        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-payment-modal">' +
         '<i class="glyphicon glyphicon-gbp"></i></button>' +
         '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal">' +
         '<i class="glyphicon glyphicon-trash"></i>' +
@@ -153,11 +153,31 @@ function expandFriend(e)
         {
             lookupField({debts: ['readOnly.credits', 'readOnly.debts']}, data, function(success, data)
             {
-                var template = '<div class="debt-container"><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.amountRemaining}}</span>)</div><div class="col-md-3">{{created}}</div><div class="col-md-3"><span style="color:{{readOnly.statusColor}};" "class="glyphicon {{readOnly.statusClass}}"></span></div>' +
+                var template = '<div class="debt-container" data-debt-key={{key}}><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.amountRemaining}}</span>)</div><div class="col-md-3">{{created}}</div><div class="col-md-3"><span style="color:{{readOnly.statusColor}};" "class="glyphicon {{readOnly.statusClass}}"></span></div>' +
                     '<div class="btn-group pull-right pay-button" role="group">{{readOnly.buttonHtml}}</div>' +
                     '</div>';
-                var debtButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button>';
+
+                console.log(data);
+
+                var debtButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-payment-modal"><i class="glyphicon glyphicon-gbp"></i></button>';
                 var creditButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-remove-circle"></i></button>';
+                $('#add-payment-modal').on('show.bs.modal', function(e) {
+                    var debtKey = $(e.relatedTarget).parent().parent().data('debt-key');
+                    console.log(e);
+                    console.log(debtKey);
+
+                    $('button.submitPayment').click(function (e) {
+
+                        var amount = $('input#paymentAmount').val();
+                        var description = $('textarea#paymentDescription').val();
+                        var payment = payments.newInstance({
+                            "debt": debtKey,
+                            "amount": parseInt(amount),
+                            "description": description
+                        });
+                        payment.create(function(success, data) { if(success) location.reload();});
+                    });
+                });
                 outputDebts(data.readOnly.debts, $debtContainer, "#CF000F", "#26A65B", template, debtButton);
                 outputDebts(data.readOnly.credits, $creditContainer, "#26A65B", "#CF000F", template, creditButton);
             });
