@@ -18,6 +18,7 @@ class GroupHandler(ModelHandler):
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])
 
+
     def postAPI(self, controller, parameter, postData):
         return '{error: "Not yet implemented"}'
 

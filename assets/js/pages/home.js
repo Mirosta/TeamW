@@ -63,6 +63,7 @@ function loadGroupsIntoDashboard() {
     $('#groups-content-div').html("");
     for (i=0; i < groupData.length; i++) {
       groupData[i].readOnly.numberClass = (groupData[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+      groupData[i].readOnly.netAmount = penceToPound(groupData[i].readOnly.netAmount);
       $('#groups-content-div').append( processTemplate(template, groupData[i]) );
     } 
   });
@@ -74,6 +75,7 @@ function loadFriendsIntoDashboard() {
     $('#friends-content-div').html(""); 
     for (i=0; i < friendData.length; i++) {
       friendData[i].readOnly.numberClass = (friendData[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+      friendData[i].readOnly.netAmount = penceToPound(friendData[i].readOnly.netAmount);
       $('#friends-content-div').append( processTemplate(template, friendData[i]) );
     }
   });

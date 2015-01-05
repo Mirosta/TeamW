@@ -12,17 +12,19 @@ from payme.controller.globals import Global
 from google.appengine.ext import ndb
 
 class User (Entity, Actionable):
-    # Database for users
 
     notUpdatableAttributes = ['googleID', 'email', 'created', 'uniqueProperty']
 
+    # obtained from google account
     googleID = ndb.StringProperty()
     familyName = ndb.StringProperty()
     email = ndb.StringProperty()
+
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.KeyProperty(kind=Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
     profilePicture = ndb.StringProperty()
+
     credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
@@ -30,11 +32,9 @@ class User (Entity, Actionable):
     # notification queue
     messageQueue = ndb.KeyProperty(kind=Notification, repeated=True)
 
+    #condition to allow this model class to be updated (i.e. you must be acting as this user to change it)
     def isUpdateAllowed(self):
         return self.getCurrentUser() == self.key
-
-    def update(self, values):
-        super(self, values)
 
     # Hacky way to return user for model
     def getMe(self):
@@ -102,7 +102,6 @@ class User (Entity, Actionable):
         else:
             return self.getCR() - self.getDR()
 
-    # create new group
     def addGroup(self, group):
         if self.isMe and group not in self.groups:
             self.groups.append(group)
@@ -110,12 +109,13 @@ class User (Entity, Actionable):
         else:
             raise SecurityError()
 
-
     def getFriends(self):
         if self.isMe() or self.getCurrentUser() in self.friends:
             output = []
             for friend in self.friends:
-                output.append(User.query(User.key == friend).fetch()[0])
+                results = User.query(User.key == friend).fetch(1);
+                if results.__len__() > 0:
+                    output.append(results[0])
             return output
         else:
             raise SecurityError()
@@ -124,12 +124,13 @@ class User (Entity, Actionable):
         if self.isMe():
             output = []
             for group in self.groups:
-                output.append(Group.query(Group.key == group).fetch()[0])
+                results = Group.query(Group.key == group).fetch(1);
+                if results.__len__() > 0:
+                    output.append(results[0])
             return output
         else:
             raise SecurityError()
 
-    # add friend
     def addFriend(self, friend):
         if self.isMe():
             self.friends.append(friend)
@@ -183,17 +184,20 @@ class User (Entity, Actionable):
 
         return output
 
+    def getAllRelatedDebts(self):
+        credits = self.getDRs()
+        debts = self.getCRs()
+
+        debts.extend(credits)
+        return debts
+
     def getAllPayments(self):
-        debts = self.getDRs()
-        credits = self.getCRs()
+        allDebts = self.getAllRelatedDebts()
 
         payments = []
 
-        for debt in debts:
+        for debt in allDebts:
             payments.extend(debt.getPayments())
-
-        for credit in credits:
-            payments.extend(credit.getPayments())
 
         return payments
 
@@ -205,3 +209,16 @@ class User (Entity, Actionable):
     # debug
     def retrieveUserName(self):
         return self.googleID
+
+    def isFriend(self, friend):
+        return friend.key in self.friends
+
+    def getFriendRequests(self):
+        otherUsers = User.query(User.key != self.key).fetch()
+        friendRequests = []
+
+        for otherUser in otherUsers:
+            if otherUser.isFriend(self) and not self.isFriend(otherUser):
+                friendRequests.append(otherUser)
+
+        return friendRequests

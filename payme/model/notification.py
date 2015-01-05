@@ -4,14 +4,14 @@ from actionable import Actionable
 class Notification(Actionable):
     'A Notification object is used to store (for display) information following a user action'
 
-    # Type of notification, i.e. info, error, success (blue, red, green?)
+    # Type of notification, i.e. info, error, success, misc, friend request
     type = ndb.StringProperty()
 
     content = ndb.StringProperty()
 
+    # Whether the notification has been seen by the user yet, obviously false by default
     seen = ndb.BooleanProperty(default=False)
 
-    # possibly unnecessary, useful for setting type neatly?
     class Type:
         INFO = "INFO"
         ERROR = "ERROR"
