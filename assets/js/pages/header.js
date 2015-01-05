@@ -10,7 +10,6 @@ function initialisePage() {
 
 function setupNotificationContainer() {
 
-  var width = $("#notificationContainer").width();
   $("#notificationLink").click(function() {
     $("#notificationContainer").fadeToggle(300);
     $("#notification_count").fadeOut("slow");

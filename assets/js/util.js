@@ -59,7 +59,7 @@ function setVariable(templateValues, variableParts, offset, value, arrayIndex)
 function stripNonSerializableFields (obj, fields)
 {
     var copy = {};
-    for(key in obj) //Loop over object properties
+    for(var key in obj) //Loop over object properties
     {
         copy[key] = obj[key]; //Copy value of property
     }
@@ -112,7 +112,7 @@ function apiCall(url, httpMethod, object, callback)
 function lookupField(types, object, callback)
 {
     var noTypes = 0;
-    for(type in types)
+    for(var type in types)
     {
         noTypes+= types[type].length;
     }
@@ -144,7 +144,7 @@ function lookupField(types, object, callback)
                 }
                 if(key.length === 0)
                 {
-                    typeComplete(true)
+                    typeComplete(true);
                 }
             }
             else

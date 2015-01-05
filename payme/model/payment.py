@@ -50,6 +50,18 @@ class Payment(Actionable):
     def isRemoveAllowed(self):
         return self.isUpdateAllowed()
 
+    def queryUser(self, key):
+        return user.User.query(user.User.key == key).fetch()[0]
+
+    def notifyCreditor(self):
+        payerObj = self.getPayer()
+
+        n = Notification(type=Notification.Type.INFO, content=payerObj.name + " has made a payment of " + Global.formatCurrency(self.amount) + " to you on " + str(self.created.strftime('%x')) + ".")
+
+        n.put()
+
+        self.queryUser(self.getDebt().creditor).giveNotification(n)
+
     # An overridden version of Actionable's update()
     # This super call is made and notifications are made depending on whether
     # the payment has just been disputed and/or approved.
@@ -65,13 +77,15 @@ class Payment(Actionable):
                 n = Notification(type=Notification.Type.INFO, content="Your disputed payment of GBP" + Global.formatCurrency(self.amount) + " with " + self.getCurrentUser().name + " made on " + str(self.created.strftime('%x')) + " has been resolved.")
 
             n.put()
-            user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
+
+            self.queryUser(self.payer).giveNotification(n)
 
         if 'approvedByCreditor' in values.keys():
             n = Notification(type=Notification.Type.INFO, content=self.getCurrentUser().name + " has accepted your payment of " + Global.formatCurrency(self.amount) + " made on " + str(self.created.strftime('%x')) + " .")
             n.put()
 
-            user.User.query(user.User.key == self.payer).fetch()[0].giveNotification(n)
+            self.queryUser(self.payer).giveNotification(n)
+
 
     # Get key for the current user
     def getCurrentUser(self):

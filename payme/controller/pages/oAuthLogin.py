@@ -15,7 +15,8 @@ class OAuthHandler(PageHandler):
         super(OAuthHandler, self).__init__(None, Parameter(), {'login': OAuthLoginHandler(), 'callback': OAuthCallbackHandler()})
 
 class OAuthLoginHandler(VerbHandler):
-    REDIRECT_URI = 'http://localhost:8080/oauth/callback'
+    PROTOCOL = "http://"
+    REDIRECT_URI = '/oauth/callback'
     CLIENT_ID = '399506081912-4dg74rjo7k6huk0f5bsid5tst65qd7c2.apps.googleusercontent.com'
     CLIENT_SECRET = 'Ih38GJ4bMO9TTDuhPpYKv9rS'
     oAuthFlow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, str.join(' ',[Scope.OpenID, Scope.Email]), redirect_uri=REDIRECT_URI)
@@ -30,6 +31,8 @@ class OAuthLoginHandler(VerbHandler):
     def authorise(self, controller, scopes = [Scope.OpenID, Scope.Email]):
         OAuthLoginHandler.oAuthFlow.scope = str.join(' ', scopes)
         logging.info('Redirecting')
+        logging.info(controller.request.host)
+        self.oAuthFlow.redirect_uri = self.PROTOCOL + controller.request.host + self.REDIRECT_URI
         redirectTo = OAuthLoginHandler.oAuthFlow.step1_get_authorize_url()
         controller.redirect(redirectTo)
 
