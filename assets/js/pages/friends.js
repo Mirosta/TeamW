@@ -39,12 +39,18 @@ function removeFriend(key){
             console.log("got friend")
             console.log(data);
         }else{
-            console.log("err");
+            console.log("error");
             console.log(data);
         }
-
     });
 
-    friend.remove();
+    friend.remove(function(success, data) {
+        if(success){
+            console.log("friend removed :-(");
+        }else{
+            console.log("error")
+            console.log(data);
+        }
+    });
 
 }
