@@ -25,19 +25,51 @@ function initialisePage() {
 
     $('#edit-group-modal').on('show.bs.modal', function(e) {
         var key = $(e.relatedTarget).parent().parent().data('group-key');
-
-        $('#edit-group-sbmt').click(function(e) {
-            groups.get(key, function(success, grp) {
+        var grp = null;
+        var keys = [];
+        groups.get(key, function(success, data) {
                if (success) {
-                   console.log(grp);
-                   grp.name = $('#edit-group-name').val();
-                   grp.update(function (success, data){
-                      if (success) {
-                        location.reload();
-                      }
-                   });
+                   grp = data;
+                   $('#edit-group-name').val(grp.name);
+                   var members = "";
+                   var count = 0;
+                   for (elem in grp.users) {
+                       friends.get(grp.users[elem], function (success, usr) {
+                          if (success) {
+                              members += usr.email + ", ";
+                              keys[usr.email] = usr.key;
+                              count++;
+                              if (count === grp.users.length) {
+                                  $('#edit-group-members').val(members);
+                              }
+                          }
+                       });
+                   }
                }
-           });
+        });
+        $('#edit-group-sbmt').click(function(e) {
+               grp.name = $('#edit-group-name').val();
+               var emails = $('#edit-group-members').val().split(", ");
+               var newkeys = [];
+               friends.getAll(function (success, all) {
+                  if (success) {
+                      for (var i = 0; i < emails.length; i++) {
+                          for (var j = 0; j < all.length; j++) {
+                              if (emails[i] === all[j].email) {
+                                  newkeys.push(all[j].key);
+                                  break;
+                              }
+                          }
+                      }
+                      console.log(newkeys);
+                      grp.users = newkeys;
+                      grp.update(function (success, data){
+                        if (success) {
+                            location.reload();
+                        }
+                      });
+                  }
+               });
         });
     });
 
