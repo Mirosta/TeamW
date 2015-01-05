@@ -1,0 +1,21 @@
+
+
+.profileNotification.friendRequestNotification {
+    background-color: #007dcb;
+}
+
+.profileNotification.infoNotification {
+    background-color: #26A65B;
+}
+
+.profileNotification.errorNotification {
+  background-color: #ff0000;
+}
+
+.profileNotification.miscNotification {
+  background-color: #374a61;
+}
+
+.profileNotification.successNotification {
+    background-color: lawngreen;
+}

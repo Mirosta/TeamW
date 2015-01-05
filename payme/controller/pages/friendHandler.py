@@ -7,7 +7,8 @@ class FriendHandler(ModelHandler):
 
     def __init__(self):
         super(FriendHandler, self).__init__('friends',
-                                            {'add' : FriendHandler.AddHandler()},
+                                            {'add' : FriendHandler.AddHandler(),
+                                             'request': FriendHandler.RequestHandler()},
                                             'getFriends', User, [],
                                             [ReadOnlyFunction('getOE', 'netAmount'),
                                              ReadOnlyFunction('getDRKeys', 'debts'),
@@ -19,3 +20,9 @@ class FriendHandler(ModelHandler):
         def __init__(self):
             super(FriendHandler.AddHandler, self).__init__('addFriend')
             self.parameter = Parameter(Parameter.Type.NoParameter, False, False)
+
+    class RequestHandler(VerbHandler):
+
+        def __init__(self):
+            super(FriendHandler.RequestHandler, self).__init__('requestFriend')
+
