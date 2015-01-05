@@ -88,7 +88,8 @@ function expandGroup(e)
     var $friendContainer = $target.find("div.friends");
     console.log(e);
 
-    var template = '<div class="friends-container"><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> ' +
+    var template = '<div class="friends-container"><div class="col-md-3"><span style="font-size:16px;" id="friend"> {{name}}</span><br> ' +
+                           '<hr style="margin-bottom:5px;">' +
                            '</div></div>';
     $friendContainer.html("");
 
