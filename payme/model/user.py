@@ -145,6 +145,14 @@ class User (Entity, Actionable):
         else:
             raise SecurityError()
 
+    def removeFriend(self, friend):
+        if self.isMe():
+            if friend in self.friends:
+                self.friends.remove(friend)
+                self.put()
+        else:
+            raise SecurityError()
+
     def getDebts(self):
         return {self : self.getCRs()}
 

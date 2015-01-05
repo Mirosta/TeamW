@@ -1,7 +1,8 @@
 from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, VerbHandler, Parameter
 from payme.model.user import User
-from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler
+from payme.controller.modelHandler import ModelHandler, RelatedModel, ReadOnlyFunction, ModelAddHandler, \
+    ModelRemoveHandler
 import json
 
 
@@ -10,7 +11,8 @@ class FriendHandler(ModelHandler):
     def __init__(self):
         super(FriendHandler, self).__init__('friends',
                                             {'add' : FriendHandler.AddHandler(),
-                                             'request': FriendHandler.RequestHandler(self)},
+                                             'request': FriendHandler.RequestHandler(self),
+                                             'remove': FriendHandler.RemoveHandler()},
                                             'getFriends', User, [],
                                             [ReadOnlyFunction('getOE', 'netAmount'),
                                              ReadOnlyFunction('getDRKeys', 'debts'),
@@ -39,6 +41,17 @@ class FriendHandler(ModelHandler):
             try:
                 json_obj = json.loads(postData)
                 controller.getCurrentUser().addFriend(User.query(User.email == json_obj['email']).fetch(1)[0].key)
+                return '{"success": 1}'
+            except Exception as e:
+                raise e
+
+
+    class RemoveHandler(ModelRemoveHandler):
+
+        def postAPI(self, controller, parameter, postData):
+            try:
+                friend = validator.retrieve(postData, self.type)
+                controller.getCurrentUser().removeFriend(friend.key)
                 return '{"success": 1}'
             except Exception as e:
                 raise e
