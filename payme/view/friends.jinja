@@ -33,19 +33,8 @@
                     <label for="debtor" class="col-md-2 control-label form-label top-buffer">debtor:</label>
                     <div class="col-md-5 top-buffer">
                         <select class="form-control" id="debtor">
-                            <option>trisha</option>
-                            <option>alex</option>
-                            <option>polly</option>
+
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="debtor-friend" class="col-md-2 control-label form-label">debtor type:</label>
-                    <div class="col-md-4">
-                        <label class="radio-inline">
-                            <input checked type="radio" name="debtor-type" id="debtor-friend" value="friend" >friend</label>
-                        <label class="radio-inline">
-                            <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
                     </div>
                 </div>
                 <div class="form-group">
@@ -85,12 +74,19 @@
             <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4>
           </div>
           <div class="modal-body">
-            <label for="addDebt-amount">e-mail:</label>
-            <input type="number" class="form-control"></input>
+            <div id="addDebt-div">
+              <form>
+                <div class="form-group">
+                  <label for="email">e-mail:</label>
+                  <input type="text" class="form-control" id="email"></input>
+                </div>
+              </form>
+            </div>
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-            <button type="button" class="btn btn-primary">submit</button>
+            <button type="button" id="submit" class="btn btn-primary">submit</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

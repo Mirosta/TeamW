@@ -64,9 +64,13 @@ class RemoveHandler(ModelRemoveHandler):
         super(RemoveHandler, self).__init__('remove')
 
     def postAPI(self, controller, parameter, postData):
-        debt = validator.retrieve(postData, self.type)
-        debt.removeMe()
-        return '{"success": 1}'
+        try:
+            debt = validator.retrieve(postData, self.type)
+            # remove entity from database
+            debt.removeMe()
+            return '{"success": 1}'
+        except Exception as e:
+            raise e
 
 
 class PayHandler(VerbHandler):

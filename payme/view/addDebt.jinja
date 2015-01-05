@@ -207,6 +207,17 @@
             }
         });
 
+        $('form[role="form"]').submit(function() {
+            var me = user.getAll(function (success, data) {
+            if (success) {
+                var newDebt = debts.newInstance({"amount": parseInt($('#amount').val()),
+                                             "creditor": data[0].key,
+                                             "description": $('#description').val()});
+                newDebt.create();
+            }});
+            return false;
+        });
+
     });
 </script>
 

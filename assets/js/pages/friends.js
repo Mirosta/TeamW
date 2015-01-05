@@ -16,6 +16,18 @@ function initialisePage() {
       $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
     });
 
+   //character counter for debt description
+    $('#description').keyup(function() {
+        var max = parseInt($(this).attr("maxlength"));
+        var count = $(this).val().length;
+        if(count >= max) {
+            $('#chars-left').text("0 characters left");
+        } else {
+            var remaining =  max - count;
+            $('#chars-left').text(remaining + " characters left");
+        }
+    });
+
     $('#delete-modal').on('show.bs.modal', function(e) {
         friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
@@ -24,6 +36,12 @@ function initialisePage() {
     });
     $('#delete-modal').on('hidden.bs.modal', function() {
         $('[data-friend-key=' + friendKey + ']').remove();
+    });
+
+
+    $('#submit').click(function() {
+        var newFriend = friends.newInstance({'email': $('#email').val()});
+        newFriend.create();
     });
   });
 }
@@ -36,8 +54,10 @@ function addFriendsToContainer() {
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
-        '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">';
+        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" id="more" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
+        '<div class="collapse moreInfo"><div class="panel panel-default"><div class="panel-body"><div class="row"></div><div class="row"></div></div></div></div>';
+
     var friendsListDiv = $("#friends-list-div");
     friendsListDiv.html("");
 
@@ -50,11 +70,14 @@ function addFriendsToContainer() {
                 data[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
             }
 
+            data[i].num = i;
+
             friendsListDiv.append(processTemplate(template, data[i]));
         }
+        $('div.user-container').on('click', '#more', expandFriend)
     });}
 
-function removeFriend(key){
+function removeFriend(key) {
 
     friends.get(key, function(success, data) {
         if(success){
@@ -71,4 +94,9 @@ function removeFriend(key){
             console.log(data);
         }
     });
+}
+
+function populateDebtorDropdown() {
+
+    users.getAll()
 }
