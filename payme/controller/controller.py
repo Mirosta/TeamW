@@ -152,7 +152,7 @@ class Controller (webapp2.RequestHandler):
                 if httpVerb == HTTPVerb.GET: return contentHandler.getAPI(self, parameter)
                 elif httpVerb == HTTPVerb.POST: return contentHandler.postAPI(self, parameter, self.request.body)
             except Exception as e:
-                return '{"error": %s}' % e
+                return '{"error": "%s"}' % e
         else:
             if httpVerb == HTTPVerb.GET: return contentHandler.getHTML(self, parameter)
             elif httpVerb == HTTPVerb.POST: return contentHandler.postHTML(self, parameter, self.request.POST)
