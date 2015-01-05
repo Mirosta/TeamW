@@ -24,19 +24,19 @@ function Model(modelUrl, idOrObj)
     {
         var url = apiUrl + thisObj.modelUrl + createUrl;
         //Create object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.update = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + updateUrl;
         //Update object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.remove = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + deleteUrl;
         //Remove object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.getFields = function()
     {
