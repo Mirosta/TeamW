@@ -36,10 +36,12 @@ class BuildDB(PageHandler):
             john = self.createUser('john', "John Smith")
             david = self.createUser('david', "David Hutchinson")
             dingdong = self.createUser('dingdong', "Ding Dong")
+            jim = self.createUser('jim', 'Jim')
         except:
             john = self.queryUser('john')
             david = self.queryUser('david')
             dingdong = self.queryUser('dingdong')
+            jim = self.queryUser('jim')
 
         self.output += 'Creating group, Wolfpack... <br>'
         group = self.createNewGroup('Wolfpack')
@@ -62,8 +64,11 @@ class BuildDB(PageHandler):
 #         Add friends
         self.output += 'Becoming friends with John, David and Dingdong <br>'
         currentUser.addFriend(john.key)
+        john.addFriendForce(currentUser.key)
         currentUser.addFriend(david.key)
+        david.addFriendForce(currentUser.key)
         currentUser.addFriend(dingdong.key)
+        jim.addFriend(currentUser.key)
 
 #         Add group
         self.output += 'Adding Wolfpack to you... <br>'

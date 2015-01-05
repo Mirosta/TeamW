@@ -150,6 +150,7 @@ class TestPage(PageHandler):
 
         # alex = self.queryUserByName('Alex')
         pollawat = self.queryUserByName('Pollawat')
+        tom = self.queryUserByName('Thomas')
         john = self.queryUserByName('John Smith')
 
         # pollawat.addFriend(alex.key)
@@ -157,9 +158,21 @@ class TestPage(PageHandler):
 
         # debt = Debt.query(Debt.creditor == alex.key, Debt.debtor == pollawat.key).fetch()[0]
 
-        debt = Debt.query(Debt.creditor == pollawat.key).fetch()[0]
+        # debt = Debt.query(Debt.creditor == pollawat.key).fetch()[0]
 
-        self.createPayments(john.key, debt.key, 10)
+        # jim = self.createUser('jim', 'Jim')
+
+        # jim = self.queryUser('jim')
+
+        # arthur = self.createUser('arthur', 'Arthur')
+
+        # arthur = self.queryUser('arthur')
+        # arthur.addFriendForce(pollawat.key)
+
+        james = self.createUser('james', 'James')
+        james.addFriendForce(tom.key)
+
+        # self.createPayments(john.key, debt.key, 10)
 
         # payment = self.createPayments(pollawat.key, debt.key, 10)
 

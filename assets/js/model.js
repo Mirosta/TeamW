@@ -9,9 +9,9 @@ function Model(modelUrl, idOrObj)
     if(!idOrObj) this.id = null; //No id or object given
     else if(typeof idOrObj === "object") //Object given, copy properties from it
     {
-        for(key in idOrObj)
+        for(var key in idOrObj)
         {
-            this[key] = idOrObj[key];
+            if(idOrObj.hasOwnProperty(key)) this[key] = idOrObj[key];
         }
     }
     else this.id = idOrObj; //ID given, just set the id
@@ -42,7 +42,7 @@ function Model(modelUrl, idOrObj)
     {
         var retArr = [];
         var strippedThis = stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']);
-        for(key in strippedThis)
+        for(var key in strippedThis)
         {
             if(typeof strippedThis[key] !== "function")
             {
@@ -50,7 +50,7 @@ function Model(modelUrl, idOrObj)
             }
         }
 
-        for(key in thisObj.readOnly)
+        for(var key in thisObj.readOnly)
         {
             if(typeof thisObj.readOnly[key] !== "function")
             {
@@ -127,7 +127,7 @@ function ModelClass(modelUrl)
     this.newInstance = function(object) //Object should contain the fields to set in the model object
     {
         return new Model(thisObj.modelUrl, object);
-    }
+    };
 }
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
@@ -144,6 +144,8 @@ var user = new ModelClass("user");
 var debts = new ModelClass("debts");
 
 var notifications = new ModelClass("notifications");
+
+var friendRequests = new ModelClass("friends/request")
 
 //Model objects have .update, .create and .remove methods
 /*

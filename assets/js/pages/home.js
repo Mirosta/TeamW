@@ -4,19 +4,41 @@ initialisePage();
 function initialisePage() {
   $(document).ready(function() {
     $div = $("#dshbrd-recent-div"); // temporary
-    loadRecentTransactions($div);
+    loadRecentTransactions();
     loadGroupsIntoDashboard();
     loadFriendsIntoDashboard();
   });
 }
 
-function loadRecentTransactions($div) {
+/*function loadRecentTransactions($div) {
   payments.getAll(function(success, paymentData) {
     console.log(paymentData);
     initialiseDataTables(paymentData, $div);
   }, 10, null, "-created");
-}
+}*/
 
+function loadRecentTransactions() { //copied from history - added the $div for transactions and limited to 10
+  payments.getAll(function(success, paymentData) {
+
+    console.log(paymentData);
+
+    var synchronised = new Synchronise(paymentData.length,
+        function(success, error)
+        {
+            if(success) initialiseDataTables(paymentData, $div);
+            else console.log(error);
+        });
+
+    for(var i = 0; i < paymentData.length; i++)
+    {
+        lookupField({friends: ["payer","readOnly.payee"]}, paymentData[i], function (success, data)
+        {
+            if(success) synchronised.complete();
+            else synchronised.failed(data);
+        } );
+    }
+  }, 10, null, "-created");
+}
 
 function initialiseDataTables(paymentData, $div) {
   $(document).ready(function() {
@@ -80,3 +102,5 @@ function loadFriendsIntoDashboard() {
     }
   });
 }
+
+
