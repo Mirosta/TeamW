@@ -8,6 +8,8 @@ from payme.model.notification import Notification
 from datetime import date, datetime
 from payme.controller.contentHandler import PageHandler
 
+from payme.controller.globals import Global
+
 import json
 
 from google.appengine.ext import ndb
@@ -17,6 +19,10 @@ class TestPage(PageHandler):
     def __init__(self):
         super(TestPage, self).__init__('testingPage')
         self.output = ''
+
+    # Get key for the current user
+    def getCurrentUser(self):
+        return Global.controller.getCurrentUser()
 
 #   MAIN
     def getHTML(self, controller, parameter):
@@ -169,8 +175,10 @@ class TestPage(PageHandler):
         # arthur = self.queryUser('arthur')
         # arthur.addFriendForce(pollawat.key)
 
-        james = self.createUser('james', 'James')
-        james.addFriendForce(tom.key)
+        # james = self.createUser('james', 'James')
+        # james.addFriendForce(tom.key)
+
+        debt = self.createDebt(john.key, self.getCurrentUser().key, 2000)
 
         # self.createPayments(john.key, debt.key, 10)
 
