@@ -103,6 +103,7 @@ function initialisePage() {
                   }
                });
         });
+        
     });
   });
 }
@@ -194,6 +195,9 @@ function removeGroupMember(groupKey, memberKey) {
                 }
             }
             data.users = memberKeyArr;
+            data.update();
+        }else{
+          console.log(data);
         }
     })
 
