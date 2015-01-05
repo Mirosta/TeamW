@@ -1,4 +1,4 @@
-
+from payme.controller.globals import Global
 from payme.model.user import User
 from payme.model.debt import Debt
 from payme.model.payment import Payment
@@ -148,19 +148,24 @@ class TestPage(PageHandler):
         #
         # debt.update({'disputed': True})
 
-        alex = self.queryUserByName('Alex')
+        # alex = self.queryUserByName('Alex')
         pollawat = self.queryUserByName('Pollawat')
+        john = self.queryUserByName('John Smith')
 
         # pollawat.addFriend(alex.key)
         # alex.addFriend(pollawat.key)
 
-        debt = Debt.query(Debt.creditor == alex.key, Debt.debtor == pollawat.key).fetch()[0]
+        # debt = Debt.query(Debt.creditor == alex.key, Debt.debtor == pollawat.key).fetch()[0]
+
+        debt = Debt.query(Debt.creditor == pollawat.key).fetch()[0]
+
+        self.createPayments(john.key, debt.key, 10)
 
         # payment = self.createPayments(pollawat.key, debt.key, 10)
 
-        payment = Payment.query(Payment.payer == pollawat.key).fetch()[0]
+        # payment = Payment.query(Payment.payer == pollawat.key).fetch()[0]
 
-        payment.update({'disputed': True})
+        # payment.update({'disputed': True})
 
         # self.createDebt(alex.key, pollawat.key, 100)
 
@@ -302,7 +307,7 @@ class TestPage(PageHandler):
 class JSonAPIEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date) or isinstance(obj, datetime):
-            return obj.strftime('%Y/%m/%d %H:%M:%S')
+            return obj.strftime(Global.JSONDateTime)
         elif isinstance(obj, ndb.Key):
             return obj.urlsafe()
         elif isinstance(obj, ndb.Model):

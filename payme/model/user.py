@@ -12,17 +12,19 @@ from payme.controller.globals import Global
 from google.appengine.ext import ndb
 
 class User (Entity, Actionable):
-    # Database for users
 
     notUpdatableAttributes = ['googleID', 'email', 'created', 'uniqueProperty']
 
+    # obtained from google account
     googleID = ndb.StringProperty()
     familyName = ndb.StringProperty()
     email = ndb.StringProperty()
+
     created = ndb.DateTimeProperty(auto_now_add=True)
     groups = ndb.KeyProperty(kind=Group, repeated=True)
     friends = ndb.KeyProperty(kind='User', repeated=True)
     profilePicture = ndb.StringProperty()
+
     credentials = ndb.PickleProperty() # Store the OAuthCredentials
 
     uniqueProperty = 'googleID'
@@ -30,11 +32,9 @@ class User (Entity, Actionable):
     # notification queue
     messageQueue = ndb.KeyProperty(kind=Notification, repeated=True)
 
+    #condition to allow this model class to be updated (i.e. you must be acting as this user to change it)
     def isUpdateAllowed(self):
         return self.getCurrentUser() == self.key
-
-    def update(self, values):
-        super(self, values)
 
     # Hacky way to return user for model
     def getMe(self):
@@ -102,14 +102,12 @@ class User (Entity, Actionable):
         else:
             return self.getCR() - self.getDR()
 
-    # create new group
     def addGroup(self, group):
         if self.isMe and group not in self.groups:
             self.groups.append(group)
             self.put()
         else:
             raise SecurityError()
-
 
     def getFriends(self):
         if self.isMe() or self.getCurrentUser() in self.friends:
@@ -133,7 +131,6 @@ class User (Entity, Actionable):
         else:
             raise SecurityError()
 
-    # add friend
     def addFriend(self, friend):
         if self.isMe():
             self.friends.append(friend)

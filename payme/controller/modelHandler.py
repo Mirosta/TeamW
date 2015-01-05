@@ -7,11 +7,9 @@ from google.appengine.ext.ndb import Key
 from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
-import sys
-import types
-from payme.controller.exceptions import InvalidParameterError, InvalidVerbType, AddNotAllowed
-from payme.model.debt import Debt
-from payme.model.user import User
+
+from payme.controller.exceptions import InvalidVerbType, AddNotAllowed
+from payme.controller.globals import Global
 
 
 class RelatedModel:
@@ -150,7 +148,7 @@ class ModelHandler(PageHandler):
     class JSonAPIEncoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, date) or isinstance(obj, datetime):
-                return obj.strftime('%Y/%m/%d %H:%M:%S')
+                return obj.strftime(Global.JSONDateTime)
             elif isinstance(obj, ndb.Key):
                 return obj.urlsafe()
             elif isinstance(obj, ndb.Model):
@@ -173,11 +171,8 @@ class ModelAddHandler(VerbHandler):
         try:
             entity = validator.create(postData, self.type)
             # add new entity to database
-            if entity.isAddAllowed():
-                entity.put()
-            else:
-                raise AddNotAllowed()
-            return self.type._properties
+            entity.put()
+            return '{"success": 1}'
         except Exception as e:
             raise e
 

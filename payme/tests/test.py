@@ -10,13 +10,14 @@ from datetime import date, datetime
 from payme.controller.globals import Global
 
 import json
+import unittest
 
 from google.appengine.ext import ndb
 
 
-class BuildDB(PageHandler):
+class UnitTest(unittest.TestCase, PageHandler):
     def __init__(self):
-        super(BuildDB, self).__init__('testingPage')
+        super(UnitTest, self).__init__('testingPage')
         self.output = ''
 
      # Get key for the current user
@@ -25,13 +26,11 @@ class BuildDB(PageHandler):
 
 #   MAIN
     def getHTML(self, controller, parameter):
-        self.output += "Starting... <br>"
 
 #         CREATE STUFF!! - ONLY RUN ONCE
 
         currentUser = self.getCurrentUser()
 
-        self.output += 'Creating users... <br>'
         try:
             john = self.createUser('john', "John Smith")
             david = self.createUser('david', "David Hutchinson")
@@ -41,18 +40,14 @@ class BuildDB(PageHandler):
             david = self.queryUser('david')
             dingdong = self.queryUser('dingdong')
 
-        self.output += 'Creating group, Wolfpack... <br>'
         group = self.createNewGroup('Wolfpack')
 
-        self.output += 'Creating debt (Dingdong to John and you and John)... <br>'
         debt1 = self.createDebt(dingdong.key, john.key, 5000)
         debt2 = self.createDebt(currentUser.key, john.key, 5000)
 
-        self.output += 'Creating payments... <br>'
         self.createPayments(john.key, debt1.key, 300)
         self.createPayments(john.key, debt2.key, 200)
 
-        self.output += 'Create notifications... <br><br>'
         notification1 = self.createNotification(Notification.Type.INFO, 'Test notification 1')
         notification2 = self.createNotification(Notification.Type.INFO, 'Test notification 2')
         notification3 = self.createNotification(Notification.Type.INFO, 'Test notification 3')
@@ -60,31 +55,42 @@ class BuildDB(PageHandler):
 #         ASSOCIATE STUFF!! - ONLY RUN ONCE
 
 #         Add friends
-        self.output += 'Becoming friends with John, David and Dingdong <br>'
         currentUser.addFriend(john.key)
         currentUser.addFriend(david.key)
         currentUser.addFriend(dingdong.key)
 
 #         Add group
-        self.output += 'Adding Wolfpack to you... <br>'
         currentUser.addGroup(group.key)
 
 #         Add member of the group
-        self.output += 'Adding Dingdong to your Wolfpack...<br>'
         group.addMember(john.key)
         group.addMember(dingdong.key)
 
 #           Give John notification
-        self.output += 'Sending John notification...<br>'
         currentUser.giveNotification(notification1)
         currentUser.giveNotification(notification2)
         david.giveNotification(notification3)
 
-        self.output += 'Done... <br>'
-        # self.output += "<br>" + self.serialize(group)
+        # Unit Cases
+        with self.assertRaises(ValueError):
+            # check that OE's are calculated correctly,
+            # this also implies that other functions called
+            # are correct as getOE called pretty much every other functions
+            self.assertEqual(john.getOE(), 4800)
+            self.assertEqual(dingdong.getOE(), 4700)
+
+            # check that notifications are sent to correct user,
+            self.assertEqual(Notification.query(Notification.key == currentUser.getNotifications()).fetch()[0].getContent(),
+                             'Test notification 1')
+            # in this case, check that 'Test notification 3' is correctly sent to David
+            self.assertEqual(Notification.query(Notification.key == david.getNotifications()).fetch()[0].getContent(),
+                             'Test notification 3')
+
+            # check that group is created and associated correctly to the user
+            self.assertEqual(group.key, currentUser.groups[0])
 
 #   LEAVE THIS ALONE!
-        return super(BuildDB, self).getHTML(controller, parameter)
+        return super(UnitTest, self).getHTML(controller, parameter)
 
 
 #   HELPER CLASSES
