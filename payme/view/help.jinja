@@ -1,9 +1,9 @@
     {{ page.header() }}
             <div class="row">
-              <h1 class="page-header bold">frequently asked questions</h1>
+              <h1 class="page-header bold">Getting started</h1>
             </div>
             <div class="row">
-              
+                <a class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Show me how</a>
             </div>
           </div>
         </div>
@@ -17,7 +17,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
-
+    
+    <!-- Intro.js -->
+    <script src="/assets/js/introjs/intro.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/introjs/introjs.min.css">
+    <link rel="stylesheet" href="/assets/css/pages/help.css">
+    
     <!-- DataTables initialisation options -->
     <script>
       $(document).ready(function() {
@@ -30,7 +35,7 @@
         });
       });
     </script>
-
+    
     <!-- Toggle icon -->
     <script>
       function toggleChevron(e) {
