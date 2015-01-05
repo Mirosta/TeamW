@@ -46,7 +46,7 @@
           {% if controller.getCurrentUser() is not none %}
             <li><a class="no-hover">hi {{ controller.getCurrentUser().name }} :-)</a></li>
             <li id="notification_li" style="display:table;">
-              <a href="#" id="notificationLink" data-step="1" data-intro="View recent recent notifcations, including new debts, and friend requests">notifications<span class="badge" style="margin-left:10px;">0</span></a>
+              <a href="#" id="notificationLink" data-step="1" data-intro="view recent notifcations, including new debts, and friend requests">notifications<span class="badge" style="margin-left:10px;">0</span></a>
               <div id="notificationContainer">
                 <div id="notificationsBody" class="notifications"></div>
                 <hr>
@@ -55,10 +55,10 @@
             </li>
           {% endif %}
           {% if controller.getAccessLevel() > 0 %}
-            <li><a href="../user/profile" data-step="2" data-intro="View your profile, showing your name and email">user profile</a></li>
-            <li><a href="../home" data-step="3" data-intro="View your profile, showing your name and email">dashboard</a></li>
+            <li><a href="../user/profile" data-step="2" data-intro="view your profile, showing your name and email">user profile</a></li>
+            <li><a href="../home" data-step="3" data-intro="return to the dashboard, showing a summary of your debts, credits and recent transactions">dashboard</a></li>
             <li><a href="../help">help!</a></li>
-            <li><a href="../user/logout" data-step="4" data-intro="Logout of payme" data-position='left'><i class="glyphicon glyphicon-log-out"></i></a></li>
+            <li><a href="../user/logout" data-step="4" data-intro="click me to logout of payme :-(" data-position='left'><i class="glyphicon glyphicon-log-out"></i></a></li>
           {% else %}
           {% endif %}
           </ul>
@@ -96,17 +96,17 @@
         {% if controller.getAccessLevel() > 0 %}
         <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
-            <li><a href="../history" data-step="5" data-intro="View all of the payements that you have made, or that have been made to you" data-position='right'>past transactions</a></li>
+            <li><a href="../history" data-step="5" data-intro="view all past payments that you have made, or have been made to you" data-position='right'>past transactions</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
-            <li><a href="../friends" data-step="6" data-intro="View debts or credits" data-position='right'>manage debts from friends</a></li>
-            <li><a href="../groups" data-step="7" data-intro="View all" data-position='right'>manage debts from groups</a></li>
-            <li><a href="../friends/request" data-step="8" data-intro="Accept friend requests from other payme users" data-position='right'>manage friend requests</a></li>
+            <li><a href="../friends" data-step="6" data-intro="this page allows you to view all outstanding debts / credits between you and your friends :-) you can also add new debts / credits, and pay them" data-position='right'>manage friends</a></li>
+            <li><a href="../groups" data-step="7" data-intro="this page allows you to view all the groups you've created and their members - this works similarly to the friends page" data-position='right'>manage groups</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
-            <li><a href="#" data-toggle="modal" data-target="#add-friend-modal" data-step="9" data-intro="Add a payme user as a friend" data-position='right'>add friend</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#add-friend-modal" data-step="8" data-intro="add a payme user as a friend" data-position='right'>add friend</a></li>
+            <li><a href="../friends/request" data-step="9" data-intro="accept friend requests from other payme users" data-position='right'>manage friend requests</a></li>
           </ul>
         </div>
         {% endif %}

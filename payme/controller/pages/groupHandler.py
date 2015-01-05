@@ -69,6 +69,7 @@ class RemoveHandler(ModelRemoveHandler):
             group = validator.retrieve(postData, self.type)
             # remove entity from database
             group.removeMe()
+            group.key.delete()
             return '{"success": 1}'
         except Exception as e:
             raise e
