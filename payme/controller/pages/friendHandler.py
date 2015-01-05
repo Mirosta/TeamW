@@ -8,7 +8,7 @@ class FriendHandler(ModelHandler):
     def __init__(self):
         super(FriendHandler, self).__init__('friends',
                                             {'add' : FriendHandler.AddHandler(),
-                                             'request': FriendHandler.RequestHandler()},
+                                             'request': FriendHandler.RequestHandler(self)},
                                             'getFriends', User, [],
                                             [ReadOnlyFunction('getOE', 'netAmount'),
                                              ReadOnlyFunction('getDRKeys', 'debts'),
@@ -23,5 +23,17 @@ class FriendHandler(ModelHandler):
 
     class RequestHandler(VerbHandler):
 
-        def __init__(self):
+        def __init__(self, modelHandler):
             super(FriendHandler.RequestHandler, self).__init__('requestFriend')
+            self.modelHandler = modelHandler
+
+        def getAPI(self, controller, parameter):
+            return self.getRequests(controller)
+
+        def getRequests(self, controller):
+            models = controller.getCurrentUser().getFriendRequests()
+            results = []
+            for model in models:
+                results.append(self.modelHandler.getOneInner(controller, model))
+            return self.modelHandler.serialize({'results': results})
+
