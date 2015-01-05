@@ -13,6 +13,37 @@ function initialisePage() {
         });
     });
 
+    $('#add-debt-modal').on('shown.bs.modal', function(e) {
+          var groupKey = $(e.relatedTarget).parent().parent().data('group-key');
+          groups.get(groupKey, function(success, data)
+          {
+             if(success)
+             {
+                 var template =
+                     '<div>' +
+                        '<label for="debtor-check-{{readOnly.num}}">{{name}} {{familyName}}</label><input id="debtor-check-{{readOnly.num}}" data-user-key="{{key}}" type="checkbox">' +
+                     '<div>';
+                 lookupField({friend: ['users']}, data, function(success, data)
+                 {
+                     for(var i =0; i < data.length; i++)
+                     {
+                         var curFriend = data[i];
+                         curFriend.readOnly.num = i;
+                         $('#groups-list-div').append($(processTemplate(template, curFriend)));
+                     }
+                 });
+             }
+          });
+          //datepicker for date of debt input field
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+
+          $('#date').val( year + "-" + month + "-" + day);
+          $('#date').datepicker({dateFormat: "yy-mm-dd", showButtonPanel: true});
+    });
+
     $('#new-group-sbmt').click(function() {
        var newGroup = groups.newInstance({"name": $('#new-group-name').val()});
        newGroup.create(function (success, data) {
@@ -22,13 +53,32 @@ function initialisePage() {
        });
        $('#create-group-modal').modal('hide')
     });
+
+    $('#edit-group-modal').on('show.bs.modal', function(e) {
+        var key = $(e.relatedTarget).parent().parent().data('group-key');
+
+        $('#edit-group-sbmt').click(function(e) {
+            groups.get(key, function(success, grp) {
+               if (success) {
+                   console.log(grp);
+                   grp.name = $('#edit-group-name').val();
+                   grp.update(function (success, data){
+                      if (success) {
+                        location.reload();
+                      }
+                   });
+               }
+           });
+        });
+    });
+
   });
 }
 
 function addGroupsToContainer() {
    var template = '<div class="group-container" style="height:40px;" data-group-key="{{key}}">' +
                     '<div class="pull-left"><span style="font-size:16px;"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-                    '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-modal"><i class="glyphicon glyphicon-edit"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
+                    '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-group-modal"><i class="glyphicon glyphicon-edit"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
                   '</div><hr style="margin-bottom:5px;">';
   var groupsListDiv = $("#groups-list-div");
   groupsListDiv.html("");
