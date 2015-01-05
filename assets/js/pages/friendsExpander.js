@@ -174,7 +174,7 @@ function expandFriend(e)
                         var description = $('textarea#paymentDescription').val();
                         var payment = payments.newInstance({
                             "debt": debtKey,
-                            "amount": parseInt(amount),
+                            "amount": parseFloat(amount) * 100,
                             "description": description
                         });
                         payment.create(function(success, data) { if(success) location.reload();});
