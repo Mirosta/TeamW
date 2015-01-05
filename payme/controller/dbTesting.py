@@ -159,7 +159,12 @@ class TestPage(PageHandler):
 
         debt = Debt.query(Debt.creditor == pollawat.key).fetch()[0]
 
-        self.createPayments(john.key, debt.key, 10)
+        # jim = self.createUser('jim', 'Jim')
+
+        jim = self.queryUser('jim')
+        jim.addFriendForce(pollawat.key)
+
+        # self.createPayments(john.key, debt.key, 10)
 
         # payment = self.createPayments(pollawat.key, debt.key, 10)
 

@@ -1,15 +1,24 @@
 {{ page.header() }}
+    <link rel="stylesheet" href="/assets/css/pages/friends.css">
 
-<div class="row top-buffer">
-   <div class="col-md-12 grey-bordered-box side-margin pull-left">
-        <h2 class="bold">friend requests</h2>
-        <hr class="top-buffer">
-        <div class="top-buffer" id="friend-requests" style="font-size:18px;">
-        </div>
-   </div>
+    <div class="row top-buffer">
+       <div class="col-md-12 grey-bordered-box side-margin pull-left">
+            <h2 class="bold">friend requests</h2>
+            <hr class="top-buffer">
+            <div class="top-buffer" id="friend-requests" style="font-size:18px;">
+            </div>
+       </div>
 
-</div>
+    </div>
 
-<script src="/assets/js/pages/requestFriend.js"></script>
+    <script src="/assets/js/pages/requestFriend.js"></script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script src="/assets/js/util.js"></script>
+<script src="/assets/js/model.js"></script>
 
 {{ page.footer() }}

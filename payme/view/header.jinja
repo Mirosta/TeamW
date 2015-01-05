@@ -77,14 +77,15 @@
               <form>
                 <div class="form-group">
                   <label for="email">e-mail:</label>
-                  <input type="text" class="form-control" id="email"></input>
+                  <input type="text" class="form-control" id="email">
                 </div>
+                <div class="alert alert-danger addFriendError" style="display: none;" role="alert"></div>
               </form>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-            <button type="button" id="submit" class="btn btn-primary">add</button>
+            <button type="button" id="add-friend-btn" class="btn btn-primary">add</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -96,12 +97,12 @@
         <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
             <li><a href="../history">past transactions</a></li>
-            <li><a href="/debts/add">add debt</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
             <li><a href="../friends">manage debts from friends</a></li>
             <li><a href="../groups">manage debts from groups</a></li>
+            <li><a href="../friends/request">manage friend requests</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">

@@ -45,6 +45,7 @@ function setupAndEventsModals()
     $('#add-friend-btn').click(function() {
         var newFriend = friends.newInstance({'email': $('#email').val()});
         newFriend.create();
+
     });
 }
 
