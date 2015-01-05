@@ -9,6 +9,7 @@ from payme.controller.contentHandler import PageHandler, Parameter, VerbHandler
 from datetime import date, datetime
 
 from payme.controller.exceptions import InvalidVerbType, AddNotAllowed
+from payme.controller.globals import Global
 
 
 class RelatedModel:
@@ -76,11 +77,8 @@ class ModelHandler(PageHandler):
     #Gets all model instances
     def getAll(self, controller, count = None, offset = 0, sortBy = None):
         currentUser = controller.getCurrentUser()
-        if self.getAllFunction != "":
-            function = getattr(currentUser, self.getAllFunction)
-            models = function()
-        else:
-            models = [currentUser]
+        function = getattr(currentUser, self.getAllFunction)
+        models = function()
         modelsOutput = []
 
         for model in models:
@@ -143,14 +141,14 @@ class ModelHandler(PageHandler):
 
     # Helper function to ease serialisation
     def serialize(self, object_to_serialize):
-        return json.dumps(object_to_serialize, cls=self.JSonAPIEncoder)
+        return json.dumps(object_to_serialize, cls=ModelHandler.JSonAPIEncoder)
 
     # This encoder ensures that complex data type are converted
     # for JSON serialisation
     class JSonAPIEncoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, date) or isinstance(obj, datetime):
-                return obj.strftime('%Y/%m/%d %H:%M:%S')
+                return obj.strftime(Global.JSONDateTime)
             elif isinstance(obj, ndb.Key):
                 return obj.urlsafe()
             elif isinstance(obj, ndb.Model):

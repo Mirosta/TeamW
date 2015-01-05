@@ -38,7 +38,6 @@ class Group (Entity, Actionable):
     def renameGroup(self, name):
         self.name = name
 
-    #TODO: Do some division on the amount of debt to add
     # When debt is evenly distributed to everyone in the group
     def addDebtEven(self, debt):
 
@@ -53,8 +52,8 @@ class Group (Entity, Actionable):
                      description=debt.description,
                      isPaid=False,
                      date=debt.date)
-
-            d.put()
+            if d.isAddAllowed():
+                d.put()
 
     # When debt is not applied to the entire group
     # Split evenly among users provided

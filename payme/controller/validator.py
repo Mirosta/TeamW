@@ -50,4 +50,7 @@ def update(json_str, type_class):
 def set_attributes(entity, json_obj, type_class):
     for key, value in json_obj.iteritems():
         convert = json_convert.get(type(type_class._properties[key]))
+        if isinstance(value, list):
+            value = map(lambda x: x if convert is None else convert(x), value)
+            convert = None
         setattr(entity, key, value if convert is None else convert(value))

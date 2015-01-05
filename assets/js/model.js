@@ -9,9 +9,9 @@ function Model(modelUrl, idOrObj)
     if(!idOrObj) this.id = null; //No id or object given
     else if(typeof idOrObj === "object") //Object given, copy properties from it
     {
-        for(key in idOrObj)
+        for(var key in idOrObj)
         {
-            this[key] = idOrObj[key];
+            if(idOrObj.hasOwnProperty(key)) this[key] = idOrObj[key];
         }
     }
     else this.id = idOrObj; //ID given, just set the id
@@ -24,25 +24,25 @@ function Model(modelUrl, idOrObj)
     {
         var url = apiUrl + thisObj.modelUrl + createUrl;
         //Create object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.update = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + updateUrl;
         //Update object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.remove = function(callback) //Callback is same as util.js apiPost function
     {
         var url = apiUrl + thisObj.modelUrl + deleteUrl;
         //Remove object in DB
-        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readonly']), callback);
+        apiPost(url, stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']), callback);
     };
     this.getFields = function()
     {
         var retArr = [];
         var strippedThis = stripNonSerializableFields(thisObj, ['modelUrl', 'readOnly']);
-        for(key in strippedThis)
+        for(var key in strippedThis)
         {
             if(typeof strippedThis[key] !== "function")
             {
@@ -50,7 +50,7 @@ function Model(modelUrl, idOrObj)
             }
         }
 
-        for(key in thisObj.readOnly)
+        for(var key in thisObj.readOnly)
         {
             if(typeof thisObj.readOnly[key] !== "function")
             {
@@ -65,11 +65,12 @@ function Model(modelUrl, idOrObj)
 function ModelClass(modelUrl)
 {
     this.modelUrl = modelUrl;
+    models[this.modelUrl] = this;
     var getAllUrl = "/";
     var allResultsProperty = "results";
     var thisObj = this;
 
-    this.get = function(callback, id) //Callback is same as util.js apiGet function
+    this.get = function(id, callback) //Callback is same as util.js apiGet function
     {
         var url = apiUrl + thisObj.modelUrl + processTemplate(getUrl, {id: id}); //Get url is a template, pass the current model obj into the template function
         //Get object from DB
@@ -126,10 +127,12 @@ function ModelClass(modelUrl)
     this.newInstance = function(object) //Object should contain the fields to set in the model object
     {
         return new Model(thisObj.modelUrl, object);
-    }
+    };
 }
 
 //Create a ModelClass for groups, you can get group objects that extend Model using the .get or .getAll methods
+var models = {};
+
 var groups = new ModelClass("groups");
 
 var friends = new ModelClass("friends");
@@ -141,6 +144,8 @@ var user = new ModelClass("user");
 var debts = new ModelClass("debts");
 
 var notifications = new ModelClass("notifications");
+
+var friendRequests = new ModelClass("friends/request")
 
 //Model objects have .update, .create and .remove methods
 /*
@@ -164,13 +169,16 @@ var allGroups = groups.getAll(
 //Example: Get group with id 1
 //NOTE: Objects don't necessarily have integer ids, they can be strings
 /*
-var group1 = groups.get("1",
+
+var group1 = null;
+groups.get("1",
     function(success, data)
     {
         if(success)
         {
             console.log('Got group 1:');
             console.log(data);
+            group1 = data;
         }
         else
         {

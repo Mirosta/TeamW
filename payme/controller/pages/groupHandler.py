@@ -10,13 +10,14 @@ class GroupHandler(ModelHandler):
     def __init__(self):
         # super(GroupHandler, self).__init__('groups', Parameter(Parameter.Type.Int, False, True))
         super(GroupHandler, self).__init__("groups",
-                                           {'add': ModelAddHandler(),
+                                           {'add': AddHandler(),
                                             'update': ModelUpdateHandler(),
-                                            'remove': ModelRemoveHandler()},
+                                            'remove': RemoveHandler()},
                                            'getGroups', Group, [],
                                            [ReadOnlyFunction('getNetAmount', 'netAmount'),
                                             ReadOnlyFunction('getCreditAmount', 'Own'),
                                             ReadOnlyFunction('getDebtAmount', 'Owe')])
+
 
     def postAPI(self, controller, parameter, postData):
         return '{error: "Not yet implemented"}'
@@ -45,12 +46,29 @@ class GroupHandler(ModelHandler):
     def onUnknownGroup(self):
         return '{error: "No group with that ID"}'
 
+
+class AddHandler(ModelAddHandler):
+
+    def postAPI(self, controller, parameter, postData):
+        try:
+            group = validator.create(postData, self.type)
+            # add new entity to database
+            group.put()
+            controller.getCurrentUser().addGroup(group.key)
+            return '{"success": 1}'
+        except Exception as e:
+            raise e
+
 class RemoveHandler(ModelRemoveHandler):
 
     def __init__(self):
         super(RemoveHandler, self).__init__('remove')
 
     def postAPI(self, controller, parameter, postData):
-        group = validator.retrieve(postData, self.type)
-        group.removeMe()
-        return '{"success": 1}'
+        try:
+            group = validator.retrieve(postData, self.type)
+            # remove entity from database
+            group.removeMe()
+            return '{"success": 1}'
+        except Exception as e:
+            raise e

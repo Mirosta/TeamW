@@ -4,19 +4,41 @@ initialisePage();
 function initialisePage() {
   $(document).ready(function() {
     $div = $("#dshbrd-recent-div"); // temporary
-    loadRecentTransactions($div);
+    loadRecentTransactions();
     loadGroupsIntoDashboard();
     loadFriendsIntoDashboard();
   });
 }
 
-function loadRecentTransactions($div) {
+/*function loadRecentTransactions($div) {
   payments.getAll(function(success, paymentData) {
     console.log(paymentData);
     initialiseDataTables(paymentData, $div);
   }, 10, null, "-created");
-}
+}*/
 
+function loadRecentTransactions() { //copied from history - added the $div for transactions and limited to 10
+  payments.getAll(function(success, paymentData) {
+
+    console.log(paymentData);
+
+    var synchronised = new Synchronise(paymentData.length,
+        function(success, error)
+        {
+            if(success) initialiseDataTables(paymentData, $div);
+            else console.log(error);
+        });
+
+    for(var i = 0; i < paymentData.length; i++)
+    {
+        lookupField({friends: ["payer","readOnly.payee"]}, paymentData[i], function (success, data)
+        {
+            if(success) synchronised.complete();
+            else synchronised.failed(data);
+        } );
+    }
+  }, 10, null, "-created");
+}
 
 function initialiseDataTables(paymentData, $div) {
   $(document).ready(function() {
@@ -63,6 +85,7 @@ function loadGroupsIntoDashboard() {
     $('#groups-content-div').html("");
     for (i=0; i < groupData.length; i++) {
       groupData[i].readOnly.numberClass = (groupData[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+      groupData[i].readOnly.netAmount = penceToPound(groupData[i].readOnly.netAmount);
       $('#groups-content-div').append( processTemplate(template, groupData[i]) );
     } 
   });
@@ -74,7 +97,10 @@ function loadFriendsIntoDashboard() {
     $('#friends-content-div').html(""); 
     for (i=0; i < friendData.length; i++) {
       friendData[i].readOnly.numberClass = (friendData[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+      friendData[i].readOnly.netAmount = penceToPound(friendData[i].readOnly.netAmount);
       $('#friends-content-div').append( processTemplate(template, friendData[i]) );
     }
   });
 }
+
+

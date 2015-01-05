@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>payme</title>
 
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
@@ -15,11 +18,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/stylesheet.css">
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
     <script src="../assets/js/util.js"></script>  
     <script src="../assets/js/model.js"></script>
+    <script src="../assets/js/pages/header.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -38,44 +39,74 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../home"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;margin-left:10px;" class="green">payme.</span></a>
+          <a class="navbar-brand" href="../home"><span style="font-family:'Arial Black', Gadget, sans-serif;font-size:20px;" class="green">payme.</span></a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse" style="position:relative;">
           <ul class="nav navbar-nav navbar-right">
           {% if controller.getCurrentUser() is not none %}
-            <li><a class="no-hover">Hi {{ controller.getCurrentUser().name }}</a></li>
+            <li><a class="no-hover">hi {{ controller.getCurrentUser().name }} :-)</a></li>
+            <li id="notification_li" style="display:table;">
+              <a href="#" id="notificationLink">notifications<span class="badge" style="margin-left:10px;">0</span></a>
+              <div id="notificationContainer">
+                <div id="notificationsBody" class="notifications"></div>
+                <hr>
+                <div id="notificationFooter" style="float:right; color:white;"><a href="/user/profile#notifications">see all</a></div>
+              </div>
+            </li>
           {% endif %}
           {% if controller.getAccessLevel() > 0 %}
-            <li><a href="../help">help!</a></li>
+            <li><a href="../user/profile">user profile</a></li>
             <li><a href="../home">dashboard</a></li>
-            <li><a href="user/profile">user profile</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-cog"></i></a></li>
+            <li><a href="../help">help!</a></li>
+            <li><a href="../user/logout"><i class="glyphicon glyphicon-log-out"></i></a></li>
           {% else %}
           {% endif %}
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
         </div>
       </div>
     </nav>
+    <div class="modal fade" id="add-friend-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4> 
+          </div>
+          <div class="modal-body">
+            <div id="addDebt-div">
+              <form>
+                <div class="form-group">
+                  <label for="email">e-mail:</label>
+                  <input type="text" class="form-control" id="email">
+                </div>
+                <div class="alert alert-danger addFriendError" style="display: none;" role="alert"></div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+            <button type="button" id="add-friend-btn" class="btn btn-primary">add</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+       
   <div class="container-fluid">
       <div class="row">
         {% if controller.getAccessLevel() > 0 %}
         <div class="col-md-2 sidebar" id="sidebar-div">
           <ul class="nav nav-sidebar">
             <li><a href="../history">past transactions</a></li>
-            <li><a href="/payments/add">make payment</a></li>
-            <li><a href="/debts/add">add debt</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
-            <li><a href="../friends">manage friends</a></li>
-            <li><a href="../groups">manage groups</a></li>
+            <li><a href="../friends">manage debts from friends</a></li>
+            <li><a href="../groups">manage debts from groups</a></li>
+            <li><a href="../friends/request">manage friend requests</a></li>
           </ul>
           <hr>
           <ul class="nav nav-sidebar top-buffer">
-            <li><a href="/friends/add">add friend</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#add-friend-modal">add friend</a></li>
           </ul>
         </div>
         {% endif %}
