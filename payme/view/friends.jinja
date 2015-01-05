@@ -85,7 +85,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-            <button type="button" class="btn btn-primary">submit</button>
+            <button type="button" id="submit" class="btn btn-primary">submit</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -119,17 +119,6 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
-
-
-    <script>
-      $(document).ready(function() {
-
-        $('#submit').click(function() {
-            var newFriend = friends.newInstance({'email': $('#email').val()});
-            newFriend.create();
-        });
-      });
-    </script>
 
     <script src="../assets/js/pages/friends.js"></script>
     <script src="../assets/js/pages/friendsExpander.js"></script>

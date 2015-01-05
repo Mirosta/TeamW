@@ -37,6 +37,12 @@ function initialisePage() {
     $('#delete-modal').on('hidden.bs.modal', function() {
         $('[data-friend-key=' + friendKey + ']').remove();
     });
+
+
+    $('#submit').click(function() {
+        var newFriend = friends.newInstance({'email': $('#email').val()});
+        newFriend.create();
+    });
   });
 }
 
@@ -48,7 +54,7 @@ function addFriendsToContainer() {
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
         '<div class="collapse" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">Test</div></div></div>';
     var friendsListDiv = $("#friends-list-div");
