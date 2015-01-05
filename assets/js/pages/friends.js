@@ -1,25 +1,32 @@
 initialisePage();
+getCurrUser();
 
 var currUser;
 
 function initialisePage() {
-  $(document).ready(function () {
-    addFriendsToContainer($("#friends-list-div"));
-      getCurrUser();
-     // the key of the friend to be removed
-      var friendKey;
-    $('#add-debt-modal').on('shown.bs.modal', function(e) {
-      var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
-      $('#debtor').text(debtorName);
-      $('#debtor').val(debtorName);
-      //datepicker for date of debt input field
-      var date = new Date();
-      var day = date.getDate();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
+    $(document).ready(function () {
+        addFriendsToContainer($("#friends-list-div"));
+        // the key of the friend to be removed
+        var friendKey;
+        setupModals();
 
-      $('#date').val( day + "/" + month + "/" + year);
-      $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+    });
+}
+
+function setupModals()
+{
+      $('#add-debt-modal').on('shown.bs.modal', function(e) {
+          var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
+          $('#debtor').text(debtorName);
+          $('#debtor').val(debtorName);
+          //datepicker for date of debt input field
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+
+          $('#date').val( day + "/" + month + "/" + year);
+          $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
     });
 
    //character counter for debt description
@@ -50,8 +57,6 @@ function initialisePage() {
     $('#add-debt-btn').click(function() {
         addDebt();
     });
-
-  });
 }
 
 function addFriendsToContainer($container) {
