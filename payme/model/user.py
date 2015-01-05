@@ -209,3 +209,16 @@ class User (Entity, Actionable):
     # debug
     def retrieveUserName(self):
         return self.googleID
+
+    def isFriend(self, friend):
+        return friend.key in self.friends
+
+    def getFriendRequests(self):
+        otherUsers = User.query(User.key != self.key).fetch()
+        friendRequests = []
+
+        for otherUser in otherUsers:
+            if otherUser.isFriend(self) and not self.isFriend(otherUser):
+                friendRequests.append(otherUser)
+
+        return friendRequests
