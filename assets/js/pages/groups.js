@@ -22,13 +22,32 @@ function initialisePage() {
        });
        $('#create-group-modal').modal('hide')
     });
+
+    $('#edit-group-modal').on('show.bs.modal', function(e) {
+        var key = $(e.relatedTarget).parent().parent().data('group-key');
+
+        $('#edit-group-sbmt').click(function(e) {
+            groups.get(key, function(success, grp) {
+               if (success) {
+                   console.log(grp);
+                   grp.name = $('#edit-group-name').val();
+                   grp.update(function (success, data){
+                      if (success) {
+                        location.reload();
+                      }
+                   });
+               }
+           });
+        });
+    });
+
   });
 }
 
 function addGroupsToContainer() {
    var template = '<div class="group-container" style="height:40px;" data-group-key="{{key}}">' +
                     '<div class="pull-left"><span style="font-size:16px;"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-                    '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-modal"><i class="glyphicon glyphicon-edit"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
+                    '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-group-modal"><i class="glyphicon glyphicon-edit"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
                   '</div><hr style="margin-bottom:5px;">';
   var groupsListDiv = $("#groups-list-div");
   groupsListDiv.html("");
