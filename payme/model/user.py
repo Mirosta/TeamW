@@ -132,7 +132,7 @@ class User (Entity, Actionable):
             raise SecurityError()
 
     def addFriend(self, friend):
-        if self.isMe():
+        if self.isMe() and friend not in self.friends:
             self.friends.append(friend)
             self.put()
 
