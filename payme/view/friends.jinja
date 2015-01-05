@@ -1,4 +1,4 @@
-        {{ page.header() }}
+{{ page.header() }}
           <div style="width:100%;">
             <div class="row">
               <h1 class="page-header bold">
@@ -82,7 +82,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4> 
+            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4>
           </div>
           <div class="modal-body">
             <label for="addDebt-amount">e-mail:</label>
@@ -102,14 +102,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">delete friend :-(</h4> 
+            <h4 class="modal-title">delete friend :-(</h4>
           </div>
           <div class="modal-body">
             are you sure that you want to delete -insert user here- from your friends list?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-            <button type="button" class="btn btn-primary">OK</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="remove-friend-btn">OK</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -125,20 +125,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
 
-    <script>
-      $(document).ready(function() {
-        $('#add-debt-modal').on('shown.bs.modal', function() {
-          //datepicker for date of debt input field
-          var date = new Date();
-          var day = date.getDate();
-          var month = date.getMonth() + 1;
-          var year = date.getFullYear();
-
-          $('#date').val( day + "/" + month + "/" + year);
-          $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
-        });
-      });
-    </script>
     <script src="../assets/js/pages/friends.js"></script>
+    <script src="../assets/js/pages/friendsExpander.js"></script>
 
   {{ page.footer() }}
