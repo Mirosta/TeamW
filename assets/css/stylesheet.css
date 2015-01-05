@@ -129,11 +129,11 @@ hr {
 }
 
 .friendRequestNotification {
-  background-color: #008000;
+  background-color: #007dcb;
 }
 
 .infoNotification {
-  background-color: #0052a4;
+  background-color: #26A65B;
 }
 
 .errorNotification {
@@ -146,6 +146,10 @@ hr {
 
 .successNotification {
   background-color: lawngreen;
+}
+
+.seenNotification {
+  opacity: 0.5;
 }
 
 /*

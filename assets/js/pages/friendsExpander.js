@@ -15,5 +15,5 @@ container = '<div class="row">' +
 
 function expandFriend(e)
 {
-    console.log(e);
+
 }

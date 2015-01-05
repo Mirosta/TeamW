@@ -30,26 +30,33 @@ function setupNotifications() {
     console.log(data);
     var maxLength = (data.length >= 11) ? 10 : data.length;
     for(i=0; i < maxLength; i++) {
-      data[i].readOnly.notificationType = returnNotificationTypeCSS(data[i].type)
+      data[i].readOnly.notificationType = returnNotificationTypeCSS(data[i].type, data[i].seen)
       $("#notificationsBody").append( processTemplate(template, data[i]) );
     }
   });
   getUnreadNumber();
 }
 
-function returnNotificationTypeCSS(notificationType) {
+function returnNotificationTypeCSS(notificationType, seen) {
+  var typeCSS = "";
   switch (notificationType) {
     case "FRIEND_REQUEST":
-          return "friendRequestNotification";
+      typeCSS = "friendRequestNotification";
+      break;
     case "INFO":
-          return "infoNotification";
+      typeCSS = "infoNotification";
+      break;
     case "ERROR":
-          return "errorNotification";
+      typeCSS = "errorNotification";
+      break;
     case "MISC":
-          return "miscNotification";
+      typeCSS = "miscNotification";
+      break;
     case "SUCCESS":
-          return "successNotification";
+      typeCSS = "successNotification";
+      break;
   }
+    return typeCSS + (seen ? " seenNotification" : "");
 }
 
 function markNotificationsSeen() {
@@ -66,7 +73,7 @@ function getUnreadNumber() {
   notifications.getAll(function(success, data) {
     var read = 0;
     for (var i = 0; i < data.length; i++) {
-      if (data[i].seen = false) {
+      if (data[i].seen === false) {
         read++;
       }
       updateUnreadNumber(read);

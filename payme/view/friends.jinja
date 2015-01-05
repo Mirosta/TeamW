@@ -109,7 +109,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-            <button type="button" class="btn btn-primary">OK</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="remove-friend-btn">OK</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -133,9 +133,17 @@
           var day = date.getDate();
           var month = date.getMonth() + 1;
           var year = date.getFullYear();
+
           $('#date').val( day + "/" + month + "/" + year);
           $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
         });
+
+        $('#delete-modal').on('show.bs.modal', function(e) {
+            var friendKey = $(e.relatedTarget).data('friend-key');
+            $('#remove-friend-btn').click(function() {
+                removeFriend(friendKey);
+            })
+        })
       });
     </script>
     <script src="../assets/js/pages/friends.js"></script>
