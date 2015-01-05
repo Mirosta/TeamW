@@ -27,6 +27,7 @@ function setupNotificationContainer() {
 
 function setupNotifications() {
   notifications.getAll(function(success, data) {
+    $("#notificationsBody").html("");
     var template = '<div class="col-md-12 {{readOnly.notificationType}}" style="border-bottom:1px solid #616161;">{{content}} </div>';
     console.log(data);
     var maxLength = (data.length >= 11) ? 10 : data.length;
