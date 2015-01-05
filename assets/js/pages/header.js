@@ -4,6 +4,7 @@ function initialisePage() {
   $(document).ready(function() {
     setupNotificationContainer();
     setupNotifications();
+    setupFriendModal();
   });
 }
 
@@ -37,6 +38,26 @@ function setupNotifications() {
     }
   });
   getUnreadNumber();
+}
+
+function setupFriendModal()
+{
+    $('#add-friend-btn').click(function() {
+        var newFriend = friends.newInstance({'email': $('#email').val()});
+        newFriend.create(function(success, data)
+        {
+            if(success)
+            {
+                $("#add-friend-modal").modal('hide');
+                location.reload();
+            }
+            else
+            {
+                $("#add-friend-modal").find("div.addFriendError").html("Can't find that person").attr("style", "");
+                console.log(data);
+            }
+        });
+    });
 }
 
 function returnNotificationTypeCSS(notificationType, seen) {
