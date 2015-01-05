@@ -14,7 +14,7 @@ class DebtHandler(ModelHandler):
                                            'pay': PayHandler(),
                                            'remove': RemoveHandler(),
                                            'update': ModelUpdateHandler()},
-                                          'getCRs',
+                                          'getAllRelatedDebts',
                                           Debt,
                                           [RelatedModel(Payment, 'debt', 'payments')],
                                           [ReadOnlyFunction('getStatus', 'status'),
