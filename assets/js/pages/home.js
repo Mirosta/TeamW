@@ -3,7 +3,6 @@ initialisePage();
 
 function initialisePage() {
   $(document).ready(function() {
-    $div = $("#dshbrd-recent-div"); // temporary
     loadRecentTransactions();
     loadGroupsIntoDashboard();
     loadFriendsIntoDashboard();
@@ -20,12 +19,10 @@ function initialisePage() {
 function loadRecentTransactions() { //copied from history - added the $div for transactions and limited to 10
   payments.getAll(function(success, paymentData) {
 
-    console.log(paymentData);
-
     var synchronised = new Synchronise(paymentData.length,
         function(success, error)
-        {
-            if(success) initialiseDataTables(paymentData, $div);
+        {   
+            if(success) initialiseDataTables(paymentData);
             else console.log(error);
         });
 
@@ -40,15 +37,16 @@ function loadRecentTransactions() { //copied from history - added the $div for t
   }, 10, null, "-created");
 }
 
-function initialiseDataTables(paymentData, $div) {
+function initialiseDataTables(datat) {
   $(document).ready(function() {
     // (temp) Column headings for DataTables table
     var columnHeaders = ["payment by...", "payment to...", "created", "amount paid (£)", "remaining debt"];
-    var data = serverDataToArray(paymentData);
+    var data = serverDataToArray(datat);
 
     // Add table to DOM
-    $($div).html("");
-    $($div).append('<table id="recent-transactions-tbl" class="table table-striped" cellspacing="0" width="100%"></table>');
+    $("#dshbrd-recent-div").html("");
+
+    $("#dshbrd-recent-div").append('<table id="recent-transactions-tbl" class="table table-striped" cellspacing="0" width="100%"></table>');
     
     // Initialise datatable with options
     $('#recent-transactions-tbl').dataTable({
@@ -71,7 +69,7 @@ function initialiseDataTables(paymentData, $div) {
 function serverDataToArray(data) {
   var finalArray = [];
   for (i=0; i < data.length; i++) {
-    finalArray.push([data[i].payer, data[i].readOnly.payee, data[i].created, data[i].amount ]);
+    finalArray.push([data[i].payer.name + " " + data[i].payer.familyName, data[i].readOnly.payee.name + " " + data[i].readOnly.payee.familyName, data[i].created, data[i].amount ]);
   }
   return finalArray;
 }
