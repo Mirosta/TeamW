@@ -18,10 +18,11 @@ function setupNotificationContainer() {
   });
 
   $("#notificationContainer").hide();
-
+/*
   $("#notificationContainer").click(function() {
     return false;
   });
+*/
 }
 
 function setupNotifications() {
