@@ -11,14 +11,10 @@
         <div class="form-group">
             <label for="debtor" class="col-md-1 control-label form-label top-buffer">debtor:</label>
             <div class="col-md-5 top-buffer">
-                <select class="form-control" id="debtor">
-                    <option>trisha</option>
-                    <option>alex</option>
-                    <option>polly</option>
-                </select>
+{#                can add some shit here to display the debtor if wanted#}
             </div>
         </div>
-        <div class="form-group">
+        {#<div class="form-group">
             <label for="debtor-friend" class="col-md-2 control-label form-label">debtor type:</label>
             <div class="col-md-4">
                 <label class="radio-inline">
@@ -26,39 +22,39 @@
                 <label class="radio-inline">
                     <input type="radio" name="debtor-type" id="debtor-group" value="group">group</label>
             </div>
-        </div>
+        </div>#}
         <div class="form-group">
-            <label for="ammount" class="col-md-1 control-label form-label">ammount:</label>
-            <div class="col-md-5">
-                <input type="number" class="form-control" id="ammount" value="1" min="1"></div>
+            <label for="amount" class="col-md-1 control-label form-label">amount:</label>
+            <div class="col-md-6">
+                <input type="number" class="form-control" id="amount" value="1" min="1"></div>
         </div>
         <div class="form-group">
             <label for="date" class="col-md-1 control-label form-label">date:</label>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <input type="text" class="form-control" id="date"></div>
         </div>
         <div class="form-group">
             <label for="description" class="col-md-1 control-label form-label">description:</label>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <textarea class="form-control textarea" id="description" maxlength="256"></textarea>
-                <div id="chars-left">256 characters left</div>
+                <div class="col-md-offset-1" id="chars-left">256 characters left</div>
             </div>
         </div>
-        <div class="form-group">
+{#        <div class="form-group">
             <label for="split" class="col-md-1 control-label form-label">splitting:</label>
             <div class="col-md-5">
                 <label class="checkbox-inline">
                     <input type="checkbox" id="split" value="split">split money between debtor(s)?</label>
             </div>
-        </div>
+        </div>#}
         <div class="form-group">
-            <div class="col-md-3 col-md-offset-2">
+            <div class="col-md-3 col-md-offset-3 top-buffer">
                 <button type="submit" class="btn btn-primary" id="submit">submit</button>
             </div>
         </div>
     </form>
     <!-- frequent debtors -->
-    <div class="col-md-6 col-md-offset-1 grey-bordered-box pull-right">
+    {#<div class="col-md-6 col-md-offset-1 grey-bordered-box pull-right">
         <h2 class="bold">frequent debtors</h2>
         <hr class="top-buffer">
         <table class="table table-hover" id="frequent-debtors">
@@ -133,7 +129,7 @@
             </tbody>
             </thead>
         </table>
-    </div>
+    </div>#}
     <div class="row">
         <div class="col-md-12 grey-bordered-box top-buffer" id="debt-split">
             <h2 class="bold">debt split</h2>
@@ -159,6 +155,11 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+<!-- Date picker imports -->
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+
 
 <!-- jQuery scripts -->
 <script>
