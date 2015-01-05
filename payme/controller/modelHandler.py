@@ -141,7 +141,7 @@ class ModelHandler(PageHandler):
 
     # Helper function to ease serialisation
     def serialize(self, object_to_serialize):
-        return json.dumps(object_to_serialize, cls=self.JSonAPIEncoder)
+        return json.dumps(object_to_serialize, cls=ModelHandler.JSonAPIEncoder)
 
     # This encoder ensures that complex data type are converted
     # for JSON serialisation
