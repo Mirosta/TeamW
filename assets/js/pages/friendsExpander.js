@@ -26,7 +26,7 @@ function setupAndEventsModals()
             $('#chars-left').text(remaining + " characters left");
         }
       });
-      $('#add-debt-btn').click(function() {
+      $('#add-debt-btn').click(function(e) {
           var debtKey = $(e.relatedTarget).parent().parent().data('friend-key');
           addDebt(debtKey);
       });
@@ -43,9 +43,6 @@ function setupAndEventsModals()
     $('#add-friend-btn').click(function() {
         var newFriend = friends.newInstance({'email': $('#email').val()});
         newFriend.create();
-    });
-    $('#add-debt-btn').click(function() {
-        addDebt();
     });
 }
 
@@ -112,9 +109,8 @@ function addDebt(debtorKey) {
                 'creditor': currUser.key,
                 'amount': parseInt(amount),
                 'description': description,
-                'isPaid': false,
-                'created': date + " 00:00:00",
-                'amountPaid': 0};
+                'disputed': false,
+                'created': date + " 00:00:00"};
 
     var newDebt = debts.newInstance(debtParams);
     newDebt.create();
