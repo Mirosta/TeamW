@@ -56,12 +56,20 @@ function addFriendsToContainer($container) {
     //                 '</div>';
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}" data-friend-name="{{name}}">' +
-        '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25">' +
+        '<span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">' +
+        '{{readOnly.netAmount}}</span>)</div>' +
+        '<div class="btn-group pull-right pay-button" role="group">' +
+        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal">' +
+        '<i class="glyphicon glyphicon-gbp"></i></button>' +
+        '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal">' +
+        '<i class="glyphicon glyphicon-trash"></i>' +
+        '</button>' +
+        '<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
         '<div class="collapse moreinfo" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">' +
-        '<div class="row summaryRow"><div class="summaryTitle"><h4>Debts</h4></div><div class="debts"></div></div>' +
-        '<div class="row summaryRow"><div class="summaryTitle"><h4>Credits</h4></div><div class="credits"></div></div>' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>debts</h4></div><div class="debts"></div></div>' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>credits</h4></div><div class="credits"></div></div>' +
         '</div></div></div>';
 
     var friendsListDiv = $("#friends-list-div");
