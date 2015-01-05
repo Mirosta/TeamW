@@ -62,12 +62,34 @@
           {% else %}
           {% endif %}
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
         </div>
       </div>
     </nav>
+    <div class="modal fade" id="add-friend-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">add friend: <span id="addDebt-recipient"></span></h4> 
+          </div>
+          <div class="modal-body">
+            <div id="addDebt-div">
+              <form>
+                <div class="form-group">
+                  <label for="email">e-mail:</label>
+                  <input type="text" class="form-control" id="email"></input>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+            <button type="button" id="submit" class="btn btn-primary">add</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+       
   <div class="container-fluid">
       <div class="row">
         {% if controller.getAccessLevel() > 0 %}
@@ -81,6 +103,10 @@
           <ul class="nav nav-sidebar top-buffer">
             <li><a href="../friends">manage friends</a></li>
             <li><a href="../groups">manage groups</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-sidebar top-buffer">
+            <li><a href="#" data-toggle="modal" data-target="#add-friend-modal">add friend</a></li>
           </ul>
         </div>
         {% endif %}
