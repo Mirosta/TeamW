@@ -39,9 +39,13 @@ function initialisePage() {
         })
     });
 
-    $('#submit').click(function() {
+    $('#add-friend-btn').click(function() {
         var newFriend = friends.newInstance({'email': $('#email').val()});
         newFriend.create();
+    });
+
+    $('#add-debt-btn').click(function() {
+        addDebt();
     });
 
   });
@@ -95,4 +99,16 @@ function removeFriend(key) {
             console.log(data);
         }
     });
+}
+
+function addDebt() {
+
+    var debtorName = $('#debtor').val();
+    var amount = $('#amount').val();
+    var date = $('#date').val();
+    var description = $('#description').val();
+
+    var debt = {'name': debtorName,
+                'amount': amount,
+                '':''};
 }
