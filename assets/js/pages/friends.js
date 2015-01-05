@@ -1,8 +1,11 @@
 initialisePage();
 
+var currUser;
+
 function initialisePage() {
   $(document).ready(function () {
     addFriendsToContainer();
+      getCurrUser();
      // the key of the friend to be removed
       var friendKey;
     $('#add-debt-modal').on('shown.bs.modal', function(e) {
@@ -108,7 +111,27 @@ function addDebt() {
     var date = $('#date').val();
     var description = $('#description').val();
 
-    var debt = {'name': debtorName,
+    var debtParams = {'debtor': debtorName,
+                'creditor': currUser,
                 'amount': amount,
-                '':''};
+                'description': description,
+                'isPaid': false,
+                'created': date,
+                'amountPaid': 0};
+
+    var newDebt = debts.newInstance(debtParams);
+    newDebt.create();
+}
+
+function getCurrUser() {
+    user.getAll(function(success,data){
+        if(success){
+            console.log("users retrieved");
+            console.log(data);
+            currUser = data[0];
+        }else{
+            console.log("error");
+            console.log(data);
+        }
+    })
 }
