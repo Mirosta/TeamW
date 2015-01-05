@@ -22,7 +22,7 @@ function initialisePage() {
             removeFriend(friendKey);
         })
     });
-    $('#delete-modal').on('hidden.bs.modal', function(e) {
+    $('#delete-modal').on('hidden.bs.modal', function() {
         $('[data-friend-key=' + friendKey + ']').remove();
     });
   });
