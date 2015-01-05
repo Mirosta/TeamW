@@ -1,0 +1,21 @@
+.summaryRow {
+    border-bottom: 1px solid #e6e6e6;
+    margin: 5px;
+    padding-bottom: 5px;
+}
+
+.summaryTitle {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.debt-container {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    min-height: 34px;
+}
+
+.no-debts {
+    font-weight: bold;
+}
