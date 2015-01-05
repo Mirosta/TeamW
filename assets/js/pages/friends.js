@@ -38,19 +38,10 @@ function removeFriend(key){
         if(success){
             console.log("got friend")
             console.log(data);
+            data.remove();
         }else{
             console.log("error");
             console.log(data);
         }
     });
-
-    friend.remove(function(success, data) {
-        if(success){
-            console.log("friend removed :-(");
-        }else{
-            console.log("error")
-            console.log(data);
-        }
-    });
-
 }
