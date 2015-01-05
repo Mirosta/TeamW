@@ -1,29 +1,36 @@
 initialisePage();
+getCurrUser();
 
 var currUser;
 
 function initialisePage() {
-  $(document).ready(function () {
-    addFriendsToContainer($("#friends-list-div"));
-      getCurrUser();
-     // the key of the friend to be removed
-      var friendKey;
-    $('#add-debt-modal').on('shown.bs.modal', function(e) {
-      var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
-      $('#debtor').text(debtorName);
-      $('#debtor').val(debtorName);
-      //datepicker for date of debt input field
-      var date = new Date();
-      var day = date.getDate();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
+    $(document).ready(function () {
+        addFriendsToContainer($("#friends-list-div"));
+        // the key of the friend to be removed
+        var friendKey;
+        setupAndEventsModals();
 
-      $('#date').val( day + "/" + month + "/" + year);
-      $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
+    });
+}
+
+function setupAndEventsModals()
+{
+      $('#add-debt-modal').on('shown.bs.modal', function(e) {
+          var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
+          $('#debtor').text(debtorName);
+          $('#debtor').val(debtorName);
+          //datepicker for date of debt input field
+          var date = new Date();
+          var day = date.getDate();
+          var month = date.getMonth() + 1;
+          var year = date.getFullYear();
+
+          $('#date').val( year + "-" + month + "-" + day);
+          $('#date').datepicker({dateFormat: "yy-mm-dd", showButtonPanel: true});
     });
 
-   //character counter for debt description
-    $('#description').keyup(function() {
+    //character counter for debt description
+      $('#description').keyup(function() {
         var max = parseInt($(this).attr("maxlength"));
         var count = $(this).val().length;
         if(count >= max) {
@@ -32,26 +39,27 @@ function initialisePage() {
             var remaining =  max - count;
             $('#chars-left').text(remaining + " characters left");
         }
-    });
+      });
+      var debtKey = $(e.relatedTarget).parent().parent().data('friend-key');
+      $('#add-debt-btn').click(function() {
+        addDebt(debtKey);
+      });
 
     $('#delete-friend-modal').on('show.bs.modal', function(e) {
-        friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
+        var friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
             $('[data-friend-key=' + friendKey + ']').remove();
-        })
+        });
     });
 
     $('#add-friend-btn').click(function() {
         var newFriend = friends.newInstance({'email': $('#email').val()});
         newFriend.create();
     });
-
     $('#add-debt-btn').click(function() {
         addDebt();
     });
-
-  });
 }
 
 function addFriendsToContainer($container) {
@@ -69,8 +77,8 @@ function addFriendsToContainer($container) {
         '<div class="row summaryRow"><div class="summaryTitle"><h4>Credits</h4></div><div class="credits"></div></div>' +
         '</div></div></div>';
 
-    //var friendsListDiv = $("#friends-list-div");
-    $container.html("");
+    var friendsListDiv = $("#friends-list-div");
+    friendsListDiv.html("");
 
     friends.getAll(function (success, data) {
         console.log(data);
@@ -86,8 +94,7 @@ function addFriendsToContainer($container) {
             $container.append(processTemplate(template, data[i]));
         }
         $('div.moreinfo').on('show.bs.collapse', expandFriend);
-    });
-}
+    });}
 
 function removeFriend(key) {
 
@@ -108,19 +115,18 @@ function removeFriend(key) {
     });
 }
 
-function addDebt() {
+function addDebt(debtorKey) {
 
-    var debtorName = $('#debtor').val();
     var amount = $('#amount').val();
     var date = $('#date').val();
     var description = $('#description').val();
 
-    var debtParams = {'debtor': debtorName,
-                'creditor': currUser,
-                'amount': amount,
+    var debtParams = {'debtor': debtorKey,
+                'creditor': currUser.key,
+                'amount': parseInt(amount),
                 'description': description,
                 'isPaid': false,
-                'created': date,
+                'created': date + " 00:00:00",
                 'amountPaid': 0};
 
     var newDebt = debts.newInstance(debtParams);
@@ -137,5 +143,6 @@ function getCurrUser() {
             console.log("error");
             console.log(data);
         }
-    })
+    });
 }
+

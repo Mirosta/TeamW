@@ -1,3 +1,4 @@
+from google.appengine.ext.ndb import Key
 from payme.controller import validator
 from payme.controller.contentHandler import PageHandler, VerbHandler, Parameter
 from payme.model.user import User
@@ -40,7 +41,14 @@ class FriendHandler(ModelHandler):
         def postAPI(self, controller, parameter, postData):
             try:
                 json_obj = json.loads(postData)
-                controller.getCurrentUser().addFriend(User.query(User.email == json_obj['email']).fetch(1)[0].key)
+                if json_obj.get('email') is not None:
+                    user = User.query(User.email == json_obj['email']).fetch(1)
+                elif json_obj.get('key') is not None:
+                    user = User.query(User.key == Key(urlsafe=json_obj['key'])).fetch(1)
+                if not user:
+                    raise Exception()
+                user = user[0]
+                controller.getCurrentUser().addFriend(user.key)
                 return '{"success": 1}'
             except Exception as e:
                 raise e
