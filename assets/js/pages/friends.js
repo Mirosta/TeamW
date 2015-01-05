@@ -16,6 +16,18 @@ function initialisePage() {
       $('#date').datepicker({dateFormat: "dd/mm/yy", showButtonPanel: true});
     });
 
+   //character counter for debt description
+    $('#description').keyup(function() {
+        var max = parseInt($(this).attr("maxlength"));
+        var count = $(this).val().length;
+        if(count >= max) {
+            $('#chars-left').text("0 characters left");
+        } else {
+            var remaining =  max - count;
+            $('#chars-left').text(remaining + " characters left");
+        }
+    });
+
     $('#delete-modal').on('show.bs.modal', function(e) {
         friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
@@ -39,7 +51,7 @@ function addFriendsToContainer() {
         '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">';
     var friendsListDiv = $("#friends-list-div");
-    friendsListDiv.html("");
+    friendsListDiv.remove();
 
     friends.getAll(function (success, data) {
         console.log(data);
@@ -54,7 +66,7 @@ function addFriendsToContainer() {
         }
     });}
 
-function removeFriend(key){
+function removeFriend(key) {
 
     friends.get(key, function(success, data) {
         if(success){
@@ -71,4 +83,9 @@ function removeFriend(key){
             console.log(data);
         }
     });
+}
+
+function populateDebtorDropdown() {
+
+    users.getAll()
 }
