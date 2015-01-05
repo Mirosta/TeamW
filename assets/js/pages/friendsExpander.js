@@ -32,6 +32,8 @@ function setupAndEventsModals()
       });
 
     $('#delete-friend-modal').on('show.bs.modal', function(e) {
+        var friendName = $(e.relatedTarget).parent().parent().data('friend-name');
+        $('#friend-to-remove').text(friendName);
         var friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
