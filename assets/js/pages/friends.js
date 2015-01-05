@@ -5,7 +5,10 @@ function initialisePage() {
     addFriendsToContainer();
      // the key of the friend to be removed
       var friendKey;
-    $('#add-debt-modal').on('shown.bs.modal', function() {
+    $('#add-debt-modal').on('shown.bs.modal', function(e) {
+      var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
+      $('#debtor').text(debtorName);
+      $('#debtor').val(debtorName);
       //datepicker for date of debt input field
       var date = new Date();
       var day = date.getDate();
@@ -32,10 +35,8 @@ function initialisePage() {
         friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
+            $('[data-friend-key=' + friendKey + ']').remove();
         })
-    });
-    $('#delete-modal').on('hidden.bs.modal', function() {
-        $('[data-friend-key=' + friendKey + ']').remove();
     });
   });
 }
@@ -46,7 +47,7 @@ function addFriendsToContainer() {
     //                   '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button></div>' +
     //                 '</div>';
 
-    var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}">' +
+    var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}" data-friend-name="{{name}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
         '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="moreinfo-{{num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
@@ -86,9 +87,4 @@ function removeFriend(key) {
             console.log(data);
         }
     });
-}
-
-function populateDebtorDropdown() {
-
-    users.getAll()
 }
