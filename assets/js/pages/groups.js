@@ -103,30 +103,33 @@ function expandGroup(e)
 {
     var $target = $(e.target);
     var groupKey = $target.parent().children().first().data('group-key');
-    var friendsArr;
     var $friendContainer = $target.find("div.friends");
     console.log(e);
 
+    var template = '<div class="friends-container"><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> ' +
+                           '</div></div>';
+    $friendContainer.html("");
+
     groups.get(groupKey, function (success, data) {
         if(success){
+            console.log(data);
             var friendsKeysArr = data.users;
+            console.log(friendsKeysArr.toString());
             for (i=0; i<friendsKeysArr.length; i++){
                 friends.get(friendsKeysArr[i], function (success, data) {
                     if(success){
-                        friendsArr.push(data);
+                        console.log(data);
+                        $friendContainer.append(processTemplate(template, {'name' : data.name}));
                     }
                 });
+
             }
-            var template = '<div class="friends-container"><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> ' +
-                           '</div></div>';
-            $friendContainer.append($(processTemplate(template, friendsArr[i])));
         }else{
+            console.log("failed");
              console.log(data);
         }
 
     });
-
-
 }
 
 function removeGroup(key) {
