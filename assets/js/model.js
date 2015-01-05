@@ -167,13 +167,16 @@ var allGroups = groups.getAll(
 //Example: Get group with id 1
 //NOTE: Objects don't necessarily have integer ids, they can be strings
 /*
-var group1 = groups.get("1",
+
+var group1 = null;
+groups.get("1",
     function(success, data)
     {
         if(success)
         {
             console.log('Got group 1:');
             console.log(data);
+            group1 = data;
         }
         else
         {
