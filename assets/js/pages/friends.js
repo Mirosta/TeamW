@@ -13,8 +13,8 @@ function addFriendsToContainer() {
     //                 '</div>';
 
     var template = '<div class="user-container" style="height:40px;">' +
-        '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
+        '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
+        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal" id="{{key}}"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;">';
     var friendsListDiv = $("#friends-list-div");
     friendsListDiv.html("");
@@ -27,7 +27,24 @@ function addFriendsToContainer() {
             if (data[i].profilePicture === null) {
                 data[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
             }
+
             friendsListDiv.append(processTemplate(template, data[i]));
         }
+    });}
+
+function removeFriend(key){
+
+    var friend = friends.get(key, function(success, data) {
+        if(success){
+            console.log("got friend")
+            console.log(data);
+        }else{
+            console.log("err");
+            console.log(data);
+        }
+
     });
+
+    friend.remove();
+
 }

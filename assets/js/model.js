@@ -70,7 +70,7 @@ function ModelClass(modelUrl)
     var allResultsProperty = "results";
     var thisObj = this;
 
-    this.get = function(callback, id) //Callback is same as util.js apiGet function
+    this.get = function(id, callback) //Callback is same as util.js apiGet function
     {
         var url = apiUrl + thisObj.modelUrl + processTemplate(getUrl, {id: id}); //Get url is a template, pass the current model obj into the template function
         //Get object from DB
