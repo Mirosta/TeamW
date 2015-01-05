@@ -41,7 +41,8 @@ class UserHandler(ModelHandler):
 
         def getHTML(self, controller, parameter):
             if controller.session.has_key('redirectTo'):
-                redirect = controller.session['redirectTo']
+                logging.info(controller.session['redirectTo'])
+                redirect = controller.homePage#controller.session['redirectTo']
             else:
                 redirect = controller.homePage
             controller.redirect(redirect)
