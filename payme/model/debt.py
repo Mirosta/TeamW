@@ -21,7 +21,7 @@ class Debt(Actionable):
     description = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
 
-    # Able to dispute debt as the debtor
+    # Able to dispute debt as the creditor
     disputed = ndb.BooleanProperty(default=False)
 
     def update(self, values):
@@ -50,7 +50,7 @@ class Debt(Actionable):
         return self.getCurrentUser().key == self.creditor
 
     def isRemoveAllowed(self):
-        return self.isAddAllowed()
+        return self.isAddAllowed() #TODO decide if this is right
 
     # Get key for the current user
     def getCurrentUser(self):
