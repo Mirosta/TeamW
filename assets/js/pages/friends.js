@@ -4,7 +4,7 @@ var currUser;
 
 function initialisePage() {
   $(document).ready(function () {
-    addFriendsToContainer();
+    addFriendsToContainer($("#friends-list-div"));
       getCurrUser();
     $('#add-debt-modal').on('shown.bs.modal', function(e) {
       var debtorName = $(e.relatedTarget).parent().parent().data('friend-name');
@@ -36,7 +36,7 @@ function initialisePage() {
       });
     });
 
-    $('#delete-modal').on('show.bs.modal', function(e) {
+    $('#delete-friend-modal').on('show.bs.modal', function(e) {
         var friendKey = $(e.relatedTarget).parent().parent().data('friend-key');
         $('#remove-friend-btn').click(function() {
             removeFriend(friendKey);
@@ -52,7 +52,7 @@ function initialisePage() {
   });
 }
 
-function addFriendsToContainer() {
+function addFriendsToContainer($container) {
     // var template = '<div class="user-container">' +
     //                   '<div class="pull-left"><img src="{{ ----- }}" class="img-rounded" width="25"><span style="font-size:16px">{{ user }}</span></div>' +
     //                   '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button></div>' +
@@ -60,7 +60,7 @@ function addFriendsToContainer() {
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}" data-friend-name="{{name}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.netAmount}}</span>)</div>' +
-        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '<div class="btn-group pull-right pay-button" role="group"><button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-debt-modal"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
         '<div class="collapse moreinfo" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">' +
         '<div class="row summaryRow"><div class="summaryTitle"><h4>Debts</h4></div><div class="debts"></div></div>' +
@@ -81,7 +81,7 @@ function addFriendsToContainer() {
 
             data[i].num = i;
 
-            friendsListDiv.append(processTemplate(template, data[i]));
+            $container.append(processTemplate(template, data[i]));
         }
         $('div.moreinfo').on('show.bs.collapse', expandFriend);
     });}
@@ -136,6 +136,3 @@ function getCurrUser() {
     });
 }
 
-function parseDate(){
-    
-}

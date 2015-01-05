@@ -3,6 +3,14 @@ initialisePage();
 function initialisePage() {
   $(document).ready(function () {
     addGroupsToContainer();
+
+    $('#delete-modal').on('show.bs.modal', function(e) {
+        groupKey = $(e.relatedTarget).parent().parent().data('group-key');
+        $('#remove-group-btn').click(function() {
+            removeGroup(groupKey);
+            $('[data-group-key=' + groupKey + ']').remove();
+        });
+    });
   });
 }
 
@@ -22,5 +30,21 @@ function addGroupsToContainer() {
       groupsListDiv.append( processTemplate(template, data[i]) );
     }
   });
+}
 
+function removeGroup(key) {
+  groups.get(key, function(success, data) {
+      if (success) {
+          console.log("got group");
+          console.log(data);
+          data.remove(function(success, data) {
+              if (!success) {
+                  console.log("error");
+                  console.log(data);
+              }
+          });
+      } else {
+          console.log(data);
+      }
+  });
 }
