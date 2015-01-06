@@ -17,7 +17,7 @@ class OAuthHandler(PageHandler):
 class OAuthLoginHandler(VerbHandler):
     PROTOCOL = "http://"
     REDIRECT_URI = '/oauth/callback'
-    CLIENT_ID = '399506081912-4dg74rjo7k6huk0f5bsid5tst65qd7c2.apps.googleusercontent.com'
+    CLIENT_ID = '399506081912-4dg74rjo7k6huk0f5bsid5tst65qd7c2@developer.gserviceaccount.com' #399506081912-4dg74rjo7k6huk0f5bsid5tst65qd7c2.apps.googleusercontent.com'
     CLIENT_SECRET = 'Ih38GJ4bMO9TTDuhPpYKv9rS'
     oAuthFlow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, str.join(' ',[Scope.OpenID, Scope.Email]), redirect_uri=REDIRECT_URI)
 
