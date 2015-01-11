@@ -19,6 +19,7 @@ class TestPage(PageHandler):
     def __init__(self):
         super(TestPage, self).__init__('testingPage')
         self.output = ''
+        self.accessLevel = 0
 
     # Get key for the current user
     def getCurrentUser(self):
@@ -27,7 +28,8 @@ class TestPage(PageHandler):
 #   MAIN
     def getHTML(self, controller, parameter):
         self.output += "Starting... <br>"
-
+        self.output += datetime.now().isoformat(" ")
+        return super(TestPage, self).renderTemplate(controller, self.templateFile)
 #   TEST 1 - Users
 #        self.createUsers()
 
