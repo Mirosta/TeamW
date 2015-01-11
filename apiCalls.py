@@ -43,7 +43,7 @@ def main():
     addGroupDebt(TOM, 2000, (ALEX, POLLY, LUBO), 'Train to Bournemouth')
     
     waitForStep("Add beer debt")
-    addGroupDebt(TOM, 1600, (ALEX, LUBO), 'Beer in Bournemouth')
+    addGroupDebt(TOM, 1200, (ALEX, POLLY), 'Beer in Bournemouth')
     
     waitForStep("Fix last payment of lubo")
     fixLastPayment(LUBO)
@@ -62,6 +62,12 @@ def cleanUp():
     payments = getAPI(LUBO, 'payments')['results']
     for payment in payments:
         r = postAPI(LUBO, 'payments', {'key': payment['key']}, 'remove')
+    
+    # Delete any debts from Lubo
+    debts = getAPI(LUBO, 'debts')['results']
+    for debt in debts:
+        del debt['readOnly']
+        r = postAPI(LUBO, 'debts', debt, 'remove')
     
     # Delete any debts from TOM with Bournemouth
     debts = getAPI(TOM, 'debts')['results']
