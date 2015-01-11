@@ -39,17 +39,20 @@ def main():
     user = getAPI(LUBO, 'user')['results'][0]
     print "Logged in as: " + user['email']
     
-    waitForStep("Add train debt")
-    addGroupDebt(TOM, 2000, (ALEX, POLLY, LUBO), 'Train to Bournemouth')
+    #waitForStep("Add train debt")
+    #addGroupDebt(TOM, 2000, (ALEX, POLLY, LUBO), 'Train to Bournemouth')
     
-    waitForStep("Add beer debt")
-    addGroupDebt(TOM, 1200, (ALEX, POLLY), 'Beer in Bournemouth')
+    #waitForStep("Add beer debt")
+    #addGroupDebt(TOM, 1200, (ALEX, POLLY), 'Beer in Bournemouth')
     
-    waitForStep("Fix last payment of lubo")
-    fixLastPayment(LUBO)
+    #waitForStep("Fix last payment of lubo")
+    #fixLastPayment(LUBO)
     
     waitForStep("Cleanup DB")
     cleanUp()
+    
+    waitForStep("Fix all TOM's payments")
+    fixAllPayments(TOM)
 
 def cleanUp():
     # Remove lubo from tom
@@ -94,12 +97,18 @@ def fixLastPayment(userEmail):
     for payment in payments:
         if payment['created'] > lastPay['created']:
             lastPay = payement
+    fixPayment(userEmail, lastPay)
     
+def fixAllPayments(userEmail):
+    for payment in getAPI(userEmail, 'payments')['results']:
+        fixPayment(userEmail, payment)
+    
+def fixPayment(userEmail, payment):
     # Delete it
-    r = postAPI(userEmail, 'payments', {'key': lastPay['key']}, 'remove')
+    r = postAPI(userEmail, 'payments', {'key': payment['key']}, 'remove')
     
     # Submit required fields
-    newPay = {'debt': lastPay['debt'], 'amount': lastPay['amount'], 'description': lastPay['description'], 'payer': getUser(userEmail)['key']}
+    newPay = {'debt': payment['debt'], 'amount': payment['amount'], 'description': payment['description'], 'payer': getUser(userEmail)['key']}
         
     # Submit it again
     r = postAPI(userEmail, 'payments', newPay, 'add')
