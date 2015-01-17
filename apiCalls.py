@@ -39,20 +39,20 @@ def main():
     user = getAPI(LUBO, 'user')['results'][0]
     print "Logged in as: " + user['email']
     
-    #waitForStep("Add train debt")
-    #addGroupDebt(TOM, 2000, (ALEX, POLLY, LUBO), 'Train to Bournemouth')
+    waitForStep("Add train debt")
+    addGroupDebt(TOM, 2000, (ALEX, POLLY, LUBO), 'Train to Bournemouth')
     
-    #waitForStep("Add beer debt")
-    #addGroupDebt(TOM, 1200, (ALEX, POLLY), 'Beer in Bournemouth')
+    waitForStep("Add beer debt")
+    addGroupDebt(TOM, 1200, (ALEX, POLLY), 'Beer in Bournemouth')
     
-    #waitForStep("Fix last payment of lubo")
-    #fixLastPayment(LUBO)
+    waitForStep("Fix last payment of lubo")
+    fixLastPayment(LUBO)
     
-    waitForStep("Cleanup DB")
-    cleanUp()
+    #waitForStep("Cleanup DB")
+    #cleanUp()
     
-    waitForStep("Fix all TOM's payments")
-    fixAllPayments(TOM)
+    #waitForStep("Fix all TOM's payments")
+    #fixAllPayments(TOM)
 
 def cleanUp():
     # Remove lubo from tom
@@ -97,6 +97,7 @@ def fixLastPayment(userEmail):
     for payment in payments:
         if payment['created'] > lastPay['created']:
             lastPay = payement
+            
     fixPayment(userEmail, lastPay)
     
 def fixAllPayments(userEmail):
