@@ -1,0 +1,4 @@
+div.accepted {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, #d6ffcc 10%, #d6ffcc 90%, rgba(0,0,0,0) 100%);
+    opacity: 0.25;
+}
