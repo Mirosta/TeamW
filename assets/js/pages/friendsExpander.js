@@ -51,11 +51,12 @@ function setupAndEventsModals()
     });
 }
 
-function addFriendsToContainer($container) {
+function addFriendsToContainer($container, friends, prefix) {
     // var template = '<div class="user-container">' +
     //                   '<div class="pull-left"><img src="{{ ----- }}" class="img-rounded" width="25"><span style="font-size:16px">{{ user }}</span></div>' +
     //                   '<div class="btn-group pull-right" role="group"><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-gbp"></i></button><button type="button" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button><button type="button" class="btn btn-default"><b>...</b></button></div>' +
     //                 '</div>';
+    if(prefix === null || prefix === undefined) prefix = ""
 
     var template = '<div class="user-container" style="height:40px;" data-friend-key="{{key}}" data-friend-name="{{name}}">' +
         '<div class="pull-left"><img src="{{profilePicture}}" class="img-rounded" width="25">' +
@@ -67,31 +68,27 @@ function addFriendsToContainer($container) {
         '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-friend-modal">' +
         '<i class="glyphicon glyphicon-trash"></i>' +
         '</button>' +
-        '<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#moreinfo-{{num}}"><b>...</b></button> </div>' +
+        '<button type="button" class="btn btn-default" data-toggle="collapse" data-target="#{{readOnly.prefix}}-moreinfo-{{readOnly.num}}"><b>...</b></button> </div>' +
         '</div><hr style="margin-bottom:5px;" data-friend-key="{{key}}">' +
-        '<div class="collapse moreinfo" id="moreinfo-{{num}}"><div class="panel panel-default"><div class="panel-body">' +
-        '<div class="row summaryRow"><div class="summaryTitle"><h4>debts</h4></div><div class="debts"></div></div>' +
-        '<div class="row summaryRow"><div class="summaryTitle"><h4>credits</h4></div><div class="credits"></div></div>' +
+        '<div class="collapse moreinfo" id="{{readOnly.prefix}}-moreinfo-{{readOnly.num}}"><div class="panel panel-default"><div class="panel-body">' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>debts</h4></div><div class="debts">Loading...</div></div>' +
+        '<div class="row summaryRow"><div class="summaryTitle"><h4>credits</h4></div><div class="credits">Loading...</div></div>' +
         '</div></div></div>';
 
-    var friendsListDiv = $("#friends-list-div");
-    friendsListDiv.html("");
+    $container.html("");
+            for (i = 0; i < friends.length; i++) {
+                friends[i].readOnly.numberClass = (friends[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
+                friends[i].readOnly.netAmount = penceToPound(friends[i].readOnly.netAmount);
+                friends[i].readOnly.prefix = prefix;
+                friends[i].readOnly.num = i;
+                if (friends[i].profilePicture === null) {
+                    friends[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
+                }
 
-    friends.getAll(function (success, data) {
-        console.log(data);
-        for (i = 0; i < data.length; i++) {
-            data[i].readOnly.numberClass = (data[i].readOnly.netAmount >= 0 ? "#26A65B" : "#CF000F");
-            data[i].readOnly.netAmount = penceToPound(data[i].readOnly.netAmount);
-            if (data[i].profilePicture === null) {
-                data[i].profilePicture = "http://i.imgur.com/GTxcoJv.png";
+                $container.append(processTemplate(template, friends[i]));
             }
-
-            data[i].num = i;
-
-            $container.append(processTemplate(template, data[i]));
-        }
-        $('div.moreinfo').on('show.bs.collapse', expandFriend);
-    });}
+            $('div.moreinfo').on('show.bs.collapse', expandFriend);
+}
 
 function removeFriend(key) {
 
@@ -112,6 +109,26 @@ function removeFriend(key) {
     });
 }
 
+function removeDebt(key) {
+    debts.get(key, function(success, data) {
+        console.log(data);
+        if(success)
+        {
+            data.remove(function(success, data) {
+                if(success)
+                {
+                    location.reload();
+                }
+                else
+                {
+                    console.log("Error removing debt");
+                    console.log(data);
+                }
+            });
+        }
+    });
+}
+
 function addDebt(debtorKey) {
 
     var amount = $('#amount').val();
@@ -120,7 +137,7 @@ function addDebt(debtorKey) {
 
     var debtParams = {'debtor': debtorKey,
                 'creditor': currUser.key,
-                'amount': parseInt(amount),
+                'amount': parseFloat(amount) * 100,
                 'description': description,
                 'disputed': false,
                 'created': date + " 00:00:00"};
@@ -145,7 +162,7 @@ function getCurrUser() {
 function expandFriend(e)
 {
     var $target = $(e.target);
-    var friendKey = $target.parent().children().first().data('friend-key');
+    var friendKey = $target.prev().prev().data('friend-key');
     var $debtContainer = $target.find("div.debts");
     var $creditContainer = $target.find("div.credits");
     console.log(e);
@@ -155,29 +172,30 @@ function expandFriend(e)
         {
             lookupField({debts: ['readOnly.credits', 'readOnly.debts']}, data, function(success, data)
             {
-                var template = '<div class="debt-container" data-debt-key={{key}}><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{name}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.amountRemaining}}</span>)</div><div class="col-md-3">{{created}}</div><div class="col-md-3"><span style="color:{{readOnly.statusColor}};" "class="glyphicon {{readOnly.statusClass}}"></span></div>' +
+                var template = '<div class="debt-container" data-debt-key={{key}}><div class="col-md-3"><span style="font-size:16px;" id="friend_"> {{description}}</span> (<span style="color:{{readOnly.numberClass}};font-weight:bold;">{{readOnly.amountRemaining}}</span>)</div><div class="col-md-3">{{created}}</div><div class="col-md-3"><span style="color:{{readOnly.statusColor}};" class="glyphicon {{readOnly.statusClass}}"></span></div>' +
                     '<div class="btn-group pull-right pay-button" role="group">{{readOnly.buttonHtml}}</div>' +
                     '</div>';
 
                 console.log(data);
 
                 var debtButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-payment-modal"><i class="glyphicon glyphicon-gbp"></i></button>';
-                var creditButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-modal"><i class="glyphicon glyphicon-remove-circle"></i></button>';
+                var creditButton = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#delete-debt-modal"><i class="glyphicon glyphicon-remove-circle"></i></button>';
                 $('#add-payment-modal').on('show.bs.modal', function(e) {
                     var debtKey = $(e.relatedTarget).parent().parent().data('debt-key');
                     console.log(e);
                     console.log(debtKey);
 
                     $('button.submitPayment').click(function (e) {
+                        user.getAll(addPayment);
+                    });
+                });
+                $('#delete-debt-modal').on('show.bs.modal', function(e) {
+                    var debtKey = $(e.relatedTarget).parent().parent().data('debt-key');
+                    console.log(e);
+                    console.log(debtKey);
 
-                        var amount = $('input#paymentAmount').val();
-                        var description = $('textarea#paymentDescription').val();
-                        var payment = payments.newInstance({
-                            "debt": debtKey,
-                            "amount": parseFloat(amount) * 100,
-                            "description": description
-                        });
-                        payment.create(function(success, data) { if(success) location.reload();});
+                    $('#remove-debt-btn').click(function (e) {
+                        removeDebt(debtKey);
                     });
                 });
                 outputDebts(data.readOnly.debts, $debtContainer, "#CF000F", "#26A65B", template, debtButton);
@@ -185,6 +203,25 @@ function expandFriend(e)
             });
         }
     });
+}
+
+function addPayment(success, data)
+{
+    if(success)
+    {
+        var amount = $('input#paymentAmount').val();
+        var description = $('textarea#paymentDescription').val();
+        var payment = payments.newInstance({
+            "debt": debtKey,
+            "amount": parseFloat(amount) * 100,
+            "description": description,
+            "payer": data[0].key
+        });
+        payment.create(function(success, data) {
+                console.log(data);
+                if(success) location.reload();
+            });
+    }
 }
 
 function getColor(disputed, paid)
@@ -203,6 +240,7 @@ function getGlyph(disputed, paid)
 
 function outputDebts(debtArray, $container, positiveColour, negativeColour, template, button)
 {
+    $container.html("");
     for(var i = 0; i < debtArray.length; i++)
     {
         var curDebt = debtArray[i];
