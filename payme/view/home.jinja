@@ -28,12 +28,14 @@
                 <h2 class="bold">friends<span class="pull-right">£</span></h2>
                 <hr class="top-buffer">
                 <div class="top-buffer" id="friends-content-div" style="font-size:18px;">
+                    Loading...
                 </div>
               </div>
               <div class="col-md-5 grey-bordered-box side-margin pull-right">
                 <h2 class="bold">groups<span class="pull-right">£</span></h2>
                 <hr class="top-buffer">
                 <div class="top-buffer" id="groups-content-div" style="font-size:18px;">
+                    Loading...
                 </div>
               </div>
             </div>
@@ -54,6 +56,7 @@
               .prev('.panel-heading')
               .find('i')
               .toggleClass('glyphicon-plus glyphicon-minus');
+          return false;
       }
       $('#accordion').on('hidden.bs.collapse', toggleChevron);
       $('#accordion').on('shown.bs.collapse', toggleChevron);
