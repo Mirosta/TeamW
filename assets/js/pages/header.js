@@ -1,11 +1,18 @@
 initialisePage();
 
+var currentNotifications = [];
+
 function initialisePage() {
   $(document).ready(function() {
     setupNotificationContainer();
-    setupNotifications();
+    startNotificationPolling();
     setupFriendModal();
   });
+}
+
+function startNotificationPolling() {
+    loadNotifications();
+    setInterval(loadNotifications, 5000);
 }
 
 function setupNotificationContainer() {
@@ -25,18 +32,23 @@ function setupNotificationContainer() {
 */
 }
 
-function setupNotifications() {
+function loadNotifications() {
+  var $notifBody = $("#notificationsBody");
   notifications.getAll(function(success, data) {
-    $("#notificationsBody").html("");
-    var template = '<div class="col-md-12 {{readOnly.notificationType}}" style="border-bottom:1px solid #616161;">{{content}} </div>';
-    console.log(data);
-    var maxLength = (data.length >= 11) ? 10 : data.length;
-    for(i=0; i < maxLength; i++) {
-      data[i].readOnly.notificationType = returnNotificationTypeCSS(data[i].type, data[i].seen)
-      $("#notificationsBody").append( processTemplate(template, data[i]) );
-    }
+      if(success)
+      {
+          currentNotifications = data;
+          getUnreadNumber();
+          $notifBody.html("");
+          var template = '<div class="col-md-12 {{readOnly.notificationType}}" style="border-bottom:1px solid #616161;">{{content}} </div>';
+          console.log(data);
+          var maxLength = (data.length >= 11) ? 10 : data.length;
+          for(i=0; i < maxLength; i++) {
+              data[i].readOnly.notificationType = returnNotificationTypeCSS(data[i].type, data[i].seen)
+              $notifBody.append( processTemplate(template, data[i]) );
+          }
+      }
   });
-  getUnreadNumber();
 }
 
 function setupFriendModal()
@@ -84,23 +96,24 @@ function returnNotificationTypeCSS(notificationType, seen) {
 function markNotificationsSeen() {
   notifications.getAll(function(success, data) {
     for (var i = 0; i < data.length; i++) {
-      data[i].seen = true;
-      data[i].update();
+      if(!data[i].seen) {
+        data[i].seen = true;
+        data[i].update();
+      }
     }
   });
   getUnreadNumber();
 }
 
 function getUnreadNumber() {
-  notifications.getAll(function(success, data) {
+
     var read = 0;
-    for (var i = 0; i < data.length; i++) {
-      if (data[i].seen === false) {
-        read++;
-      }
-      updateUnreadNumber(read);
+    for (var i = 0; i < currentNotifications.length; i++) {
+        if (currentNotifications[i].seen === false) {
+            read++;
+        }
+        updateUnreadNumber(read);
     }
-  })
 }
 
 function updateUnreadNumber(read) {
