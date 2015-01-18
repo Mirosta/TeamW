@@ -21,7 +21,7 @@ class Debt(Actionable):
     amount = ndb.IntegerProperty()
     description = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
-
+    dateOf = ndb.DateTimeProperty()
     # Able to dispute debt as the creditor
     disputed = ndb.BooleanProperty(default=False)
 
