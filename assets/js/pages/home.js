@@ -59,7 +59,8 @@ function initialiseDataTables(datat) {
         { "title" : columnHeaders[0] },
         { "title" : columnHeaders[1] },
         { "title" : columnHeaders[2] },
-        { "title" : columnHeaders[3] }
+        { "title" : columnHeaders[3] },
+        { "title" : columnHeaders[4] }
       ]
     });
   });
@@ -69,7 +70,9 @@ function initialiseDataTables(datat) {
 function serverDataToArray(data) {
   var finalArray = [];
   for (i=0; i < data.length; i++) {
-    finalArray.push([data[i].payer.name + " " + data[i].payer.familyName, data[i].readOnly.payee.name + " " + data[i].readOnly.payee.familyName, data[i].created, data[i].amount ]);
+    var color = getColor(data[i].disputed, data[i].approvedByCreditor );
+    var glyph = getGlyph(data[i].disputed, data[i].approvedByCreditor);
+    finalArray.push([data[i].payer.name + " " + data[i].payer.familyName, data[i].readOnly.payee.name + " " + data[i].readOnly.payee.familyName, data[i].created, penceToPound(data[i].amount), '<span style="color: ' + color + ';" class="glyphicon ' + glyph + '"></span>']);
   }
   return finalArray;
 }
@@ -101,4 +104,16 @@ function loadFriendsIntoDashboard() {
   });
 }
 
+function getColor(disputed, approved)
+{
+    if(disputed) return 'red';
+    else if(!approved) return 'orange';
+    else return 'green';
+}
 
+function getGlyph(disputed, approved)
+{
+    if(disputed) return "glyphicon-exclamation-sign";
+    else if(!approved) return "glyphicon-question-sign";
+    else return "glyphicon-ok-sign";
+}
